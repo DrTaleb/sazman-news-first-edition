@@ -162,12 +162,19 @@ export default function PanelLayout({children}) {
                                     ></LinearScaleIcon>
                                     <span className="text-secondary">اسلایدر ها</span>
                                 </Link>
-                                <Link href={"/admin/menus"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("menus") && "active"}`}>
+                                <Link href={"/admin/menus/header/1"}
+                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("menus/header") && "active"}`}>
                                     <MenuIcon
-                                        className={`${routerPath.includes("menus") && "color-my-purple"}`}
+                                        className={`${routerPath.includes("menus/header") && "color-my-purple"}`}
                                     ></MenuIcon>
-                                    <span className="text-secondary">منو ها</span>
+                                    <span className="text-secondary">منوی هدر</span>
+                                </Link>
+                                <Link href={"/admin/menus/footer/1"}
+                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("menus/footer") && "active"}`}>
+                                    <MenuIcon
+                                        className={`${routerPath.includes("menus/footer") && "color-my-purple"}`}
+                                    ></MenuIcon>
+                                    <span className="text-secondary">منوی فوتر</span>
                                 </Link>
                                 <Link href={"/admin/categories"}
                                       className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("categories") && "active"}`}>
