@@ -4,7 +4,7 @@ export function middleware(req,res){
         const authToken = req.cookies.get("authToken")
         if (req.nextUrl.pathname.startsWith("/admin")){
                 if (!authToken){
-                        return NextResponse.redirect("http://localhost:3000/admin-login")
+                        return NextResponse.redirect("http://localhost:3000/login")
                 }
         }
         if (authToken){

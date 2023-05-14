@@ -20,10 +20,7 @@ import {Badge} from "react-bootstrap";
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'title', label: 'نام', minWidth: 170, align: "left"},
-    {id: 'link_type', label: 'نوع لینک', minWidth: 170, align: 'left',},
-    {id: 'link', label: 'لینک', minWidth: 170, align: 'left',},
-    {id: 'order', label: 'ترتیب قرارگیری', minWidth: 170, align: 'left',},
-    {id: 'childrenCount', label: 'تعداد زیرمنو ها', minWidth: 170, align: 'left',},
+    {id: 'childrenCount', label: 'تعداد زیردسته ها', minWidth: 170, align: 'left',},
     {id: 'status', label: 'وضعیت', minWidth: 170, align: 'left',},
 ];
 
@@ -32,21 +29,21 @@ export default function Menus({data}) {
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const dataFetch = async () => {
-        const res = await fetch(`http://localhost:3000/api/admin/menus/footer/${router.query.page}`)
+        const res = await fetch(`http://localhost:3000/api/admin/categories/${router.query.page}`)
         const data = await res.json()
         await setDATA(data.data.data)
     }
     useEffect(()=>{
         dataFetch()
     },[router.query.page])
-    function createData(id, title, link_type, link, order, childrenCount, status, subMenus, options) {
-        return {id, title, link_type, link, order, childrenCount, status, subMenus, options};
+    function createData(id, title, childrenCount, status, options) {
+        return {id, title, childrenCount, status, options};
     }
 
-    DATA.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.link_type == 1 ? "درونی" : "بیرونی"}`, `${item.link}`, `${item.order}`, `${item.children.length}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`)))
+    DATA.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.children.length}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`)))
 
     const editHandler = (id) => {
-        router.push(`/admin/menus/footer/edit-menu/${id}`)
+        router.push(`/admin/menus/header/edit-menu/${id}`)
     }
     const deleteHandler = async (id) => {
         Swal.fire({
@@ -60,7 +57,7 @@ export default function Menus({data}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 try {
-                    fetch(`http://localhost:3000/api/admin/menus/footer/${id}`, {
+                    fetch(`http://localhost:3000/api/admin/categories/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.massage.status) {
@@ -73,7 +70,7 @@ export default function Menus({data}) {
                         } else {
                             Swal.fire(
                                 '',
-                                "مشکلی در حذف منو پیش آمده !",
+                                "مشکلی در حذف دسته پیش آمده !",
                                 'error'
                             )
                         }
@@ -94,17 +91,17 @@ export default function Menus({data}) {
     const [rowsPerPage, setRowsPerPage] = useState(data.data.per_page);
     const [pageCount, setPageCount] = useState(data.data.last_page);
     const clickHandler = (event, value) => {
-        router.replace(`/admin/menus/footer/${value}`)
+        router.replace(`/admin/menus/header/${value}`)
     }
     const seeChildren = (id) =>{
-        router.push(`/admin/menus/footer/submenus/${id}`)
+        router.push(`/admin/categories/subcategories/${id}`)
     }
 
     return (
         <div className={"px-4"}>
             <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/menus/footer/add-menu"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن منو</Button>
+                <Link href={"/admin/categories/add-category"}>
+                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن دسته </Button>
                 </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
@@ -120,7 +117,7 @@ export default function Menus({data}) {
                                     </TableCell>
                                 ))}
                                 <TableCell>
-                                    زیرمنو ها
+                                    زیردسته ها
                                 </TableCell>
                                 <TableCell>
                                     گزینه ها
@@ -142,7 +139,7 @@ export default function Menus({data}) {
                                             );
                                         })}
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            {row.childrenCount >= 1 ? <Button variant={"contained"} onClick={()=> seeChildren(row.id)}>مشاهده زیرمنو ها</Button> : <Badge bg={"secondary"} className={"p-2"}>هیج زیرمنویی ثبت نشده</Badge>}
+                                            {row.childrenCount >= 1 ? <Button variant={"contained"} onClick={()=> seeChildren(row.id)}>مشاهده زیردسته ها</Button> : <Badge bg={"secondary"} className={"p-2"}>هیج زیرمنویی ثبت نشده</Badge>}
                                         </TableCell>
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                             <IconButton color={"warning"}
@@ -186,7 +183,7 @@ export async function getServerSideProps(context) {
 
     const {req, params} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/menus?type=footer&page=${params.page}&limit=10`, {
+    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/categories?page=${params.page}&limit=15`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

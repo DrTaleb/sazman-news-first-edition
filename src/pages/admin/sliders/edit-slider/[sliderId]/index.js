@@ -19,6 +19,7 @@ import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import InputIcon from "react-multi-date-picker/components/input_icon";
 
 export default function editSlider({data}) {
+    console.log(data)
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter()
     const breadcrumbs = [
@@ -250,6 +251,12 @@ export default function editSlider({data}) {
                                         <DatePanel key={2} markFocused></DatePanel>
                                     ]}>
                                 </DatePicker>
+                            </div>
+                            <div className={"w-75 d-flex flex-column align-items-center gap-3 p-2 border border-2 border-light rounded-3"}>
+                                <span>
+                                    عکس فعلی
+                                </span>
+                                <img className={"w-100"} src={`https://newsapi.deltagroup.ir/${data.data.image}`}/>
                             </div>
 
                             <label> در صورت تمایل به تغییر٬ عکس مورد نظر را وارد کنید</label>

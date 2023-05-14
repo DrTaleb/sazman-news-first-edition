@@ -16,37 +16,38 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {Badge} from "react-bootstrap";
+import Tooltip from "@mui/material/Tooltip";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
-    {id: 'title', label: 'نام', minWidth: 170, align: "left"},
-    {id: 'link_type', label: 'نوع لینک', minWidth: 170, align: 'left',},
-    {id: 'link', label: 'لینک', minWidth: 170, align: 'left',},
-    {id: 'order', label: 'ترتیب قرارگیری', minWidth: 170, align: 'left',},
-    {id: 'childrenCount', label: 'تعداد زیرمنو ها', minWidth: 170, align: 'left',},
+    {id: 'brand_name', label: 'نام برند', minWidth: 170, align: "left"},
+    {id: 'company_name', label: 'نام شرکت', minWidth: 170, align: 'left',},
+    {id: 'activity_type', label: 'نوع فعالیت', minWidth: 170, align: 'left',},
+    {id: 'verify_status', label: 'وضعیت احراز هویت', minWidth: 170, align: 'left',},
     {id: 'status', label: 'وضعیت', minWidth: 170, align: 'left',},
 ];
 
-export default function Menus({data}) {
+export default function Companies({data}) {
     const rows = []
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const dataFetch = async () => {
-        const res = await fetch(`http://localhost:3000/api/admin/menus/footer/${router.query.page}`)
+        const res = await fetch(`http://localhost:3000/api/admin/company-requests/${router.query.page}`)
         const data = await res.json()
         await setDATA(data.data.data)
     }
-    useEffect(()=>{
+    useEffect(() => {
         dataFetch()
-    },[router.query.page])
-    function createData(id, title, link_type, link, order, childrenCount, status, subMenus, options) {
-        return {id, title, link_type, link, order, childrenCount, status, subMenus, options};
+    }, [router.query.page])
+
+    function createData(id, brand_name, company_name, activity_type, verify_status, status, options) {
+        return {id, brand_name, company_name, activity_type, verify_status, status, options};
     }
 
-    DATA.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.link_type == 1 ? "درونی" : "بیرونی"}`, `${item.link}`, `${item.order}`, `${item.children.length}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`)))
+    DATA.map(item => rows.push(createData(`${item.id}`, `${item.brand_name}`, `${item.company_name}`, `${item.activity_type}`, `${item.verify_status == 1 ? "فعال" : "غیر فعال"}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`)))
 
     const editHandler = (id) => {
-        router.push(`/admin/menus/footer/edit-menu/${id}`)
+        router.push(`/admin/companies/edit-company/${id}`)
     }
     const deleteHandler = async (id) => {
         Swal.fire({
@@ -60,10 +61,10 @@ export default function Menus({data}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 try {
-                    fetch(`http://localhost:3000/api/admin/menus/footer/${id}`, {
+                    fetch(`http://localhost:3000/api/admin/companies/delete/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
-                        if (data.massage.status) {
+                        if (data.status) {
                             dataFetch()
                             Swal.fire(
                                 '',
@@ -71,9 +72,10 @@ export default function Menus({data}) {
                                 'success'
                             )
                         } else {
+                            console.log(data)
                             Swal.fire(
                                 '',
-                                "مشکلی در حذف منو پیش آمده !",
+                                "مشکلی در حذف شرکت پیش آمده !",
                                 'error'
                             )
                         }
@@ -94,18 +96,15 @@ export default function Menus({data}) {
     const [rowsPerPage, setRowsPerPage] = useState(data.data.per_page);
     const [pageCount, setPageCount] = useState(data.data.last_page);
     const clickHandler = (event, value) => {
-        router.replace(`/admin/menus/footer/${value}`)
+        router.replace(`/admin/menus/header/${value}`)
     }
-    const seeChildren = (id) =>{
-        router.push(`/admin/menus/footer/submenus/${id}`)
+    const seeChildren = (id) => {
+        router.push(`/admin/menus/header/submenus/${id}`)
     }
 
     return (
         <div className={"px-4"}>
             <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/menus/footer/add-menu"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن منو</Button>
-                </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -119,9 +118,6 @@ export default function Menus({data}) {
                                         {column.label}
                                     </TableCell>
                                 ))}
-                                <TableCell>
-                                    زیرمنو ها
-                                </TableCell>
                                 <TableCell>
                                     گزینه ها
                                 </TableCell>
@@ -142,19 +138,20 @@ export default function Menus({data}) {
                                             );
                                         })}
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            {row.childrenCount >= 1 ? <Button variant={"contained"} onClick={()=> seeChildren(row.id)}>مشاهده زیرمنو ها</Button> : <Badge bg={"secondary"} className={"p-2"}>هیج زیرمنویی ثبت نشده</Badge>}
-                                        </TableCell>
-                                        <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            <IconButton color={"warning"}
-                                                        onClick={() => editHandler(row.id)}
-                                            >
-                                                <ModeEditOutlineRoundedIcon></ModeEditOutlineRoundedIcon>
-                                            </IconButton>
-                                            <IconButton color={"error"}
-                                                        onClick={() => deleteHandler(row.id)}
-                                            >
-                                                <DeleteIcon></DeleteIcon>
-                                            </IconButton>
+                                            <Tooltip title="ویزایش">
+                                                <IconButton color={"warning"}
+                                                            onClick={() => editHandler(row.id)}
+                                                >
+                                                    <ModeEditOutlineRoundedIcon></ModeEditOutlineRoundedIcon>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="حذف شرکت">
+                                                <IconButton color={"error"}
+                                                            onClick={() => deleteHandler(row.id)}
+                                                >
+                                                    <DeleteIcon></DeleteIcon>
+                                                </IconButton>
+                                            </Tooltip>
                                         </TableCell>
                                     </TableRow>
                                 )
@@ -182,20 +179,20 @@ export default function Menus({data}) {
 }
 
 
-export async function getServerSideProps(context) {
+    export async function getServerSideProps(context) {
 
-    const {req, params} = context
+        const {req, params} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/menus?type=footer&page=${params.page}&limit=10`, {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': `Bearer ${req.cookies.authToken}`
+        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/companies?page=${params.page}&limit=10&verify_status=0`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': `Bearer ${req.cookies.authToken}`
+            }
+        })
+        const data = await dataResponse.json()
+
+        return {
+            props: {data}
         }
-    })
-    const data = await dataResponse.json()
-
-    return {
-        props: {data}
     }
-}

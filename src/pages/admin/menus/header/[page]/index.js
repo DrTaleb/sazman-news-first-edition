@@ -15,6 +15,7 @@ import {Button, Pagination, PaginationItem} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
+import {Badge} from "react-bootstrap";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
@@ -95,12 +96,15 @@ export default function Menus({data}) {
     const clickHandler = (event, value) => {
         router.replace(`/admin/menus/header/${value}`)
     }
+    const seeChildren = (id) =>{
+        router.push(`/admin/menus/header/submenus/${id}`)
+    }
 
     return (
         <div className={"px-4"}>
             <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <Link href={"/admin/menus/header/add-menu"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن منو</Button>
+                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن منو و زیرمنو</Button>
                 </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
@@ -115,6 +119,9 @@ export default function Menus({data}) {
                                         {column.label}
                                     </TableCell>
                                 ))}
+                                <TableCell>
+                                    زیرمنو ها
+                                </TableCell>
                                 <TableCell>
                                     گزینه ها
                                 </TableCell>
@@ -134,6 +141,9 @@ export default function Menus({data}) {
                                                 </TableCell>
                                             );
                                         })}
+                                        <TableCell align={"left"} sx={{minWidth: "200px"}}>
+                                            {row.childrenCount >= 1 ? <Button variant={"contained"} onClick={()=> seeChildren(row.id)}>مشاهده زیرمنو ها</Button> : <Badge bg={"secondary"} className={"p-2"}>هیج زیرمنویی ثبت نشده</Badge>}
+                                        </TableCell>
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                             <IconButton color={"warning"}
                                                         onClick={() => editHandler(row.id)}

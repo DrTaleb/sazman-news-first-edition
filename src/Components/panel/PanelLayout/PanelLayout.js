@@ -1,4 +1,3 @@
-
 import {Button, Fab} from "@mui/material";
 import {useState} from "react";
 import Tooltip from "@mui/material/Tooltip";
@@ -28,6 +27,7 @@ import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import SettingsIcon from '@mui/icons-material/Settings';
+
 export default function PanelLayout({children}) {
 
 
@@ -57,7 +57,7 @@ export default function PanelLayout({children}) {
                 <div className="container-fluid">
                     <div className="d-flex flex-row align-items-center gap-3">
                         <div className="panel-menu-icon active d-flex flex-column justify-content-center rounded">
-                            <MenuIcon sx={{color : "var(--white)"}}></MenuIcon>
+                            <MenuIcon sx={{color: "var(--white)"}}></MenuIcon>
                         </div>
                         <a className="navbar-brand text-white" href="#">اخبار رسمی</a>
                     </div>
@@ -145,14 +145,16 @@ export default function PanelLayout({children}) {
                                 </div>
                                 <Link href={"/admin"}
                                       className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.length === 6 && "active"}`}
-                                     >
-                                    <GridViewIcon className={`${routerPath.length === 6 && "color-my-purple"}`}></GridViewIcon>
+                                >
+                                    <GridViewIcon
+                                        className={`${routerPath.length === 6 && "color-my-purple"}`}></GridViewIcon>
                                     <span className="text-secondary">داشبورد</span>
                                 </Link>
                                 <Link href={"/admin/admins"}
                                       className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("admins") && "active"}`}
-                                    >
-                                    <AdminPanelSettingsIcon className={`${routerPath.includes("admins") && "color-my-purple"}`}></AdminPanelSettingsIcon>
+                                >
+                                    <AdminPanelSettingsIcon
+                                        className={`${routerPath.includes("admins") && "color-my-purple"}`}></AdminPanelSettingsIcon>
                                     <span className="text-secondary">لیست ادمین ها</span>
                                 </Link>
                                 <Link href={"/admin/sliders/1"}
@@ -176,21 +178,21 @@ export default function PanelLayout({children}) {
                                     ></MenuIcon>
                                     <span className="text-secondary">منوی فوتر</span>
                                 </Link>
-                                <Link href={"/admin/categories"}
+                                <Link href={"/admin/categories/1"}
                                       className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("categories") && "active"}`}>
                                     <ReceiptLongIcon
                                         className={`${routerPath.includes("categories") && "color-my-purple"}`}
                                     ></ReceiptLongIcon>
                                     <span className="text-secondary">دسته بندی ها</span>
                                 </Link>
-                                <Link href={"/admin/add-company"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("add-company") && "active"}`}>
+                                <Link href={"/admin/company-requests/1"}
+                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("company-requests") && "active"}`}>
                                     <AddTaskIcon
-                                        className={`${routerPath.includes("add-company") && "color-my-purple"}`}
+                                        className={`${routerPath.includes("company-requests") && "color-my-purple"}`}
                                     ></AddTaskIcon>
                                     <span className="text-secondary">درخواست های ثبت شرکت</span>
                                 </Link>
-                                <Link href={"/admin/companies"}
+                                <Link href={"/admin/companies/1"}
                                       className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("companies") && "active"}`}>
                                     <ListAltIcon
                                         className={`${routerPath.includes("companies") && "color-my-purple"}`}
@@ -308,9 +310,8 @@ export default function PanelLayout({children}) {
                                         خروج از حساب
                                     </MenuItem>
                                 </Menu>
-                                <div className="d-flex flex-sm-row flex-column gap-2">
-                                    <Button color={"secondary"} variant={"contained"}>پیشنمایش پروفایل کاربری</Button>
-                                    <Button color={"error"} variant={"contained"}>خروج از حساب</Button>
+                                <div className="d-flex flex-sm-row flex-column justify-content-end gap-2">
+                                    <Button color={"secondary"} variant={"contained"}> پروفایل کاربری</Button>
                                 </div>
                             </div>
                         </div>
