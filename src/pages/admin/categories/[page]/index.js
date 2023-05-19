@@ -139,7 +139,7 @@ export default function Menus({data}) {
                                             );
                                         })}
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            {row.childrenCount >= 1 ? <Button variant={"contained"} onClick={()=> seeChildren(row.id)}>مشاهده زیردسته ها</Button> : <Badge bg={"secondary"} className={"p-2"}>هیج زیرمنویی ثبت نشده</Badge>}
+                                            {row.childrenCount >= 1 ? <Button variant={"contained"} onClick={()=> seeChildren(row.id)}>مشاهده زیردسته ها</Button> : <Badge bg={"secondary"} className={"p-2"}>هیج زیردسته ای ثبت نشده</Badge>}
                                         </TableCell>
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                             <IconButton color={"warning"}

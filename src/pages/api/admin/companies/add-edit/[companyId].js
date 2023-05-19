@@ -36,6 +36,7 @@ export default async function Handler(req, res) {
                 if (files.logo) {
                     await formData.append("logo", fs.createReadStream(files.logo.filepath), `${files.logo.originalFilename}`)
                 }
+                console.log(formData)
                 const data = await axios.post(`https://newsapi.deltagroup.ir/panel/companies/${req.query.companyId}`, formData, {
                     headers: {
                         'Authorization': `Bearer ${authToken}`,

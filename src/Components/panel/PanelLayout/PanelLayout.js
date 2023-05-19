@@ -199,7 +199,7 @@ export default function PanelLayout({children}) {
                                     ></ListAltIcon>
                                     <span className="text-secondary">لیست شرکت ها</span>
                                 </Link>
-                                <Link href={"/admin/writers"}
+                                <Link href={"/admin/writers/1"}
                                       className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("writers") && "active"}`}>
                                     <ListAltIcon
                                         className={`${routerPath.includes("writers") && "color-my-purple"}`}

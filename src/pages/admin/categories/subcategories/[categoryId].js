@@ -20,16 +20,13 @@ import Typography from "@mui/material/Typography";
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'title', label: 'نام', minWidth: 170, align: "left"},
-    {id: 'link_type', label: 'نوع لینک', minWidth: 170, align: 'left',},
-    {id: 'link', label: 'لینک', minWidth: 170, align: 'left',},
-    {id: 'order', label: 'ترتیب قرارگیری', minWidth: 170, align: 'left',},
     {id: 'status', label: 'وضعیت', minWidth: 170, align: 'left',},
 ];
 
 export default function SubMenus({data}) {
     const breadcrumbs = [
         <span key="1" color="inherit">
-            زیر منو ها
+            زیردسته ها
         </span>,
         <Typography key="3" color="text.primary" className={"color-my-purple"}>
             {data.data.title}
@@ -51,7 +48,7 @@ export default function SubMenus({data}) {
         return {id, title, status, options};
     }
 
-    // DATA.map(item => rows.push(createData(`${item.id}`, `${item.title}`,  `${item.status == 1 ? "فعال" : "غیر فعال"}`)))
+    DATA.map(item => rows.push(createData(`${item.id}`, `${item.title}`,  `${item.status == 1 ? "فعال" : "غیر فعال"}`)))
 
     const editHandler = (id) => {
         router.push(`/admin/menus/header/edit-menu/${id}`)

@@ -538,8 +538,6 @@ export default function EditCompany({data}) {
             })
         }
         else {
-
-
             await formData.append("brand_name", brandName)
             await formData.append("company_name", companyName)
             await formData.append("activity_type", activityType)
