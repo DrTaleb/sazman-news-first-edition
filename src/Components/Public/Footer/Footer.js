@@ -3,41 +3,43 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import menuContext from "@/Contexts/MenuContext";
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 import Link from "next/link";
-export default function Footer(){
+
+export default function Footer() {
     const dataItems = useContext(menuContext)
     const menuHeaders = dataItems.data.footers.sort(item => item.order)
 
     // const categoryHeaders = dataItems.categories.filter(item => item.parentID === 0)
     // const categoryItems = dataItems.categories.filter(item => item.parentID != 0)
-    const [newsLetterEmail , setNewsLetterEmail] = useState("")
+    const [newsLetterEmail, setNewsLetterEmail] = useState("")
 
     function newsLetterEmailHandler(event) {
         setNewsLetterEmail(event.target.value)
     }
-    async function submitNewsLetterEmail(){
+
+    async function submitNewsLetterEmail() {
         event.preventDefault()
-        if(validateEmail(newsLetterEmail)) {
-            await fetch("https://newsapi.deltagroup.ir/front/newsletters",{
-                method : "POST",
+        if (validateEmail(newsLetterEmail)) {
+            await fetch("https://newsapi.deltagroup.ir/front/newsletters", {
+                method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body : JSON.stringify({
-                    email : newsLetterEmail
+                body: JSON.stringify({
+                    email: newsLetterEmail
                 })
             }).then(res => {
-               if (res.status){
-                   toast.success("ایمیل شما با موفقیت ثبت شد")
-                   console.log(res)
-               }else {
-                   toast.error("مشکلی در ثبت ایمیل شما پیش آمده لطفا دوباره تلاش کنید")
-               }
+                if (res.status) {
+                    toast.success("ایمیل شما با موفقیت ثبت شد")
+                    console.log(res)
+                } else {
+                    toast.error("مشکلی در ثبت ایمیل شما پیش آمده لطفا دوباره تلاش کنید")
+                }
             })
             setNewsLetterEmail("")
-        }else {
-            toast.error("ایمیل وارد شده معتبر نیست",{
+        } else {
+            toast.error("ایمیل وارد شده معتبر نیست", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -51,14 +53,15 @@ export default function Footer(){
         }
 
     }
+
     const validateEmail = (email) => {
-         return !!String(email)
-             .toLowerCase()
-             .match(
-                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        return !!String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
     };
-    return(
+    return (
         <Fragment>
             <footer className="footer">
                 <section className="footer-social-section flex-wrap">
@@ -124,7 +127,9 @@ export default function Footer(){
                                            onInput={(event) => newsLetterEmailHandler(event)}
                                            value={newsLetterEmail}
                                            type="email"/>
-                                    <button className="btn news-letter-email-btn" type={"submit"} onClick={submitNewsLetterEmail}>ارسال</button>
+                                    <button className="btn news-letter-email-btn" type={"submit"}
+                                            onClick={submitNewsLetterEmail}>ارسال
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -163,6 +168,7 @@ export default function Footer(){
                     {/*)}*/}
                 </section>
             </footer>
+
         </Fragment>
     )
 }

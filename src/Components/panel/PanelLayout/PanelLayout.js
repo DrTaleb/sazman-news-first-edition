@@ -206,6 +206,20 @@ export default function PanelLayout({children}) {
                                     ></ListAltIcon>
                                     <span className="text-secondary">لیست نویسندگان</span>
                                 </Link>
+                                <Link href={"/admin/ads/1"}
+                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("ads") && "active"}`}>
+                                    <ListAltIcon
+                                        className={`${routerPath.includes("ads") && "color-my-purple"}`}
+                                    ></ListAltIcon>
+                                    <span className="text-secondary"> لیست تبلیغات فعال</span>
+                                </Link>
+                                <Link href={"/admin/ads-requests/1"}
+                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("ads-requests") && "active"}`}>
+                                    <ListAltIcon
+                                        className={`${routerPath.includes("ads-requests") && "color-my-purple"}`}
+                                    ></ListAltIcon>
+                                    <span className="text-secondary"> لیست درخواست تبلیغات</span>
+                                </Link>
                                 <Link href={"/admin/selected-posts"}
                                       className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("selected-posts") && "active"}`}>
                                     <WysiwygIcon

@@ -24,6 +24,12 @@ const columns = [
         id: 'status', label: 'وضعیت', minWidth: 170, align: 'left',
     },
     {
+        id: 'position_id', label: 'آیدی محل قرارگیری', minWidth: 200, align: 'left',
+    },
+    {
+        id: 'type', label: 'نوع فایل', minWidth: 200, align: 'left',
+    },
+    {
         id: 'link', label: 'لینک', minWidth: 170, align: 'left',
     },
     {
@@ -38,24 +44,19 @@ const columns = [
 ];
 
 
-export default function sliders({data}) {
+export default function Ads({data}) {
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const router = useRouter()
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [DATA,setDATA] = useState(data)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [page, setPage] = useState(data.data.current_page);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [rowsPerPage, setRowsPerPage] = useState(data.data.per_page);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [pageCount, setPageCount] = useState(data.data.last_page);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [getData, setGetData] = useState(false)
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const dataFetch = async ()=>{
-        const res = await fetch(`http://localhost:3000/api/admin/sliders/${router.query.page}`)
+        const res = await fetch(`http://localhost:3000/api/admin/ads/${router.query.page}`)
         const data = await res.json()
         await setDATA(data)
     }
@@ -64,25 +65,24 @@ export default function sliders({data}) {
     //     dataFetch()
     // }, [getData])
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(()=>{
         setDATA(data)
     },[data])
 
-    function createData(id, name, status,link, link_type,start_at,end_at, options) {
-        return {id, name, status,link, link_type,start_at,end_at, options};
+    function createData(id, name, status,position_id,type,link, link_type,start_at,end_at, options) {
+        return {id, name, status,link,position_id,type, link_type,start_at,end_at, options};
     }
 
     const rows = [];
-    DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`,`${item.link}`, `${item.link_type == 1 ?  "داخلی" : "خارجی" }`,`${item.start_at}`,`${item.end_at}`,)))
+    DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`,`${item.position_id}`,`${item.type}`, `${item.link}`, `${item.link_type == 1 ?  "داخلی" : "خارجی" }`,`${item.start_at}`,`${item.end_at}`,)))
 
 
 
     const viewHandler = (id) => {
-        router.push(`/admin/sliders/view/${id}`)
+        router.push(`/admin/ads/view/${id}`)
     }
     const editHandler = (id) => {
-       router.replace(`/admin/sliders/edit-slider/${id}`)
+       router.replace(`/admin/ads/edit-slider/${id}`)
     }
 
     const deleteHandler = async (id) => {
@@ -97,7 +97,7 @@ export default function sliders({data}) {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`http://localhost:3000/api/admin/sliders/delete/${id}`, {
+                    fetch(`http://localhost:3000/api/admin/ads/delete/${id}`, {
                         method : "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.status){
@@ -140,8 +140,8 @@ export default function sliders({data}) {
     return (
         <div className={"px-4"}>
             <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden' , boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/sliders/add-slider"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن اسلایدر</Button>
+                <Link href={"/admin/ads/add-ads"}>
+                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن تبلیغ</Button>
                 </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
