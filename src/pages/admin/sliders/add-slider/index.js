@@ -103,7 +103,6 @@ export default function addSlider() {
     },[link])
     const dateHandler = (event) => {
         setDate(event.target.value)
-        console.log(date)
     }
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
