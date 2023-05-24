@@ -1,11 +1,11 @@
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
     if (req.method === "GET"){
-        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/admins?page=1&limit=15/`,{
+        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/admins?page=1&limit=15`,{
             method : "GET",
             headers : {
                 'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization' : `Token ${authToken}`
+                'Authorization' : `Bearer ${authToken}`
             }
         })
         const data = await dataResponse.json()
@@ -16,7 +16,7 @@ export default async function Handler(req, res) {
             credentials : 'include',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization' : `Token ${authToken}`
+                'Authorization' : `Bearer ${authToken}`
             },
             body : JSON.stringify({
                 mobile : req.body.mobile

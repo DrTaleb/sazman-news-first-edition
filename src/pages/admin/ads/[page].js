@@ -82,7 +82,7 @@ export default function Ads({data}) {
         router.push(`/admin/ads/view/${id}`)
     }
     const editHandler = (id) => {
-       router.replace(`/admin/ads/edit-slider/${id}`)
+       router.replace(`/admin/ads/edit/${id}`)
     }
 
     const deleteHandler = async (id) => {
