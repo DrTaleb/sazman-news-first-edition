@@ -139,11 +139,9 @@ export default function Companies({data}) {
     const [page, setPage] = useState(data.data.current_page);
     const [rowsPerPage, setRowsPerPage] = useState(data.data.per_page);
     const [pageCount, setPageCount] = useState(data.data.last_page);
-    const clickHandler = (event, value) => {
-        router.replace(`/admin/menus/header/${value}`)
-    }
-    const seeChildren = (id) => {
-        router.push(`/admin/menus/header/submenus/${id}`)
+
+    const writersList = (id)=>{
+        router.push(`/admin/companies/company-writer/${id}`)
     }
 
     // head row style ---------
@@ -221,7 +219,7 @@ export default function Companies({data}) {
                                            </Button>
                                         </TableCell>
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            <Button variant={"outlined"}>
+                                            <Button variant={"outlined"} onClick={()=> writersList(row.id)}>
                                                 مشاهده لیست
                                             </Button>
                                         </TableCell>

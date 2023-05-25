@@ -46,9 +46,11 @@ export default function Writers({data}) {
         return {id, photo, firstName, lastName, mobile, status, options};
     }
 
-    console.log(DATA)
     DATA.map(item => rows.push(createData(`${item.id}`, `${item.photo}`, `${item.firstname}`, `${item.lastname}`, `${item.user.mobile}`, `${item.user.status == 1 ? "فعال" : "غیر فعال"}`)))
 
+    const viewHandler = (id)=>{
+        router.push(`/admin/writers/view/${id}`)
+    }
     const editHandler = async (id, firstName, lastName, mobile, status) => {
         console.log(status)
         Swal.fire({
@@ -147,9 +149,7 @@ export default function Writers({data}) {
     const clickHandler = (event, value) => {
         router.replace(`/admin/menus/header/${value}`)
     }
-    const seeChildren = (id) => {
-        router.push(`/admin/categories/subcategories/${id}`)
-    }
+
 
     const StyledTableRow = styled(TableRow)(({theme}) => ({
         // hide last border
@@ -216,7 +216,7 @@ export default function Writers({data}) {
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                             <Tooltip title={"مشاهده جزئیات اکانت"}>
                                                 <IconButton color={"primary"}
-                                                            onClick={() => deleteHandler(row.id)}
+                                                            onClick={() => viewHandler(row.id)}
                                                 >
                                                     <RemoveRedEyeIcon></RemoveRedEyeIcon>
                                                 </IconButton>

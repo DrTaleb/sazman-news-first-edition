@@ -1,17 +1,20 @@
 import {Col} from "react-bootstrap";
 import TextField from "@mui/material/TextField";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import {Breadcrumbs, Button} from "@mui/material";
 import Container from "react-bootstrap/Container";
 import Swal from "sweetalert2";
-import {useRouter} from "next/router";
 import BlockIcon from '@mui/icons-material/Block';
 import MenuItem from "@mui/material/MenuItem";
+import {CheckCircleOutline} from "@mui/icons-material";
+import {useRouter} from "next/router";
+
 
 
 export default function UserView({data}) {
+    const router = useRouter()
     const breadcrumbs = [
         <Link underline="hover" key="1" color="inherit" href={"/admin/writers/1"}>
             کاربران
@@ -21,7 +24,18 @@ export default function UserView({data}) {
         </Typography>,
     ];
 
-    const [statusOptions, setStatusOptions] = useState([
+    const [DATA , setDATA] = useState(data)
+    const [getData , setGetData] = useState(false)
+    const dataFetch = async ()=>{
+        const res = await fetch(`http://localhost:3000/api/admin/writers/view/${router.query.writerId}`)
+        const data = await res.json()
+        await setDATA(data)
+    }
+    useEffect(()=>{
+        dataFetch()
+    },[getData])
+
+    const [statusOptions] = useState([
         {
             label: "غیر فعال",
             value: 0
@@ -34,10 +48,10 @@ export default function UserView({data}) {
 
     // form input ---------------------------------------
 
-    const [status, setStatus] = useState(data.data.status)
-    const [firstname, setFirstname] = useState(data.data.firstname)
-    const [lastname, setLastname] = useState(data.data.lastname)
-    const [mobile, setMobile] = useState(data.data.mobile)
+    const [status, setStatus] = useState(DATA.data.status)
+    const [firstname, setFirstname] = useState(DATA.data.firstname)
+    const [lastname, setLastname] = useState(DATA.data.lastname)
+    const [mobile, setMobile] = useState(DATA.data.mobile)
 
     const statusHandler = (event) => {
         setStatus(event.target.value)
@@ -51,13 +65,11 @@ export default function UserView({data}) {
     const mobileHandler = (event) => {
         setMobile(event.target.value)
     };
-    console.log(data.data)
 
 
     const editHandler = async () => {
-        console.log(status)
         Swal.fire({
-            text: `آیا از ${data.data.status == "1" ? "" : "رفع"} مسدودسازی کاربر مورد نظر اطمینان دارید؟`,
+            text: `آیا از ${DATA.data.status === "1" ? "" : "رفع"} مسدودسازی کاربر مورد نظر اطمینان دارید؟`,
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: "خیر",
@@ -67,22 +79,23 @@ export default function UserView({data}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 try {
-                    fetch(`http://localhost:3000/api/admin/writers/${data.data.id}`, {
+                    fetch(`http://localhost:3000/api/admin/writers/${DATA.data.id}`, {
                         method: "PUT",
                         body: JSON.stringify({
                             _method: "PUT",
-                            mobile: data.data.mobile,
-                            firstname: data.data.firstName,
-                            lastname: data.data.lastName,
-                            status: data.data.status == "1" ? "0" : "1"
+                            mobile: DATA.data.mobile,
+                            firstname: DATA.data.firstname,
+                            lastname: DATA.data.lastname,
+                            status: DATA.data.status == "1" ? "0" : "1"
                         })
-                    }).then(res => res.json()).then(data => {
-                        if (data.massage.status) {
+                    }).then(res => res.json()).then(dataRes => {
+                        if (dataRes.massage.status) {
                             Swal.fire(
                                 '',
-                                ` کاربر ${data.data.status == "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
+                                ` کاربر ${DATA.data.status === "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
                                 'success'
                             )
+                            setGetData(!getData)
                         } else {
                             Swal.fire(
                                 '',
@@ -114,7 +127,7 @@ export default function UserView({data}) {
                             <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
                                 <div className={"w-75 d-flex flex-column align-items-center align-items-sm-start gap-4 border border-1 border-light p-2"}>
                                     <picture>
-                                        <source className={"panel-writer-img"} src={`https://newsapi.deltagroup.ir/${data.data.photo}`}/>
+                                        <source className={"panel-writer-img"} srcSet={`https://newsapi.deltagroup.ir/${data.data.photo}`}/>
                                         <img className={"panel-writer-img"} src={"/img/1.webp"}/>
                                     </picture>
                                     <TextField className={"w-100"}
@@ -155,9 +168,16 @@ export default function UserView({data}) {
                                             </MenuItem>
                                         ))}
                                     </TextField>
-                                    <Button onClick={editHandler} variant="outlined" color={"error"} endIcon={<BlockIcon />}>
-                                        مسدود سازی
-                                    </Button>
+                                    {
+                                        DATA.data.status === "1" ?
+                                            <Button onClick={editHandler} variant="outlined" color={"error"} endIcon={<BlockIcon />}>
+                                                مسدود سازی
+                                            </Button>
+                                            :
+                                            <Button onClick={editHandler} variant="outlined" color={"success"} endIcon={<CheckCircleOutline />}>
+                                                رفع مسدود سازی
+                                            </Button>
+                                    }
                                 </div>
                             </div>
                         </form>
