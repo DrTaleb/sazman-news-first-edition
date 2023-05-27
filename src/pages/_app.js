@@ -15,8 +15,10 @@ import MenuContext from "@/Contexts/MenuContext";
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
 import Nprogress from "nprogress";
+import axios from "axios";
 
 
+axios.defaults.baseURL = 'https://newsapi.deltagroup.ir';
 Router.events.on('routeChangeStart', ()=>{
     Nprogress.start();
 })
