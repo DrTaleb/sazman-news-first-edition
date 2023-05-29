@@ -48,14 +48,14 @@ export default function Ads({data}) {
 
 
     const router = useRouter()
-    const [DATA,setDATA] = useState(data)
+    const [DATA, setDATA] = useState(data)
     const [page, setPage] = useState(data.data.current_page);
     const [rowsPerPage, setRowsPerPage] = useState(data.data.per_page);
     const [pageCount, setPageCount] = useState(data.data.last_page);
     const [getData, setGetData] = useState(false)
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const dataFetch = async ()=>{
+    const dataFetch = async () => {
         const res = await fetch(`http://localhost:3000/api/admin/ads/${router.query.page}`)
         const data = await res.json()
         await setDATA(data)
@@ -65,24 +65,23 @@ export default function Ads({data}) {
     //     dataFetch()
     // }, [getData])
 
-    useEffect(()=>{
+    useEffect(() => {
         setDATA(data)
-    },[data])
+    }, [data])
 
-    function createData(id, name, status,position_id,type,link, link_type,start_at,end_at, options) {
-        return {id, name, status,link,position_id,type, link_type,start_at,end_at, options};
+    function createData(id, name, status, position_id, type, link, link_type, start_at, end_at, options) {
+        return {id, name, status, link, position_id, type, link_type, start_at, end_at, options};
     }
 
     const rows = [];
-    DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`,`${item.position_id}`,`${item.type}`, `${item.link}`, `${item.link_type == 1 ?  "داخلی" : "خارجی" }`,`${item.start_at}`,`${item.end_at}`,)))
-
+    DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.position_id}`, `${item.type}`, `${item.link}`, `${item.link_type == 1 ? "داخلی" : "خارجی"}`, `${item.start_at}`, `${item.end_at}`,)))
 
 
     const viewHandler = (id) => {
         router.push(`/admin/ads/view/${id}`)
     }
     const editHandler = (id) => {
-       router.replace(`/admin/ads/edit/${id}`)
+        router.replace(`/admin/ads/edit/${id}`)
     }
 
     const deleteHandler = async (id) => {
@@ -98,9 +97,9 @@ export default function Ads({data}) {
                 Nprogress.start()
                 try {
                     fetch(`http://localhost:3000/api/admin/ads/delete/${id}`, {
-                        method : "DELETE"
+                        method: "DELETE"
                     }).then(res => res.json()).then(data => {
-                        if (data.status){
+                        if (data.status) {
                             setGetData(prev => !prev)
                             Nprogress.done()
                             Swal.fire(
@@ -109,7 +108,7 @@ export default function Ads({data}) {
                                 'success'
                             )
                             dataFetch()
-                        }else {
+                        } else {
                             Nprogress.done()
                             Swal.fire(
                                 '',
@@ -118,7 +117,7 @@ export default function Ads({data}) {
                             )
                         }
                     })
-                }catch {
+                } catch {
                     Nprogress.done()
                     Swal.fire(
                         '',
@@ -131,15 +130,15 @@ export default function Ads({data}) {
     }
 
 
-    const clickHandler =  (event, value) => {
-         router.push(`/admin/sliders/${value}`)
+    const clickHandler = (event, value) => {
+        router.push(`/admin/sliders/${value}`)
         dataFetch()
     }
 
 
     return (
         <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden' , boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <Link href={"/admin/ads/add-ads"}>
                     <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن تبلیغ</Button>
                 </Link>
@@ -163,38 +162,38 @@ export default function Ads({data}) {
                         </TableHead>
                         <TableBody>
                             {rows.map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}  className={"fw-bold"}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                            <TableCell align={"left"} sx={{minWidth : "200px"}}>
-                                                <IconButton color={"info"}
-                                                            onClick={() => viewHandler(row.id)}
-                                                ><RemoveRedEyeRoundedIcon/>
-                                                </IconButton>
-                                                <IconButton color={"warning"}
-                                                            onClick={() => editHandler(row.id)}
-                                                >
-                                                    <ModeEditOutlineRoundedIcon></ModeEditOutlineRoundedIcon>
-                                                </IconButton>
-                                                <IconButton color={"error"}
-                                                            onClick={()=> deleteHandler( row.id)}
-                                                >
-                                                    <DeleteIcon></DeleteIcon>
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                        ;
-                                })}
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                                        {columns.map((column) => {
+                                            const value = row[column.id];
+                                            return (
+                                                <TableCell key={column.id} align={column.align} className={"fw-bold"}>
+                                                    {column.format && typeof value === 'number'
+                                                        ? column.format(value)
+                                                        : value}
+                                                </TableCell>
+                                            );
+                                        })}
+                                        <TableCell align={"left"} sx={{minWidth: "200px"}}>
+                                            <IconButton color={"info"}
+                                                        onClick={() => viewHandler(row.id)}
+                                            ><RemoveRedEyeRoundedIcon/>
+                                            </IconButton>
+                                            <IconButton color={"warning"}
+                                                        onClick={() => editHandler(row.id)}
+                                            >
+                                                <ModeEditOutlineRoundedIcon></ModeEditOutlineRoundedIcon>
+                                            </IconButton>
+                                            <IconButton color={"error"}
+                                                        onClick={() => deleteHandler(row.id)}
+                                            >
+                                                <DeleteIcon></DeleteIcon>
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                                    ;
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -217,20 +216,26 @@ export default function Ads({data}) {
 }
 
 
-export async function getServerSideProps(context){
+export async function getServerSideProps(context) {
+    try {
+        const {params, req} = context
 
-    const {params ,req} = context
+        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/ads?page=${params.page}&limit=10`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': `Bearer ${req.cookies.authToken}`
+            }
+        })
+        const data = await dataResponse.json()
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/ads?page=${params.page}&limit=10`,{
-        method : "GET",
-        headers : {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization' : `Bearer ${req.cookies.authToken}`
+        return {
+            props: {data}
         }
-    })
-    const data = await dataResponse.json()
-
-    return {
-        props : {data}
+    } catch {
+        const data = {status: false, data: {data: []}}
+        return {
+            props: {data}
+        }
     }
 }

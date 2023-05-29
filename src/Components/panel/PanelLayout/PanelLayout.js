@@ -1,4 +1,4 @@
-import {Button, Fab} from "@mui/material";
+import {Badge, Button, Fab} from "@mui/material";
 import {useState} from "react";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -27,6 +27,7 @@ import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import SettingsIcon from '@mui/icons-material/Settings';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function PanelLayout({children}) {
 
@@ -130,7 +131,7 @@ export default function PanelLayout({children}) {
             <div className="parent d-flex flex-row flex-wrap">
                 <div className="panel-navigation-menu panel-w-sidebar panel-w-sidebar-sm">
                     <div className="panel-side-bar col-12 position-relative d-lg-flex">
-                        <div className="panel-nav-item-parent col-12 d-flex flex-column ps-3 mt-4">
+                        <div className="panel-nav-item-parent col-12 d-flex flex-column ps-3 mt-3 mt-md-0">
                             <div className="panel-menu-items-parent col-12">
                                 <div className="service-section-opener d-flex flex-row">
                                     <div className="panel-title-parent w-100">
@@ -143,110 +144,147 @@ export default function PanelLayout({children}) {
                                    <i className="fa fa-angle-down text-secondary"></i>
                                 </span>
                                 </div>
-                                <Link href={"/admin"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.length === 6 && "active"}`}
-                                >
-                                    <GridViewIcon
-                                        className={`${routerPath.length === 6 && "color-my-purple"}`}></GridViewIcon>
-                                    <span className="text-secondary">داشبورد</span>
+                                <Link href={"/admin"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.length === 6 && "active"}`}>
+                                        <GridViewIcon
+                                            className={`${routerPath.length === 6 && "color-my-purple"}`}></GridViewIcon>
+                                        <span className="text-secondary">داشبورد</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/admins"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("admins") && "active"}`}
-                                >
-                                    <AdminPanelSettingsIcon
-                                        className={`${routerPath.includes("admins") && "color-my-purple"}`}></AdminPanelSettingsIcon>
-                                    <span className="text-secondary">لیست ادمین ها</span>
+                                <Link href={"/admin/admins"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("admins") && "active"}`}>
+                                        <AdminPanelSettingsIcon
+                                            className={`${routerPath.includes("admins") && "color-my-purple"}`}></AdminPanelSettingsIcon>
+                                        <span className="text-secondary">لیست ادمین ها</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/sliders/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("sliders") && "active"}`}>
-                                    <LinearScaleIcon
-                                        className={`${routerPath.includes("sliders") && "color-my-purple"}`}
-                                    ></LinearScaleIcon>
-                                    <span className="text-secondary">اسلایدر ها</span>
+                                <Link href={"/admin/sliders/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("sliders") && "active"}`}>
+                                        <LinearScaleIcon
+                                            className={`${routerPath.includes("sliders") && "color-my-purple"}`}
+                                        ></LinearScaleIcon>
+                                        <span className="text-secondary">اسلایدر ها</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/menus/header/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("menus/header") && "active"}`}>
-                                    <MenuIcon
-                                        className={`${routerPath.includes("menus/header") && "color-my-purple"}`}
-                                    ></MenuIcon>
-                                    <span className="text-secondary">منوی هدر</span>
+                                <Link href={"/admin/menus/header/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("menus/header") && "active"}`}>
+                                        <MenuIcon
+                                            className={`${routerPath.includes("menus/header") && "color-my-purple"}`}
+                                        ></MenuIcon>
+                                        <span className="text-secondary">منوی هدر</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/menus/footer/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("menus/footer") && "active"}`}>
-                                    <MenuIcon
-                                        className={`${routerPath.includes("menus/footer") && "color-my-purple"}`}
-                                    ></MenuIcon>
-                                    <span className="text-secondary">منوی فوتر</span>
+                                <Link href={"/admin/menus/footer/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("menus/footer") && "active"}`}>
+                                        <MenuIcon
+                                            className={`${routerPath.includes("menus/footer") && "color-my-purple"}`}
+                                        ></MenuIcon>
+                                        <span className="text-secondary">منوی فوتر</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/categories/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("categories") && "active"}`}>
-                                    <ReceiptLongIcon
-                                        className={`${routerPath.includes("categories") && "color-my-purple"}`}
-                                    ></ReceiptLongIcon>
-                                    <span className="text-secondary">دسته بندی ها</span>
+                                <Link href={"/admin/categories/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("categories") && "active"}`}>
+                                        <ReceiptLongIcon
+                                            className={`${routerPath.includes("categories") && "color-my-purple"}`}
+                                        ></ReceiptLongIcon>
+                                        <span className="text-secondary">دسته بندی ها</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/company-requests/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("company-requests") && "active"}`}>
-                                    <AddTaskIcon
-                                        className={`${routerPath.includes("company-requests") && "color-my-purple"}`}
-                                    ></AddTaskIcon>
-                                    <span className="text-secondary">درخواست های ثبت شرکت</span>
+                                <Link href={"/admin/company-requests/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("company-requests") && "active"}`}>
+                                        <AddTaskIcon
+                                            className={`${routerPath.includes("company-requests") && "color-my-purple"}`}
+                                        ></AddTaskIcon>
+                                        <span className="text-secondary">درخواست های ثبت شرکت</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/companies/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("companies") && "active"}`}>
-                                    <ListAltIcon
-                                        className={`${routerPath.includes("companies") && "color-my-purple"}`}
-                                    ></ListAltIcon>
-                                    <span className="text-secondary">لیست شرکت ها</span>
+                                <Link href={"/admin/companies/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("companies") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("companies") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary">لیست شرکت ها</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/writers/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("writers") && "active"}`}>
-                                    <ListAltIcon
-                                        className={`${routerPath.includes("writers") && "color-my-purple"}`}
-                                    ></ListAltIcon>
-                                    <span className="text-secondary">لیست نویسندگان</span>
+                                <Link href={"/admin/certifications/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("certifications") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("certifications") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary">لیست گواهینامه ها</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/ads/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("ads") && "active"}`}>
-                                    <ListAltIcon
-                                        className={`${routerPath.includes("ads") && "color-my-purple"}`}
-                                    ></ListAltIcon>
-                                    <span className="text-secondary"> لیست تبلیغات فعال</span>
+                                <Link href={"/admin/writers/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("writers") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("writers") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary">لیست نویسندگان</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/ads-requests/1"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("ads-requests") && "active"}`}>
-                                    <ListAltIcon
-                                        className={`${routerPath.includes("ads-requests") && "color-my-purple"}`}
-                                    ></ListAltIcon>
-                                    <span className="text-secondary"> لیست درخواست تبلیغات</span>
+                                <Link href={"/admin/ads/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("ads") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("ads") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary"> لیست تبلیغات فعال</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/selected-posts"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("selected-posts") && "active"}`}>
-                                    <WysiwygIcon
-                                        className={`${routerPath.includes("selected-posts") && "color-my-purple"}`}
-                                    ></WysiwygIcon>
-                                    <span className="text-secondary">پست های منتخب</span>
+                                <Link href={"/admin/ads-requests/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("ads-requests") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("ads-requests") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary"> لیست درخواست تبلیغات</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/reports"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("reports") && "active"}`}>
-                                    <RemoveModeratorIcon
-                                        className={`${routerPath.includes("reports") && "color-my-purple"}`}
-                                    ></RemoveModeratorIcon>
-                                    <span className="text-secondary">گزارشات تخلف</span>
+                                <Link href={"/admin/selected-posts"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("selected-posts") && "active"}`}>
+                                        <WysiwygIcon
+                                            className={`${routerPath.includes("selected-posts") && "color-my-purple"}`}
+                                        ></WysiwygIcon>
+                                        <span className="text-secondary">پست های منتخب</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/tickets"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("tickets") && "active"}`}>
-                                    <ConnectWithoutContactIcon
-                                        className={`${routerPath.includes("tickets") && "color-my-purple"}`}
-                                    ></ConnectWithoutContactIcon>
-                                    <span className="text-secondary">تیکت ها</span>
+                                <Link href={"/admin/reports"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("reports") && "active"}`}>
+                                        <RemoveModeratorIcon
+                                            className={`${routerPath.includes("reports") && "color-my-purple"}`}
+                                        ></RemoveModeratorIcon>
+                                        <span className="text-secondary">گزارشات تخلف</span>
+                                    </MenuItem>
                                 </Link>
-                                <Link href={"/admin/setting"}
-                                      className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("setting") && "active"}`}>
-                                    <SettingsIcon
-                                        className={`${routerPath.includes("setting") && "color-my-purple"}`}
-                                    ></SettingsIcon>
-                                    <span className="text-secondary">تنظیمات اصلی</span>
+                                <Link href={"/admin/tickets"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("tickets") && "active"}`}>
+                                        <ConnectWithoutContactIcon
+                                            className={`${routerPath.includes("tickets") && "color-my-purple"}`}
+                                        ></ConnectWithoutContactIcon>
+                                        <span className="text-secondary">تیکت ها</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/setting"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("setting") && "active"}`}>
+                                        <SettingsIcon
+                                            className={`${routerPath.includes("setting") && "color-my-purple"}`}
+                                        ></SettingsIcon>
+                                        <span className="text-secondary">تنظیمات اصلی</span>
+                                    </MenuItem>
                                 </Link>
                             </div>
                         </div>
@@ -256,17 +294,22 @@ export default function PanelLayout({children}) {
                     <nav className="bg-white py-3 shadow-sm">
                         <div className="container">
                             <div className="d-flex flex-row justify-content-between align-items-center">
-                                {/*<Tooltip title="منوی کاربری">*/}
-                                {/*    <Button*/}
-                                {/*        onClick={handleClick}*/}
-                                {/*        size="small"*/}
-                                {/*        aria-controls={open ? 'account-menu' : undefined}*/}
-                                {/*        aria-haspopup="true"*/}
-                                {/*        aria-expanded={open ? 'true' : undefined}*/}
-                                {/*    >*/}
-                                {/*        <h1 className={"navbar-brand"}>شرکت دلتاگروپ</h1>*/}
-                                {/*    </Button>*/}
-                                {/*</Tooltip>*/}
+                                <div>
+                                    <Tooltip title="منوی کاربری">
+                                        <IconButton aria-label="delete" size="small"
+                                                    onClick={handleClick}
+                                                    aria-controls={open ? 'account-menu' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={open ? 'true' : undefined}>
+                                            <Badge color="success" variant="dot">
+                                                <Avatar></Avatar>
+                                            </Badge>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <span className={"ms-2"}>
+                                                محمد جواد طالب کارگر
+                                </span>
+                                </div>
                                 <Menu
                                     anchorEl={anchorEl}
                                     id="company-menu"
@@ -276,6 +319,7 @@ export default function PanelLayout({children}) {
                                     PaperProps={{
                                         elevation: 0,
                                         sx: {
+                                            minWidth : "200px",
                                             overflow: 'visible',
                                             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                             mt: 2,
@@ -283,7 +327,7 @@ export default function PanelLayout({children}) {
                                                 width: 32,
                                                 height: 32,
                                                 ml: -0.5,
-                                                mr: 1,
+                                                mr: 2,
                                             },
                                             '&:before': {
                                                 content: '""',
@@ -302,21 +346,15 @@ export default function PanelLayout({children}) {
                                     transformOrigin={{horizontal: 'right', vertical: 'top'}}
                                     anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                                 >
-                                    <MenuItem onClick={handleClose}>
-                                        <Avatar/> شرکت طالب گستر
-                                    </MenuItem>
-                                    <MenuItem onClick={handleClose}>
-                                        <Avatar/> شرکت طالب گستر
-                                    </MenuItem>
-                                    <Divider/>
                                     <Link href={"/user-panel/register"}>
                                         <MenuItem onClick={handleClose}>
                                             <ListItemIcon>
-                                                <AddIcon fontSize="small"/>
+                                                <SettingsIcon fontSize="small"/>
                                             </ListItemIcon>
-                                            افزودن اکانت
+                                            تنظیمات اکانت
                                         </MenuItem>
                                     </Link>
+                                    <Divider/>
                                     <MenuItem onClick={handleClose}>
                                         <ListItemIcon>
                                             <Logout fontSize="small"/>
@@ -324,9 +362,6 @@ export default function PanelLayout({children}) {
                                         خروج از حساب
                                     </MenuItem>
                                 </Menu>
-                                <div className="d-flex flex-sm-row flex-column justify-content-end gap-2">
-                                    <Button color={"secondary"} variant={"contained"}> پروفایل کاربری</Button>
-                                </div>
                             </div>
                         </div>
                     </nav>

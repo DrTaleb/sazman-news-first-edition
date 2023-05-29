@@ -44,7 +44,7 @@ export default function MainSetting({data}) {
     }
     const descriptionsHandler = (event) => {
         setDescriptions(event.target.value)
-        event.target.value.length ? descriptionsError(false) : descriptionsError(true)
+        event.target.value.length ? setDescriptionsError(false) : setDescriptionsError(true)
     }
     const addressHandler = (event) => {
         setAddress(event.target.value)
@@ -114,8 +114,7 @@ export default function MainSetting({data}) {
                         }
                     }
                 )
-                console.log(res.data)
-                if (res.data.status) {
+                if (res.status) {
                     Nprogress.done()
                     await Swal.fire({
                         icon: 'success',

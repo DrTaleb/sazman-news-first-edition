@@ -600,3 +600,9 @@ html body {
 .panel-writer-img{
     width: 100px;
 }
+.panel-search-bar{
+    /*background-color: var(--white);*/
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}

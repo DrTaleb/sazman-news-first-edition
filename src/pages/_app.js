@@ -41,9 +41,16 @@ export default function App({Component, pageProps, props}) {
         key: 'muirtl',
         stylisPlugins: [prefixer, rtlPlugin],
     });
-
-
-    return (
+    if (!props.data.status){
+       return (
+           <div className={"d-flex flex-column bg-white align-items-center justify-content-center vh-100"}>
+               <h1>
+                   سرور در دسترس نیست ...
+               </h1>
+               <img className={"col-7"} src={"/img/500/na_january_16.webp"}/>
+           </div>
+       )
+    }else return (
         <AuthProvider>
             <MenuContext.Provider value={props.data}>
                 <>
@@ -89,12 +96,12 @@ export default function App({Component, pageProps, props}) {
 }
 
 App.getInitialProps = async () => {
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/front/settings`)
-    const data = await dataResponse.json()
-    if (data.status === false) {
-        return {
-            notFound: true
-        }
+    try{
+        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/front/settings`)
+        const data = await dataResponse.json()
+        return {props: {data}};
+    }catch {
+        const data = {status : false}
+       return {props : {data}}
     }
-    return {props: {data}};
 }

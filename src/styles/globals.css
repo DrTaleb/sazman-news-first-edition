@@ -1623,7 +1623,7 @@ input::-webkit-inner-spin-button {
 }
 
 #nprogress .bar {
-    background: #f14833;
+    background: var(--white);
 
     position: fixed;
     z-index: 1031;
@@ -1642,7 +1642,7 @@ input::-webkit-inner-spin-button {
     width: 100px;
     height: 100%;
     top: 0;
-    box-shadow: 0 0 10px #f14833, 0 0 5px #f14833;
+    box-shadow: 0 0 10px var(--white), 0 0 5px #f14833;
     opacity: 1;
     -webkit-transform: rotate(3deg) translate(0px, -4px);
     -ms-transform: rotate(3deg) translate(0px, -4px);
@@ -1663,8 +1663,9 @@ input::-webkit-inner-spin-button {
     height: 27px;
     box-sizing: border-box;
     border: solid 2px transparent;
-    border-top-color: #f14833;
-    border-left-color: #f14833;
+    border-top-color: var(--main-purple);
+    border-left-color: var(--main-purple);
+    box-shadow: 0 0 10px var(--white), 0 0 5px var(--main-purple);
     border-radius: 50%;
     -webkit-animation: nprogress-spinner 400ms linear infinite;
     animation: nprogress-spinner 400ms linear infinite;

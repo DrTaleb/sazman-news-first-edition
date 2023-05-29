@@ -4,13 +4,13 @@ import {useRouter} from "next/router";
 import {Col} from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 
-export default function SliderId({data}){
+export default function SliderId({data}) {
     const router = useRouter()
-    const returnLastPage = ()=> {
+    const returnLastPage = () => {
         router.push("/admin/sliders/1")
     }
     console.log(data)
-    return(
+    return (
         <Container className={"rounded-4"}>
             <Button onClick={returnLastPage}>
                 بازگشت به صفحه قبل
@@ -27,7 +27,8 @@ export default function SliderId({data}){
                                 value={data.data.title}
                             >
                             </TextField>
-                            <img alt={""} className={"w-100 rounded mt-3"} src={`https://newsapi.deltagroup.ir/${data.data.data}`}/>
+                            <img alt={""} className={"w-100 rounded mt-3"}
+                                 src={`https://newsapi.deltagroup.ir/${data.data.data}`}/>
                         </div>
                     </form>
                 </Col>
@@ -36,19 +37,26 @@ export default function SliderId({data}){
     )
 }
 
-export async function getServerSideProps (context){
-    const {params,req} = context
-    const authToken = req.cookies.authToken
-    const response = await fetch(`https://newsapi.deltagroup.ir/panel/ads/${params.adsId}`,{
-        method : "GET",
-        credentials : 'include',
-        headers: {
-            'Authorization' : `Bearer ${authToken}`
-        },
-    })
-    const data = await response.json()
-    return{
-        props : {data}
+export async function getServerSideProps(context) {
+    try {
+        const {params, req} = context
+        const authToken = req.cookies.authToken
+        const response = await fetch(`https://newsapi.deltagroup.ir/panel/ads/${params.adsId}`, {
+            method: "GET",
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            },
+        })
+        const data = await response.json()
+        return {
+            props: {data}
+        }
+    } catch {
+        const data = {status: false, data: {data: {}}}
+        return {
+            props: {data}
+        }
     }
 
 }

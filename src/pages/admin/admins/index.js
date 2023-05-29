@@ -29,7 +29,7 @@ export default function admins({data}) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter()
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [DATA,setDATA] = useState(data.data.data)
+    const [DATA, setDATA] = useState(data.data.data)
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [page, setPage] = useState(0);
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -40,26 +40,26 @@ export default function admins({data}) {
         setPage(newPage);
     };
 
-    const dataFetch = async ()=>{
+    const dataFetch = async () => {
         await fetch(`http://localhost:3000/api/admin/admins`, {
-            method : "GET",
+            method: "GET",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }}).then(res => res.json()).then(data => setDATA(data))
+            }
+        }).then(res => res.json()).then(data => setDATA(data))
     }
     // eslint-disable-next-line react-hooks/rules-of-hooks
     // useEffect( ()=> {
     //      dataFetch()
     // },[getData])
 
-    function createData(id, name, mobile ,status,options) {
-        return {id, name,mobile,status, options};
+    function createData(id, name, mobile, status, options) {
+        return {id, name, mobile, status, options};
     }
 
     const rows = [];
-    DATA.map(item => rows.push(createData(`${item.id}`, `${item.firstname} ${item.lastname}`,`${item.user.mobile}`, `${item.user.status === "1" ? "فعال" : "غیر فعال"}`),))
-
+    DATA.map(item => rows.push(createData(`${item.id}`, `${item.firstname} ${item.lastname}`, `${item.user.mobile}`, `${item.user.status === "1" ? "فعال" : "غیر فعال"}`),))
 
 
     const handleChangeRowsPerPage = (event) => {
@@ -78,22 +78,22 @@ export default function admins({data}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch(`http://localhost:3000/api/admin/admins`, {
-                    method : "DELETE",
+                    method: "DELETE",
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        mobile : mobile
+                        mobile: mobile
                     })
                 }).then(res => res.json()).then(data => {
-                    if (data.massage.message === "this user now is not staff"){
+                    if (data.massage.message === "this user now is not staff") {
                         Swal.fire({
                             text: "کارمند حذف شد",
                             icon: 'success',
-                    })
+                        })
                         setGetData(!getData)
-                    }else {
+                    } else {
                         Swal.fire({
                             text: "مشکلی در حذف پیش آمده",
                             icon: 'error',
@@ -108,9 +108,9 @@ export default function admins({data}) {
 
     return (
         <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden' , boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <Link href={"/admin/admins/add-admin"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"} >افزودن ادمین</Button>
+                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن ادمین</Button>
                 </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
@@ -139,7 +139,8 @@ export default function admins({data}) {
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 return (
-                                                    <TableCell key={column.id} align={column.align}  className={"fw-bold"}>
+                                                    <TableCell key={column.id} align={column.align}
+                                                               className={"fw-bold"}>
                                                         {column.format && typeof value === 'number'
                                                             ? column.format(value)
                                                             : value}
@@ -148,9 +149,9 @@ export default function admins({data}) {
                                             })}
                                             <TableCell align={"left"}>
                                                 <IconButton color={"error"}
-                                                            onClick={()=> deleteHandler(row.mobile)}
+                                                            onClick={() => deleteHandler(row.mobile)}
                                                 >
-                                                     <DeleteIcon></DeleteIcon>
+                                                    <DeleteIcon></DeleteIcon>
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>
@@ -177,22 +178,24 @@ export default function admins({data}) {
 
 
 export async function getServerSideProps(context) {
-    const {req} = context
-    const authToken = req.cookies.authToken
-    // admins list
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/admins?page=1&limit=15`,{
-        method : "GET",
-        headers : {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization' : `Bearer ${authToken}`
-        }
-    })
-    const data = await dataResponse.json()
-    if (!data) {
+    try {
+        const {req} = context
+        const authToken = req.cookies.authToken
+        // admins list
+        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/admins?page=1&limit=15`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': `Bearer ${authToken}`
+            }
+        })
+        const data = await dataResponse.json()
+
         return {
-            notFound: true
+            props: {data}
         }
-    } else {
+    } catch {
+        const data = {status: false, data: {data: []}}
         return {
             props: {data}
         }
