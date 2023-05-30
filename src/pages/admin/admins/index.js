@@ -83,11 +83,9 @@ export default function admins({data}) {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        mobile: mobile
-                    })
                 }).then(res => res.json()).then(data => {
-                    if (data.massage.message === "this user now is not staff") {
+                    console.log(data)
+                    if (data.mass === "this user now is not staff") {
                         Swal.fire({
                             text: "کارمند حذف شد",
                             icon: 'success',

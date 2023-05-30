@@ -1,11 +1,47 @@
-import {createContext} from "react";
+import {createContext, useEffect, useState} from "react";
+import {useRouter} from "next/router";
+
+
 
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
+    const router = useRouter()
 
+    const [userData , setUserData] = useState({
+        userable : {
+            firstname : "",
+            lastname : ""
+        }
+    });
+    const getUserData = async () => {
+        let massage;
+        try {
+            await fetch(`${process.env.LOCAL_URL}/api/auth/useinfo`, {
+                method: "GET",
+            }).then(res => res.json()).then(data =>{
+                console.log(data)
+                if (data.status){
+                    massage = data.data
+                }else {
+                    massage = {
+                        userable : {
+                            firstname : "",
+                            lastname : ""
+                        }
+                    }
+                }
+            })
+            await setUserData(massage)
 
+        }catch {
+            setUserData({})
+        }
+    }
+    useEffect(()=>{
+       getUserData()
+    },[])
     // register
     const login = async (otp , mobile) => {
         let massage
@@ -17,7 +53,6 @@ export const AuthProvider = ({children}) => {
                 otp : otp
             })
         }).then(res => res.json()).then(data => massage = data.status)
-        console.log(massage)
         return massage
     }
 
@@ -41,8 +76,7 @@ export const AuthProvider = ({children}) => {
         await fetch(`${process.env.LOCAL_URL}/api/auth/logout`, {
             method: "POST",
         }).then(res => res.json()).then(data => massage = data)
-        console.log(massage)
-        return massage
+        router.push("/")
     }
     //check if user logged in
 
@@ -52,7 +86,7 @@ export const AuthProvider = ({children}) => {
 
     return (
 
-        <AuthContext.Provider value={{login, SendCode, logOut, isLoggedIn}}>
+        <AuthContext.Provider value={{login, SendCode, logOut, userData}}>
             {children}
         </AuthContext.Provider>
     )

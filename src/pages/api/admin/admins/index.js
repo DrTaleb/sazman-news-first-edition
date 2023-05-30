@@ -11,30 +11,27 @@ export default async function Handler(req, res) {
         const data = await dataResponse.json()
         res.status(200).json(data)
     }else if (req.method === "POST") {
-        await fetch(`https://server.hanousa.ir/page/admins/`,{
+        await fetch(`${process.env.SERVER_URL}/panel/admins`,{
             method : "POST",
-            credentials : 'include',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'Authorization' : `Bearer ${authToken}`
             },
-            body : JSON.stringify({
-                mobile : req.body.mobile
-            })
+            body : req.body
         }).then(res => res.json()).then(data =>{
-            res.status(200).json({massage : data})
+            console.log(data)
+            res.status(200).json(data)
         })
 
     }else if (req.method === "DELETE") {
-        await fetch(`https://server.hanousa.ir/page/admins/`,{
+        await fetch(`${process.env.SERVER_URL}/panel/admins`,{
             method : "DELETE",
-            credentials : 'include',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization' : `Token ${authToken}`
+                'Authorization' : `Bearer ${authToken}`
             }
         }).then(res => res.json()).then(data =>{
-            res.status(200).json({massage : data})
+            res.status(200).json(data)
         })
 
     }else {

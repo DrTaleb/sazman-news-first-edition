@@ -1,5 +1,5 @@
 import {Badge} from "@mui/material";
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -22,8 +22,11 @@ import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import SettingsIcon from '@mui/icons-material/Settings';
+import authContext from "@/Contexts/AuthContext";
+import AuthContext from "@/Contexts/AuthContext";
 
 export default function PanelLayout({children}) {
+
 
 
     const [anchorEl, setAnchorEl] = useState();
@@ -57,6 +60,9 @@ export default function PanelLayout({children}) {
         toggleElement.current.classList.remove("active");
         responsiveMenu.current.classList.remove("active");
     },[routerPath])
+
+    const {userData,logOut} = useContext(AuthContext)
+    console.log(userData)
     return (
         <main>
             <nav className="navbar navbar-expand bg-main-blue py-1 fixed-top">
@@ -314,8 +320,8 @@ export default function PanelLayout({children}) {
                                         </IconButton>
                                     </Tooltip>
                                     <span className={"ms-2"}>
-                                                محمد جواد طالب کارگر
-                                </span>
+                                                {userData.userable.firstname} {userData.userable.lastname}
+                                    </span>
                                 </div>
                                 <Menu
                                     anchorEl={anchorEl}
@@ -362,7 +368,7 @@ export default function PanelLayout({children}) {
                                         </MenuItem>
                                     </Link>
                                     <Divider/>
-                                    <MenuItem onClick={handleClose}>
+                                    <MenuItem onClick={logOut}>
                                         <ListItemIcon>
                                             <Logout fontSize="small"/>
                                         </ListItemIcon>
