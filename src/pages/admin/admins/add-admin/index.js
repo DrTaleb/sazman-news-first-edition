@@ -8,8 +8,7 @@ import Container from "react-bootstrap/Container";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 
-export default function addAdmin() {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+export default function AddAdmin() {
     const router = useRouter()
     const breadcrumbs = [
         <Link className={"text-decoration-none text-dark"} underline="hover" key="1" color="inherit" href={"/admin/admins"}>
@@ -42,11 +41,8 @@ export default function addAdmin() {
         }
     ]
     // form input -----------------------------------
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [mobile , setMobile] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [mobileError, setMobileError] = useState(true)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const mobileHandler = (event)=> {
         setMobile(event.target.value)
         event.target.value.length === 11 && event.target.value[0] == 0 &&  event.target.value[1] == 9 ? setMobileError(false) : setMobileError(true)
@@ -60,7 +56,7 @@ export default function addAdmin() {
                 text: "لطفا فیلد را به درستی پر کنید",
             })
         }else {
-            await fetch("http://localhost:3000/api/admin/admins", {
+            await fetch(`${process.env.LOCAL_URL}/api/admin/admins`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',

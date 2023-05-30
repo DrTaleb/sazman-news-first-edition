@@ -16,7 +16,6 @@ import persian from "react-date-object/calendars/persian"
 import persian_en from "react-date-object/locales/persian_en";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import {ErrorOutlined, Warning} from "@mui/icons-material";
 
 
 export default function AddAds() {
@@ -221,7 +220,7 @@ export default function AddAds() {
             await formData.append("end_at", date[1].format("YYYY-MM-DD HH:mm").replaceAll("-", "/"))
             await formData.append("data", file)
             try {
-                const res = await axios.post(`http://localhost:3000/api/admin/ads/add-ads`, formData, {
+                const res = await axios.post(`${process.env.LOCAL_URL}/api/admin/ads/add-ads`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         }

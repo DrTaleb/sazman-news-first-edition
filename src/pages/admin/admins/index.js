@@ -41,7 +41,7 @@ export default function admins({data}) {
     };
 
     const dataFetch = async () => {
-        await fetch(`http://localhost:3000/api/admin/admins`, {
+        await fetch(`${process.env.LOCAL_URL}/api/admin/admins`, {
             method: "GET",
             headers: {
                 'Accept': 'application/json',
@@ -77,7 +77,7 @@ export default function admins({data}) {
             confirmButtonText: 'بله'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:3000/api/admin/admins`, {
+                fetch(`${process.env.LOCAL_URL}/api/admin/admins`, {
                     method: "DELETE",
                     headers: {
                         'Accept': 'application/json',
@@ -182,7 +182,7 @@ export async function getServerSideProps(context) {
         const {req} = context
         const authToken = req.cookies.authToken
         // admins list
-        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/admins?page=1&limit=15`, {
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/admins?page=1&limit=15`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',

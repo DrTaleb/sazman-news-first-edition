@@ -9,10 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
-import {Button, Pagination, PaginationItem, styled} from "@mui/material";
+import {Pagination, PaginationItem, styled} from "@mui/material";
 import Swal from "sweetalert2";
-import Link from "next/link";
 import {useRouter} from "next/router";
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import Tooltip from "@mui/material/Tooltip";
@@ -34,7 +32,7 @@ export default function Writers({data}) {
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const dataFetch = async () => {
-        const res = await fetch(`http://localhost:3000/api/admin/writers/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/writers/${router.query.page}`)
         const data = await res.json()
         await setDATA(data.data.data)
     }
@@ -63,9 +61,8 @@ export default function Writers({data}) {
             confirmButtonText: 'بله'
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log(id, firstName, lastName, mobile)
                 try {
-                    fetch(`http://localhost:3000/api/admin/writers/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/writers/${id}`, {
                         method: "PUT",
                         body: JSON.stringify({
                             _method: "PUT",
@@ -113,7 +110,7 @@ export default function Writers({data}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 try {
-                    fetch(`http://localhost:3000/api/admin/writers/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/writers/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.massage.status) {
@@ -277,7 +274,7 @@ export async function getServerSideProps(context) {
 
     const {req, params} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/writers?page=${params.page}&limit=15`, {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/writers?page=${params.page}&limit=15`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

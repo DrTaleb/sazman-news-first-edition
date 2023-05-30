@@ -54,16 +54,13 @@ export default function Ads({data}) {
     const [pageCount, setPageCount] = useState(data.data.last_page);
     const [getData, setGetData] = useState(false)
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const dataFetch = async () => {
-        const res = await fetch(`http://localhost:3000/api/admin/ads/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads/${router.query.page}`)
         const data = await res.json()
         await setDATA(data)
     }
-    // // eslint-disable-next-line react-hooks/rules-of-hooks,react-hooks/exhaustive-deps
-    // useEffect( () => {
-    //     dataFetch()
-    // }, [getData])
+
 
     useEffect(() => {
         setDATA(data)
@@ -96,7 +93,7 @@ export default function Ads({data}) {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`http://localhost:3000/api/admin/ads/delete/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/ads/delete/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.status) {
@@ -220,7 +217,7 @@ export async function getServerSideProps(context) {
     try {
         const {params, req} = context
 
-        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/ads?page=${params.page}&limit=10`, {
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/ads?page=${params.page}&limit=10`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',

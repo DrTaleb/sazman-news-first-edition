@@ -558,7 +558,7 @@ export default function EditCompany({data}) {
                 await formData.append("logo", logo)
             }
             try {
-                const res = await axios.put(`http://localhost:3000/api/admin/companies/add-edit/${router.query.companyId}`, formData, {
+                const res = await axios.put(`${process.env.LOCAL_URL}/api/admin/companies/add-edit/${router.query.companyId}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         }
@@ -839,7 +839,7 @@ export async function getServerSideProps(context) {
 
     const {params, req} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/companies/${params.companyId}`, {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/companies/${params.companyId}`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

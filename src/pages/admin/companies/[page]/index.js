@@ -33,7 +33,7 @@ export default function Companies({data}) {
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const dataFetch = async () => {
-        const res = await fetch(`http://localhost:3000/api/admin/companies/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/companies/${router.query.page}`)
         const data = await res.json()
         await setDATA(data.data.data)
     }
@@ -77,7 +77,7 @@ export default function Companies({data}) {
                 await formData.append("selected_status", selectedCompany.selected_status)
                 await formData.append("owner_id", selectedCompany.owner.id)
                 try {
-                    const res = await axios.put(`http://localhost:3000/api/admin/companies/add-edit/${id}`, formData, {
+                    const res = await axios.put(`${process.env.LOCAL_URL}/api/admin/companies/add-edit/${id}`, formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data',
                             }
@@ -279,7 +279,7 @@ export async function getServerSideProps(context) {
 
     const {req, params} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/companies?page=${params.page}&limit=10`, {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/companies?page=${params.page}&limit=10`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

@@ -108,7 +108,7 @@ export default function MainSetting({data}) {
                 await formData.append("logo", file)
             }
             try {
-                const res = await axios.post(`http://localhost:3000/api/admin/setting`, formData, {
+                const res = await axios.post(`${process.env.LOCAL_URL}/api/admin/setting`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         }
@@ -150,8 +150,8 @@ export default function MainSetting({data}) {
                         <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
                             <picture>
                                 <source className={"panel-writer-img"}
-                                        srcSet={`https://newsapi.deltagroup.ir/${data.data.logo}`}/>
-                                <img className={"panel-writer-img"} src={"/img/1.webp"}/>
+                                        srcSet={`${process.env.SERVER_URL}/${data.data.logo}`}/>
+                                <img alt={""} className={"panel-writer-img"} src={"/img/1.webp"}/>
                             </picture>
                             <TextField
                                 className={"w-75"}
@@ -247,7 +247,7 @@ export default function MainSetting({data}) {
 export async function getServerSideProps(context) {
     const {req} = context
     const authToken = req.cookies.authToken
-    const response = await fetch(`https://newsapi.deltagroup.ir/panel/settings`, {
+    const response = await fetch(`${process.env.SERVER_URL}/panel/settings`, {
         method: "GET",
         credentials: 'include',
         headers: {

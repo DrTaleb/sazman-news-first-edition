@@ -4,6 +4,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from '@mui/icons-material/Share';
 import {toast} from "react-toastify";
 import ReplyIcon from '@mui/icons-material/Reply';
+
 export default function SingleNewsPage({
                                            data,
                                            companyInfo,
@@ -40,7 +41,7 @@ export default function SingleNewsPage({
         })
 
     }
-    useEffect(()=>{
+    useEffect(() => {
         console.log("hi")
     }, [data, companyInfo, otherDataTopFive, commentList, otherPostOfCategoryListTopFour])
 
@@ -137,7 +138,7 @@ export default function SingleNewsPage({
                                                     <span className="stat grey"></span>
                                                 </div>
                                                 <span className={"fw-bold"}>محمد جواد طالب</span>
-                                                <Button variant="outlined" size={"small"} startIcon={<ReplyIcon />}>
+                                                <Button variant="outlined" size={"small"} startIcon={<ReplyIcon/>}>
                                                     پاسخ
                                                 </Button>
                                                 <div
@@ -173,7 +174,8 @@ export default function SingleNewsPage({
                                                                 <img src={companyInfo.logo}/>
                                                                 <span className="stat green"></span>
                                                             </div>
-                                                            <span className={"fw-bold"}>{companyInfo.companyTitle}</span>
+                                                            <span
+                                                                className={"fw-bold"}>{companyInfo.companyTitle}</span>
                                                         </div>
                                                         <button className="btn dropdown"><i
                                                             className="ri-more-line"></i>

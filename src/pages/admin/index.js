@@ -1,6 +1,3 @@
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import * as PropTypes from "prop-types";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import RemoveModeratorIcon from "@mui/icons-material/RemoveModerator";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
@@ -8,8 +5,6 @@ import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact
 
 
 export default function admin(){
-
-
 
     return(
         <div className="panel-content-sec-one flex-wrap px-md-4 px-1 container">

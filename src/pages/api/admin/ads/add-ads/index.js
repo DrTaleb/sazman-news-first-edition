@@ -25,7 +25,7 @@ export default async function Handler(req, res) {
                await myFormData.append("link_type", fields.link_type)
                await myFormData.append("status", fields.status)
                await myFormData.append("data", fs.createReadStream(files.data.filepath), `${files.data.originalFilename}`)
-               const data = await axios.post('https://newsapi.deltagroup.ir/panel/ads', myFormData, {
+               const data = await axios.post(`/panel/ads`, myFormData, {
                    headers: {
                        'Authorization': `Bearer ${authToken}`,
                        'Content-Type': 'multipart/form-data'

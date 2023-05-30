@@ -1,8 +1,7 @@
-import {Badge, Button, Fab} from "@mui/material";
-import {useState} from "react";
+import {Badge} from "@mui/material";
+import {useEffect, useRef, useState} from "react";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
@@ -10,14 +9,10 @@ import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import AddIcon from '@mui/icons-material/Add';
 import GridViewIcon from '@mui/icons-material/GridView';
-import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
-import MonitorIcon from '@mui/icons-material/Monitor';
 import Link from "next/link";
 import MenuIcon from '@mui/icons-material/Menu';
 import {useRouter} from "next/router";
-import admin from "@/pages/admin/admins";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
@@ -27,7 +22,6 @@ import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import SettingsIcon from '@mui/icons-material/Settings';
-import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function PanelLayout({children}) {
 
@@ -49,15 +43,28 @@ export default function PanelLayout({children}) {
         setProfileOpener(null);
     };
 
+    const toggleElement = useRef()
+    const responsiveMenu = useRef()
+    const menuClick = () => {
+        toggleElement.current.classList.toggle("active");
+        responsiveMenu.current.classList.toggle("active");
+    }
+
 
     const router = useRouter()
     const routerPath = router.pathname
+    useEffect(()=>{
+        toggleElement.current.classList.remove("active");
+        responsiveMenu.current.classList.remove("active");
+    },[routerPath])
     return (
         <main>
             <nav className="navbar navbar-expand bg-main-blue py-1 fixed-top">
                 <div className="container-fluid">
                     <div className="d-flex flex-row align-items-center gap-3">
-                        <div className="panel-menu-icon active d-flex flex-column justify-content-center rounded">
+                        <div className="panel-menu-icon active d-flex flex-column justify-content-center rounded"
+                             onClick={menuClick}
+                             ref={toggleElement}>
                             <MenuIcon sx={{color: "var(--white)"}}></MenuIcon>
                         </div>
                         <a className="navbar-brand text-white" href="#">اخبار رسمی</a>
@@ -129,9 +136,9 @@ export default function PanelLayout({children}) {
                 </div>
             </nav>
             <div className="parent d-flex flex-row flex-wrap">
-                <div className="panel-navigation-menu panel-w-sidebar panel-w-sidebar-sm">
+                <div className="panel-navigation-menu panel-w-sidebar panel-w-sidebar-sm" ref={responsiveMenu}>
                     <div className="panel-side-bar col-12 position-relative d-lg-flex">
-                        <div className="panel-nav-item-parent col-12 d-flex flex-column ps-3 mt-3 mt-md-0">
+                        <div className="panel-nav-item-parent col-12 d-flex flex-column ps-3 mt-5  pt-md-0 mt-md-0">
                             <div className="panel-menu-items-parent col-12">
                                 <div className="service-section-opener d-flex flex-row">
                                     <div className="panel-title-parent w-100">

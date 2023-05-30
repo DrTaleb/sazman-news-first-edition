@@ -1,7 +1,7 @@
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
     if (req.method === "GET"){
-        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/companies?page=${req.query.companyId}&limit=10&verify_status=1`,{
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/companies?page=${req.query.companyId}&limit=10&verify_status=1`,{
             method : "GET",
             headers : {
                 'Content-Type': 'application/json; charset=UTF-8',

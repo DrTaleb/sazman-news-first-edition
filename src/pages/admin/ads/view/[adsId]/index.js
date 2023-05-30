@@ -28,7 +28,7 @@ export default function SliderId({data}) {
                             >
                             </TextField>
                             <img alt={""} className={"w-100 rounded mt-3"}
-                                 src={`https://newsapi.deltagroup.ir/${data.data.data}`}/>
+                                 src={`${process.env.SERVER_URL}/${data.data.data}`}/>
                         </div>
                     </form>
                 </Col>

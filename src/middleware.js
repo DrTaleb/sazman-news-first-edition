@@ -5,12 +5,12 @@ export function middleware(req,res){
 
         if (req.nextUrl.pathname.startsWith("/admin")){
                 if (!authToken){
-                        return NextResponse.redirect("http://localhost:3000/login")
+                        return NextResponse.redirect(`${process.env.LOCAL_URL}/login`)
                 }
         }
         if (authToken){
                 if (req.nextUrl.pathname.startsWith("/login")){
-                        return NextResponse.redirect("http://localhost:3000/")
+                        return NextResponse.redirect(`${process.env.LOCAL_URL}`)
                 }
         }
 }

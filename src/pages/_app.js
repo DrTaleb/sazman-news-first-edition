@@ -18,7 +18,7 @@ import Nprogress from "nprogress";
 import axios from "axios";
 
 
-axios.defaults.baseURL = 'https://newsapi.deltagroup.ir';
+axios.defaults.baseURL = `${process.env.SERVER_URL}`;
 Router.events.on('routeChangeStart', ()=>{
     Nprogress.start();
 })
@@ -26,6 +26,7 @@ Router.events.on('routeChangeComplete', ()=>{
     Nprogress.done();
 })
 export default function App({Component, pageProps, props}) {
+
     const routerName = useRouter()
     const userAdminRoute = routerName.pathname.includes("user-panel")
     const adminRoute = routerName.pathname.includes("admin")
@@ -97,7 +98,7 @@ export default function App({Component, pageProps, props}) {
 
 App.getInitialProps = async () => {
     try{
-        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/front/settings`)
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/front/settings`)
         const data = await dataResponse.json()
         return {props: {data}};
     }catch {

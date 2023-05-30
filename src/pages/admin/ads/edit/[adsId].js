@@ -16,7 +16,6 @@ import persian from "react-date-object/calendars/persian"
 import persian_en from "react-date-object/locales/persian_en";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import {ErrorOutlined, Warning} from "@mui/icons-material";
 
 
 export default function AddAds({data}) {
@@ -223,7 +222,7 @@ export default function AddAds({data}) {
                 await formData.append("data", file)
             }
             try {
-                const res = await axios.post(`http://localhost:3000/api/admin/ads/edit/${router.query.adsId}`, formData, {
+                const res = await axios.post(`${process.env.LOCAL_URL}/api/admin/ads/edit/${router.query.adsId}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         }
@@ -372,7 +371,7 @@ export async function getServerSideProps(context){
 
     const {params ,req} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/ads/${params.adsId}`,{
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/ads/${params.adsId}`,{
         method : "GET",
         headers : {
             'Content-Type': 'application/json; charset=UTF-8',

@@ -6,16 +6,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Fragment, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
-import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
-import {Button, Pagination, PaginationItem} from "@mui/material";
+import {Pagination, PaginationItem} from "@mui/material";
 import Swal from "sweetalert2";
-import Link from "next/link";
 import {useRouter} from "next/router";
-import {Badge} from "react-bootstrap";
 import Tooltip from "@mui/material/Tooltip";
 
 const columns = [
@@ -32,7 +29,7 @@ export default function Companies({data}) {
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const dataFetch = async () => {
-        const res = await fetch(`http://localhost:3000/api/admin/company-requests/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/company-requests/${router.query.page}`)
         const data = await res.json()
         await setDATA(data.data.data)
     }
@@ -61,7 +58,7 @@ export default function Companies({data}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 try {
-                    fetch(`http://localhost:3000/api/admin/companies/delete/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/companies/delete/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.status) {
@@ -183,7 +180,7 @@ export default function Companies({data}) {
 
         const {req, params} = context
 
-        const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/companies?page=${params.page}&limit=10&verify_status=0`, {
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/companies?page=${params.page}&limit=10&verify_status=0`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',

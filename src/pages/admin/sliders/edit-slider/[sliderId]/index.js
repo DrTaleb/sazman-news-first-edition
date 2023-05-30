@@ -16,11 +16,9 @@ import persian from "react-date-object/calendars/persian"
 import persian_en from "react-date-object/locales/persian_en";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import InputIcon from "react-multi-date-picker/components/input_icon";
 
-export default function editSlider({data}) {
-    console.log(data)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+export default function EditSlider({data}) {
+
     const router = useRouter()
     const breadcrumbs = [
         <Link className={"text-decoration-none"} underline="hover" key="1" color="inherit" href={"/admin/sliders/1"}>
@@ -53,27 +51,27 @@ export default function editSlider({data}) {
         }
     ]
     // form input -----------------------------------
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [title, setTitle] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [titleError, setTitleError] = useState(false)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [link, setLink] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [type, setType] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [typeError, setTypeError] = useState(false)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [linkError, setLinkError] = useState(false)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [disableLink, setDisableLink] = useState(false)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [status, setStatus] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [statusError, setStatusError] = useState(false)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [date, setDate] = useState()
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     useEffect(() => {
         setTitle(data.data.title)
         setLink(data.data.link)
@@ -103,7 +101,7 @@ export default function editSlider({data}) {
             setLink("/")
         }
     }
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     useEffect(() => {
         if (type === "2") {
             link.startsWith("https://") ? setLinkError(false) : setLinkError(true)
@@ -115,7 +113,7 @@ export default function editSlider({data}) {
         setDate(event.target.value)
     }
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [file, setFile] = useState(null);
     const formData = new FormData();
     const handleChange = (file) => {
@@ -148,7 +146,7 @@ export default function editSlider({data}) {
                 await formData.append("image", file)
             }
             try {
-                const res = await axios.put(`http://localhost:3000/api/admin/sliders/edit/${router.query.sliderId}`, formData, {
+                const res = await axios.put(`${process.env.LOCAL_URL}/api/admin/sliders/edit/${router.query.sliderId}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         }
@@ -256,7 +254,7 @@ export default function editSlider({data}) {
                                 <span>
                                     عکس فعلی
                                 </span>
-                                <img className={"w-100"} src={`https://newsapi.deltagroup.ir/${data.data.image}`}/>
+                                <img className={"w-100"} src={`${process.env.SERVER_URL}/${data.data.image}`}/>
                             </div>
 
                             <label> در صورت تمایل به تغییر٬ عکس مورد نظر را وارد کنید</label>
@@ -275,7 +273,7 @@ export default function editSlider({data}) {
 export async function getServerSideProps(context) {
     const {params, req} = context
     const authToken = req.cookies.authToken
-    const response = await fetch(`https://newsapi.deltagroup.ir/panel/sliders/${params.sliderId}`, {
+    const response = await fetch(`${process.env.SERVER_URL}/panel/sliders/${params.sliderId}`, {
         method: "GET",
         credentials: 'include',
         headers: {

@@ -6,18 +6,11 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
-import {Button, Pagination, PaginationItem, styled} from "@mui/material";
-import Swal from "sweetalert2";
-import Link from "next/link";
+import {Button, styled} from "@mui/material";
 import {useRouter} from "next/router";
-import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import Tooltip from "@mui/material/Tooltip";
-import AddTaskIcon from '@mui/icons-material/AddTask';
-import {Badge} from "react-bootstrap";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 const columns = [
@@ -31,21 +24,11 @@ const columns = [
 export default function Writers({data}) {
     const rows = []
     const router = useRouter()
-    const [DATA, setDATA] = useState(data.data.data)
-    // const dataFetch = async () => {
-    //     const res = await fetch(`http://localhost:3000/api/admin/writers/${router.query.page}`)
-    //     const data = await res.json()
-    //     // await setDATA(data.data.data)
-    //     console.log(data)
-    // }
-    // useEffect(() => {
-    //     dataFetch()
-    // }, [router.query.page])
+    const [DATA] = useState(data.data.data)
 
     function createData(id, photo, firstName, lastName, mobile, options) {
         return {id, photo, firstName, lastName, mobile, options};
     }
-    console.log(DATA)
 
     DATA.map(item => rows.push(createData(`${item.id}`, `${item.photo}`, `${item.firstname}`, `${item.lastname}`, `${item.user.mobile}`, )))
 
@@ -137,7 +120,7 @@ export async function getServerSideProps(context) {
 
     const {req, params} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/companies/${params.companyId}/writers?page=1&limit=1000`, {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/companies/${params.companyId}/writers?page=1&limit=1000`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

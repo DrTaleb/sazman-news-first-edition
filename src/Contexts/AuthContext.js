@@ -7,10 +7,9 @@ export const AuthProvider = ({children}) => {
 
 
     // register
-
     const login = async (otp , mobile) => {
         let massage
-        await fetch("http://localhost:3000/api/auth/login", {
+        await fetch(`${process.env.LOCAL_URL}/api/auth/login`, {
             method: "POST",
             body: JSON.stringify({
                 type: "login2",
@@ -25,7 +24,7 @@ export const AuthProvider = ({children}) => {
     //login
     const SendCode = async (user) => {
         let isMassageSent;
-        await fetch("http://localhost:3000/api/auth/login", {
+        await fetch(`${process.env.LOCAL_URL}/api/auth/login`, {
             method: "POST",
             body: JSON.stringify({
                 type: "login1",
@@ -39,7 +38,7 @@ export const AuthProvider = ({children}) => {
 
     const logOut = async () => {
         let massage
-        await fetch("http://localhost:3000/api/auth/logout", {
+        await fetch(`${process.env.LOCAL_URL}/api/auth/logout`, {
             method: "POST",
         }).then(res => res.json()).then(data => massage = data)
         console.log(massage)
@@ -50,7 +49,6 @@ export const AuthProvider = ({children}) => {
     const isLoggedIn = async (user) => {
         return true
     }
-
 
     return (
 

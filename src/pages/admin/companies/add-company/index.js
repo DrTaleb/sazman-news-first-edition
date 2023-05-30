@@ -1,15 +1,13 @@
 import {Col} from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import {useEffect, useState} from "react";
-// import {FileUploader} from "react-drag-drop-files";
+import {useState} from "react";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import {Alert, Breadcrumbs, Button} from "@mui/material";
 import Container from "react-bootstrap/Container";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
-import {headers} from "next/headers";
 
 export default function AddMenu({data}) {
     const breadcrumbs = [
@@ -514,7 +512,7 @@ export default function AddMenu({data}) {
             })
         } else {
             try {
-                const res = await fetch(`http://localhost:3000/api/admin/menus/footer`, {
+                const res = await fetch(`${process.env.LOCAL_URL}/api/admin/menus/footer`, {
                     method: "POST",
                     body: JSON.stringify({})
                 })
@@ -713,7 +711,7 @@ export async function getServerSideProps(context) {
 
     const {params, req} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/menus?type=footer&page=1&limit=1000`, {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/menus?type=footer&page=1&limit=1000`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

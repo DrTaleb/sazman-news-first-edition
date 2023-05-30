@@ -16,17 +16,17 @@ import persian from "react-date-object/calendars/persian"
 import persian_en from "react-date-object/locales/persian_en";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import InputIcon from "react-multi-date-picker/components/input_icon";
 
-export default function addSlider() {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
+export default function AddSlider() {
+
     const router = useRouter()
     const breadcrumbs = [
         <Link className={"text-decoration-none"} underline="hover" key="1" color="inherit" href={"/admin/sliders/1"}>
             اسلایدر ها
         </Link>,
         <Typography key="3" color="text.primary" className={"color-my-purple"}>
-            ویرایش اسلایدر
+            افزودن اسلایدر
         </Typography>,
     ];
 
@@ -51,25 +51,25 @@ export default function addSlider() {
         }
     ]
     // form input -----------------------------------
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [title, setTitle] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [titleError, setTitleError] = useState(true)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [link, setLink] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [type, setType] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [typeError, setTypeError] = useState(true)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [linkError, setLinkError] = useState(true)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [disableLink, setDisableLink] = useState(true)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [status, setStatus] = useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [statusError, setStatusError] = useState(true)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [date , setDate] = useState()
     const titleHandler = (event) => {
         setTitle(event.target.value)
@@ -93,7 +93,7 @@ export default function addSlider() {
             setLink("/")
         }
     }
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     useEffect(()=>{
         if (type === "2"){
             link.startsWith("https://") ? setLinkError(false) : setLinkError(true)
@@ -105,7 +105,7 @@ export default function addSlider() {
         setDate(event.target.value)
     }
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [file, setFile] = useState(null);
     const formData = new FormData();
     const handleChange = (file) => {
@@ -137,7 +137,7 @@ export default function addSlider() {
             await formData.append("end_at" , date[1].format("YYYY-MM-DD HH:mm").replaceAll("-", "/"))
             await formData.append("image", file)
             try {
-                const res = await axios.post(`http://localhost:3000/api/admin/sliders/add-slider`,formData,{headers : {
+                const res = await axios.post(`${process.env.LOCAL_URL}/api/admin/sliders/add-slider`,formData,{headers : {
                             'Content-Type': 'multipart/form-data',
                         }
                     }
@@ -243,7 +243,7 @@ export default function addSlider() {
 
                             <label>عکس مورد نظر را وارد کنید</label>
                             <FileUploader handleChange={handleChange} name="file" types={fileTypes}
-                                          label={"بکشید و در این نقطه رها کنید"}/>
+                                          label={"کلیک کنید"}/>
                             <Button onClick={submitHandler} className={"col-8 mt-5"} variant={"contained"}
                                     color={"success"}>افزودن</Button>
                         </div>

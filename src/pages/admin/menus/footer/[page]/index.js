@@ -32,7 +32,7 @@ export default function Menus({data}) {
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const dataFetch = async () => {
-        const res = await fetch(`http://localhost:3000/api/admin/menus/footer/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/menus/footer/${router.query.page}`)
         const data = await res.json()
         await setDATA(data.data.data)
     }
@@ -186,7 +186,7 @@ export async function getServerSideProps(context) {
 
     const {req, params} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/menus?type=footer&page=${params.page}&limit=10`, {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/menus?type=footer&page=${params.page}&limit=10`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

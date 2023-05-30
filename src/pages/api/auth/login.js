@@ -3,7 +3,7 @@ import cookie from "cookie";
 export default async function Handler(req, res) {
     if (req.method === "POST") {
        try {
-           await fetch("https://newsapi.deltagroup.ir/panel/auth",{
+           await fetch(`${process.env.SERVER_URL}/panel/auth`,{
                method : "POST",
                headers: {
                    'Content-Type': 'application/json',

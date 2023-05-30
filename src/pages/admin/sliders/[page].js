@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Fragment, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
@@ -38,33 +38,27 @@ const columns = [
 ];
 
 
-export default function sliders({data}) {
+export default function Sliders({data}) {
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter()
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [DATA,setDATA] = useState(data)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [page, setPage] = useState(data.data.current_page);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [rowsPerPage, setRowsPerPage] = useState(data.data.per_page);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [pageCount, setPageCount] = useState(data.data.last_page);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const [getData, setGetData] = useState(false)
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const dataFetch = async ()=>{
-        const res = await fetch(`http://localhost:3000/api/admin/sliders/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/sliders/${router.query.page}`)
         const data = await res.json()
         await setDATA(data)
     }
-    // // eslint-disable-next-line react-hooks/rules-of-hooks,react-hooks/exhaustive-deps
-    // useEffect( () => {
-    //     dataFetch()
-    // }, [getData])
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     useEffect(()=>{
         setDATA(data)
     },[data])
@@ -97,7 +91,7 @@ export default function sliders({data}) {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`http://localhost:3000/api/admin/sliders/delete/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/sliders/delete/${id}`, {
                         method : "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.status){
@@ -221,7 +215,7 @@ export async function getServerSideProps(context){
 
     const {params ,req} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/sliders?page=${params.page}&limit=10`,{
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/sliders?page=${params.page}&limit=10`,{
         method : "GET",
         headers : {
             'Content-Type': 'application/json; charset=UTF-8',

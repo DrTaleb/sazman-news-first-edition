@@ -1,7 +1,7 @@
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
     if (req.method === "POST") {
-        await fetch(`https://newsapi.deltagroup.ir/panel/menus`,{
+        await fetch(`${process.env.SERVER_URL}/panel/menus`,{
             method : "POST",
             credentials : 'include',
             headers: {

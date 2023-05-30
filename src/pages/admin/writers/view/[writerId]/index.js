@@ -27,7 +27,7 @@ export default function UserView({data}) {
     const [DATA , setDATA] = useState(data)
     const [getData , setGetData] = useState(false)
     const dataFetch = async ()=>{
-        const res = await fetch(`http://localhost:3000/api/admin/writers/view/${router.query.writerId}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/writers/view/${router.query.writerId}`)
         const data = await res.json()
         await setDATA(data)
     }
@@ -79,7 +79,7 @@ export default function UserView({data}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 try {
-                    fetch(`http://localhost:3000/api/admin/writers/${DATA.data.id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/writers/${DATA.data.id}`, {
                         method: "PUT",
                         body: JSON.stringify({
                             _method: "PUT",
@@ -127,8 +127,8 @@ export default function UserView({data}) {
                             <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
                                 <div className={"w-75 d-flex flex-column align-items-center align-items-sm-start gap-4 border border-1 border-light p-2"}>
                                     <picture>
-                                        <source className={"panel-writer-img"} srcSet={`https://newsapi.deltagroup.ir/${data.data.photo}`}/>
-                                        <img className={"panel-writer-img"} src={"/img/1.webp"}/>
+                                        <source className={"panel-writer-img"} srcSet={`${process.env.SERVER_URL}/${data.data.photo}`}/>
+                                        <img alt={""} className={"panel-writer-img"} src={"/img/1.webp"}/>
                                     </picture>
                                     <TextField className={"w-100"}
                                                label="نام"
@@ -198,7 +198,7 @@ export async function getServerSideProps(context) {
 
     const {params, req} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/writers/${params.writerId}`, {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/writers/${params.writerId}`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',
