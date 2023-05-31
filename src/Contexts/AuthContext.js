@@ -21,7 +21,6 @@ export const AuthProvider = ({children}) => {
             await fetch(`${process.env.LOCAL_URL}/api/auth/useinfo`, {
                 method: "GET",
             }).then(res => res.json()).then(data =>{
-                console.log(data)
                 if (data.status){
                     massage = data.data
                 }else {
