@@ -23,18 +23,13 @@ const columns = [
     {id: 'status', label: 'وضعیت', minWidth: 170, align: 'left',},
 ];
 
-export default function admins({data}) {
+export default function Admins({data}) {
 
-    console.log(data)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     const router = useRouter()
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [DATA, setDATA] = useState(data.data.data)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [page, setPage] = useState(0);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [getData, setGetData] = useState(false)
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -47,12 +42,12 @@ export default function admins({data}) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-        }).then(res => res.json()).then(data => setDATA(data))
+        }).then(res => res.json()).then(data => setDATA(data.data.data))
     }
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    // useEffect( ()=> {
-    //      dataFetch()
-    // },[getData])
+
+    useEffect( ()=> {
+         dataFetch()
+    },[getData])
 
     function createData(id, name, mobile, status, options) {
         return {id, name, mobile, status, options};
@@ -66,7 +61,7 @@ export default function admins({data}) {
         setRowsPerPage(+event.target);
         setPage(0);
     };
-    const deleteHandler = async (mobile) => {
+    const deleteHandler = async (id) => {
         Swal.fire({
             text: "آیا از حذف آیتم مورد نظر اطمینان دارید؟",
             icon: 'warning',
@@ -77,17 +72,16 @@ export default function admins({data}) {
             confirmButtonText: 'بله'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`${process.env.LOCAL_URL}/api/admin/admins`, {
+                fetch(`${process.env.LOCAL_URL}/api/admin/admins/delete/${id}`, {
                     method: "DELETE",
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
                 }).then(res => res.json()).then(data => {
-                    console.log(data)
-                    if (data.mass === "this user now is not staff") {
+                    if (data.status) {
                         Swal.fire({
-                            text: "کارمند حذف شد",
+                            text: "ادمین حذف شد",
                             icon: 'success',
                         })
                         setGetData(!getData)
@@ -147,7 +141,7 @@ export default function admins({data}) {
                                             })}
                                             <TableCell align={"left"}>
                                                 <IconButton color={"error"}
-                                                            onClick={() => deleteHandler(row.mobile)}
+                                                            onClick={() => deleteHandler(row.id)}
                                                 >
                                                     <DeleteIcon></DeleteIcon>
                                                 </IconButton>

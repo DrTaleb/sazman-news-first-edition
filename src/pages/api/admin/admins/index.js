@@ -23,17 +23,6 @@ export default async function Handler(req, res) {
             res.status(200).json(data)
         })
 
-    }else if (req.method === "DELETE") {
-        await fetch(`${process.env.SERVER_URL}/panel/admins`,{
-            method : "DELETE",
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization' : `Bearer ${authToken}`
-            }
-        }).then(res => res.json()).then(data =>{
-            res.status(200).json(data)
-        })
-
     }else {
         res.setHeader("Allow", ["post"]);
         res.status(405).json({massage: "not allowed"})

@@ -11,7 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
-import {Button, Pagination, PaginationItem} from "@mui/material";
+import {Button, Pagination, PaginationItem, styled} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -132,17 +132,24 @@ export default function Ads({data}) {
         dataFetch()
     }
 
+    // head row style ---------
+    const StyledTableRow = styled(TableRow)(({theme}) => ({
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+            backgroundColor: "#f7f7f7",
+
+        },
+    }));
+    // end head row style-----------
 
     return (
         <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/ads/add-ads"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن تبلیغ</Button>
-                </Link>
+            <Paper className={"rounded-4"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
-                            <TableRow>
+                            <StyledTableRow>
                                 {columns.map((column) => (
                                     <TableCell
                                         key={column.id}
@@ -155,7 +162,7 @@ export default function Ads({data}) {
                                 <TableCell>
                                     گزینه ها
                                 </TableCell>
-                            </TableRow>
+                            </StyledTableRow>
                         </TableHead>
                         <TableBody>
                             {rows.map((row) => {
@@ -217,7 +224,7 @@ export async function getServerSideProps(context) {
     try {
         const {params, req} = context
 
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/ads?page=${params.page}&limit=10&status=1`, {
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/ads?page=${params.page}&limit=10&status=0`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',

@@ -7,9 +7,8 @@ import TextField from "@mui/material/TextField";
 export default function SliderId({data}) {
     const router = useRouter()
     const returnLastPage = () => {
-        router.push("/admin/sliders/1")
+        router.push("/admin/ads/1")
     }
-    console.log(data)
     return (
         <Container className={"rounded-4"}>
             <Button onClick={returnLastPage}>

@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
 import Nprogress from "nprogress";
 import axios from "axios";
+import UserPanelLayout from "@/Components/userPanel/UserPanelLayout";
 
 
 axios.defaults.baseURL = `${process.env.SERVER_URL}`;
@@ -68,7 +69,18 @@ export default function App({Component, pageProps, props}) {
                         </CacheProvider>
                     }
                     {
-                        userAdminRoute || adminRoute &&
+                        userAdminRoute &&
+                        <CacheProvider value={cacheRtl}>
+                            <ThemeProvider theme={theme}>
+                                <UserPanelLayout>
+                                    <ToastContainer></ToastContainer>
+                                    <Component {...pageProps} />
+                                </UserPanelLayout>
+                            </ThemeProvider>
+                        </CacheProvider>
+                    }
+                    {
+                        adminRoute &&
                         <CacheProvider value={cacheRtl}>
                             <ThemeProvider theme={theme}>
                                 <PanelLayout>
