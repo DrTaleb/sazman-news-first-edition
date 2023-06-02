@@ -1,15 +1,14 @@
 
 
 export default async function Handler(req, res) {
-    if (req.method === "GET") {
+    if (req.method === "POST") {
         try {
-            const userToken = req.cookies.authToken
             await fetch(`${process.env.SERVER_URL}/panel/info`,{
                 method : "GET",
                 credentials : 'include',
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
-                    'Authorization' : `Bearer ${userToken}`
+                    'Authorization' : `Bearer ${req.body}`
                 },
             }).then(response => response.json()).then(data =>{
                 if (data.status){

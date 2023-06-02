@@ -17,6 +17,7 @@ import {ToastContainer} from "react-toastify";
 import Nprogress from "nprogress";
 import axios from "axios";
 import UserPanelLayout from "@/Components/userPanel/UserPanelLayout";
+import {useEffect} from "react";
 
 
 axios.defaults.baseURL = `${process.env.SERVER_URL}`;
@@ -27,6 +28,7 @@ Router.events.on('routeChangeComplete', ()=>{
     Nprogress.done();
 })
 export default function App({Component, pageProps, props}) {
+
 
     const routerName = useRouter()
     const userAdminRoute = routerName.pathname.includes("user-panel")

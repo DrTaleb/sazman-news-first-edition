@@ -1,4 +1,4 @@
-import {Badge} from "@mui/material";
+import {Badge, Skeleton} from "@mui/material";
 import {useContext, useEffect, useRef, useState} from "react";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -28,7 +28,6 @@ import AuthContext from "@/Contexts/AuthContext";
 export default function PanelLayout({children}) {
 
 
-
     const [anchorEl, setAnchorEl] = useState();
     const open = Boolean(anchorEl);
     const [profileOpener, setProfileOpener] = useState();
@@ -56,13 +55,12 @@ export default function PanelLayout({children}) {
 
     const router = useRouter()
     const routerPath = router.pathname
-    useEffect(()=>{
+    useEffect(() => {
         toggleElement.current.classList.remove("active");
         responsiveMenu.current.classList.remove("active");
-    },[routerPath])
+    }, [routerPath])
 
-    const {userData,logOut} = useContext(AuthContext)
-    console.log(userData)
+    const {userData, logOut} = useContext(AuthContext)
     return (
         <main>
             <nav className="navbar navbar-expand bg-main-blue py-1 fixed-top">
@@ -307,7 +305,7 @@ export default function PanelLayout({children}) {
                     <nav className="bg-white py-3 shadow-sm">
                         <div className="container">
                             <div className="d-flex flex-row justify-content-between align-items-center">
-                                <div>
+                                <div className={"d-flex flex-row align-items-center"}>
                                     <Tooltip title="منوی کاربری">
                                         <IconButton aria-label="delete" size="small"
                                                     onClick={handleClick}
@@ -319,9 +317,14 @@ export default function PanelLayout({children}) {
                                             </Badge>
                                         </IconButton>
                                     </Tooltip>
-                                    <span className={"ms-2"}>
-                                                {userData.userable.firstname} {userData.userable.lastname}
-                                    </span>
+                                    {
+                                        userData.firstname ?
+                                            <span className={"ms-2"}>
+                                                {userData.firstname} {userData.lastname}
+                                            </span>
+                                            :
+                                            <Skeleton className={"d-inline-block"} animation={"wave"} width={100} height={20}></Skeleton>
+                                    }
                                 </div>
                                 <Menu
                                     anchorEl={anchorEl}
@@ -332,7 +335,7 @@ export default function PanelLayout({children}) {
                                     PaperProps={{
                                         elevation: 0,
                                         sx: {
-                                            minWidth : "200px",
+                                            minWidth: "200px",
                                             overflow: 'visible',
                                             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                             mt: 2,

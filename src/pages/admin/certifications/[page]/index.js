@@ -31,12 +31,13 @@ const columns = [
 
 
 export default function Companies({data}) {
+    console.log(data)
     const rows = []
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const [loading, setLoading] = useState(!data)
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/companies/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/certificates/${router.query.page}`)
         const data = await res.json()
         await setDATA(data.data.data)
     }
@@ -110,33 +111,7 @@ export default function Companies({data}) {
             }
         })
     }
-    const ownerHandler = (id) => {
-        const selectedCompany = DATA.find(item => item.id == id)
-        console.log(selectedCompany)
-        Swal.fire({
-            html: `<table class="table table-responsive">
-                      <tr>
-                         <td>
-نام و نام خانوادگی :                           
-                         </td>
-                         <td>
-                           ${selectedCompany.owner.firstname} ${selectedCompany.owner.lastname}
-                         </td>
-                       </tr>
-                    </table>`
-            ,
-
-            showCancelButton: true,
-            cancelButtonText: "بستن",
-            confirmButtonColor: 'var(--main-purple)',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'مشاهده و تغییر جزيیات'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                router.replace(`/admin/writers/view/${selectedCompany.owner_id}`)
-            }
-        })
-    }
+ 
 
 
     const [page, setPage] = useState(data.data.current_page);
@@ -302,7 +277,7 @@ export async function getServerSideProps(context) {
     try {
         const {req, params} = context
 
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/companies?page=${params.page}&limit=10`, {
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/certificates?page=${params.page}&limit=10`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',

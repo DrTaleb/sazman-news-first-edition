@@ -10,11 +10,11 @@ export const AuthProvider = ({children}) => {
     const router = useRouter()
 
     const [userData , setUserData] = useState({
-        userable : {
             firstname : "",
-            lastname : ""
-        }
+            lastname : "",
+            companies : [],
     });
+
     const getUserData = async () => {
         let massage;
         try {
@@ -22,20 +22,18 @@ export const AuthProvider = ({children}) => {
                 method: "GET",
             }).then(res => res.json()).then(data =>{
                 if (data.status){
-                    massage = data.data
+                    massage = data.data.userable
                 }else {
                     massage = {
-                        userable : {
                             firstname : "",
-                            lastname : ""
-                        }
+                            lastname : "",
+                            companies : [],
                     }
                 }
             })
             await setUserData(massage)
-
         }catch {
-            setUserData({})
+            setUserData(userData)
         }
     }
     useEffect(()=>{

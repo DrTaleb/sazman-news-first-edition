@@ -1,5 +1,5 @@
 import styles from "../../../../styles/topNav.module.css"
-import {Fragment, useContext, useState} from "react";
+import {Fragment, useContext, useEffect, useState} from "react";
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import {Image} from "react-bootstrap";
@@ -22,7 +22,6 @@ import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import LoginIcon from '@mui/icons-material/Login';
 import AuthContext from "@/Contexts/AuthContext";
 export default function TopNav() {
-    let isLogin = true
     const [anchorEl, setAnchorEl] = useState();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -32,8 +31,12 @@ export default function TopNav() {
         setAnchorEl(null);
     };
 
-    const {logOut} = useContext(AuthContext)
+    const {userData,logOut} = useContext(AuthContext)
+    const [isLogin , setIsLogin] = useState(false)
 
+    useEffect(()=>{
+        userData.firstname.length ? setIsLogin(true) : setIsLogin(false)
+    },[userData])
     return (
         <Fragment>
             <Navbar sticky={"top"} bg={"white"} className={`shadow-sm ${styles.dirSmLtr}`}>
@@ -100,15 +103,30 @@ export default function TopNav() {
                                         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                                     >
-                                        <Link href={"/user-panel"}>
-                                            <MenuItem onClick={handleClose}>
-                                                <ListItemIcon>
-                                                    <LoginIcon/>
-                                                </ListItemIcon>
-                                                ورود به پنل
-                                            </MenuItem>
-                                            <Divider />
-                                        </Link>
+                                        {
+
+                                               userData.companies ?
+                                                   <Link href={"/user-panel"}>
+                                                       <MenuItem onClick={handleClose}>
+                                                           <ListItemIcon>
+                                                               <LoginIcon/>
+                                                           </ListItemIcon>
+                                                           ورود به پنل کاربری
+                                                       </MenuItem>
+                                                       <Divider />
+                                                   </Link>
+                                                   :
+                                                   <Link href={"/admin"}>
+                                                       <MenuItem onClick={handleClose}>
+                                                           <ListItemIcon>
+                                                               <LoginIcon/>
+                                                           </ListItemIcon>
+                                                           ورود به پنل ادمین
+                                                       </MenuItem>
+                                                       <Divider />
+                                                   </Link>
+
+                                        }
                                         <Link href={"/my-news"}>
                                             <MenuItem onClick={handleClose}>
                                                 <ListItemIcon>

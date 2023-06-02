@@ -1,4 +1,4 @@
-import {Fragment, useContext} from "react";
+import {Fragment, useContext, useEffect} from "react";
 import AuthContext from "@/Contexts/AuthContext";
 import MainSlider from "@/Components/Public/MainSlider";
 import MenuContext from "@/Contexts/MenuContext";
@@ -19,6 +19,7 @@ import {ErrorOutline} from "@mui/icons-material";
 
 
 export default function Home({data}) {
+
     if (!data.status) {
         return (
             <div className={"d-flex flex-column align-items-center justify-content-center"}>
