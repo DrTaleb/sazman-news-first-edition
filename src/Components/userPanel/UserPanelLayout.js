@@ -84,7 +84,8 @@ export default function UserPanelLayout({children}) {
     const {userData, logOut} = useContext(AuthContext)
     const [selectedCompany, setSelectedCompany] = useState("")
     useEffect(() => {
-        setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
+        userData.companies.length &&  setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
+
     }, [userData])
     return (
         <main>
@@ -386,6 +387,7 @@ export default function UserPanelLayout({children}) {
                         </div>
                     </nav>
                     {
+                        userData.companies &&
                         userData.companies.length ?
                             children
                             :
