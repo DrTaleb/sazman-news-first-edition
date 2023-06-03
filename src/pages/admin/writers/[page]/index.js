@@ -157,7 +157,7 @@ export default function Writers({data}) {
         },
     }));
     return (
-        <div className={"px-4"}>
+        <div className={"px-md-4"}>
             <Paper className={"pb-3 rounded-4"}
                    sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <TableContainer sx={{maxHeight: 600}}>

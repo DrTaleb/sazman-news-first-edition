@@ -256,16 +256,16 @@ export default function AddAds() {
     const gifTypes = ["GIF"];
     return (
         <Container>
-            <Breadcrumbs className={"ms-4"} separator="›" aria-label="breadcrumb">
+            <Breadcrumbs className={"ms-md-4"} separator="›" aria-label="breadcrumb">
                 {breadcrumbs}
             </Breadcrumbs>
             <div className={"d-flex flex-row justify-content-center mt-4"}>
 
-                <Col xs={11} sm={11} md={8} lg={6} xl={5} className={"shadow-sm bg-white"}>
+                <Col xs={12} sm={11} md={8} lg={6} xl={5} className={"shadow-sm bg-white"}>
                     <form>
                         <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="عنوان تبلیغ"
                                 variant="outlined"
                                 error={titleError}
@@ -274,7 +274,7 @@ export default function AddAds() {
                             <TextField
                                 select
                                 label="نوع لینک"
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 value={linkType}
                                 error={linkTypeError}
                                 onChange={linkTypeHandler}
@@ -286,7 +286,7 @@ export default function AddAds() {
                                 ))}
                             </TextField>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="لینک"
                                 variant="outlined"
                                 multiline
@@ -298,7 +298,7 @@ export default function AddAds() {
                                 select
                                 label="وضعیت"
                                 error={statusError}
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 onChange={statusHandler}
                                 value={status}
                             >
@@ -312,7 +312,7 @@ export default function AddAds() {
                                 select
                                 label="محل قرارگیری"
                                 error={positionIdError}
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 onChange={positionIdHandler}
                                 value={positionId}
                             >
@@ -325,7 +325,7 @@ export default function AddAds() {
                             <div>
 
                                 <DatePicker
-                                    className={"w-75"}
+                                    className={"col-md-9 col-11"}
                                     render={<Button>انتخاب تاریخ شروع و پایان</Button>}
                                     inputClass={"form-control"}
                                     range

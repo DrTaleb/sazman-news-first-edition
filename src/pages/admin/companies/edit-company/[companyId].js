@@ -466,9 +466,9 @@ export default function EditCompany({data}) {
     const [verifyStatus, setVerifyStatus] = useState(data.data.verify_status)
     const [selectedStatus, setSelectedStatus] = useState(data.data.selected_status)
     const [stateLabel, setStateLabel] = useState("")
-    useEffect(()=>{
+    useEffect(() => {
         setStateLabel(stateList.find(item => item.value == state).label)
-    },[state])
+    }, [state])
     const brandNameHandler = (event) => {
         setBrandName(event.target.value)
         event.target.value.length >= 6 && event.target.value.length <= 40 ? setBrandNameError(false) : setBrandNameError(true)
@@ -536,8 +536,7 @@ export default function EditCompany({data}) {
                 icon: 'error',
                 text: "لطفا تمام فیلد ها را پر کنید",
             })
-        }
-        else {
+        } else {
             await formData.append("brand_name", brandName)
             await formData.append("company_name", companyName)
             await formData.append("activity_type", activityType)
@@ -592,14 +591,15 @@ export default function EditCompany({data}) {
     if (data.status) {
         return (
             <Container>
-                <Breadcrumbs className={"ms-4 py-3"} separator="›" aria-label="breadcrumb">
+                <Breadcrumbs className={"ms-md-4 py-3"} separator="›" aria-label="breadcrumb">
                     {breadcrumbs}
                 </Breadcrumbs>
                 <div className={"d-flex flex-row justify-content-center"}>
                     <Col xs={12} sm={11} md={8} lg={8} xl={7} className={"bg-white rounded-3 shadow"}>
                         <form>
                             <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12 d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField className={"w-100"}
                                                label="نام برند، نام تجاری و یا نام کسب و کار"
                                                variant="outlined"
@@ -619,7 +619,8 @@ export default function EditCompany({data}) {
                                         باشید.
                                     </Alert>
                                 </div>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField className={"w-100"}
                                                label="نام حقوقی کسب و کار"
                                                variant="outlined"
@@ -633,7 +634,8 @@ export default function EditCompany({data}) {
                                         شرکت ثبت شده ندارید، نام تجاری و یا نام کسب و کارتان را تکرار کنید.
                                     </Alert>
                                 </div>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12 d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField
                                         select
                                         label="حوزه فعالیت"
@@ -652,7 +654,8 @@ export default function EditCompany({data}) {
                                         صنعت شرکتتان را جستجو و انتخاب کنید
                                     </Alert>
                                 </div>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField className={"w-100"}
                                                label="نام مورد نظر برای اکانت"
                                                variant="outlined"
@@ -665,7 +668,8 @@ export default function EditCompany({data}) {
                                         کاربران دیگر با این نام ٬ پروفایل شما را مشاهده میکنند .
                                     </Alert>
                                 </div>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField className={"w-100"}
                                                label="توضیحات در مورد حوزه فعالیت شرکت"
                                                variant="outlined"
@@ -678,7 +682,8 @@ export default function EditCompany({data}) {
                                         این توضیحات در پروفایل کاربری شما توسط کاربران دیگر مشاهده میشود
                                     </Alert>
                                 </div>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField className={"w-100"}
                                                label="تلفن شرکت"
                                                variant="outlined"
@@ -690,7 +695,8 @@ export default function EditCompany({data}) {
                                                onInput={(event) => telHandler(event)}
                                     />
                                 </div>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField
                                         select
                                         label="استان"
@@ -705,7 +711,8 @@ export default function EditCompany({data}) {
                                         ))}
                                     </TextField>
                                 </div>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField
                                         select
                                         label="شهر"
@@ -721,7 +728,8 @@ export default function EditCompany({data}) {
                                         ))}
                                     </TextField>
                                 </div>
-                                <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                                <div
+                                    className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                     <TextField className={"w-100"}
                                                label="آدرس"
                                                variant="outlined"
@@ -731,8 +739,7 @@ export default function EditCompany({data}) {
                                                onInput={(event) => addressHandler(event)}
                                     />
                                 </div>
-                                <div
-                                    className={"w-75 d-flex flex-column align-items-center gap-3 shadow-sm bg-light py-4 rounded-2 px-2"}>
+                                <div className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 shadow-sm bg-light py-4 rounded-2 px-2"}>
                                     <span className={"border-bottom border-2 border-secondary mb-3"}>
                                         کادر تغییر وضعیت
                                     </span>
@@ -776,8 +783,7 @@ export default function EditCompany({data}) {
                                         ))}
                                     </TextField>
                                 </div>
-                                <div
-                                    className={"w-75 d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
+                                <div className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
                                     <span>
                                         عکس پروفایل شرکت (عکس بدون بک گراند از لوگوی شرکت با نسبت ۱*۱)
                                     </span>
@@ -788,15 +794,13 @@ export default function EditCompany({data}) {
                                         label={"لوگوی شرکت (نسبت ۱ * ۱)"}
                                     />
                                 </div>
-                                <div
-                                    className={"w-75 d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
+                                <div className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
                                     <span>
                                         عکس کنونی لوگوی شرکت
                                     </span>
                                     <img className={"w-25"} src={`https://newsapi.deltagroup.ir/${data.data.logo}`}/>
                                 </div>
-                                <div
-                                    className={"w-75 d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
+                                <div className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
                                     <span>
                                         عکس بک گراند پروفایل شرکت (نسبت ترجیحی ۱*۳)
                                     </span>
@@ -807,8 +811,7 @@ export default function EditCompany({data}) {
                                         label={"بک گراند (نسبت ۳ * ۱)"}
                                     />
                                 </div>
-                                <div
-                                    className={"w-75 d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
+                                <div className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
                                     <span>
                                         عکس کنونی پس زمینه شرکت
                                     </span>

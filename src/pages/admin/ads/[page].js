@@ -134,10 +134,10 @@ export default function Ads({data}) {
 
 
     return (
-        <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/ads/add-ads"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن تبلیغ</Button>
+        <div className={"px-md-4"}>
+            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <Link href={"/admin/ads/add-ads"} className={"ps-2"}>
+                    <Button variant={"contained"} color={"success"}>افزودن تبلیغ</Button>
                 </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">

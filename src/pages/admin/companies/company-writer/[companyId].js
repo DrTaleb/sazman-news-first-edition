@@ -49,7 +49,7 @@ export default function Writers({data}) {
         router.push("/admin/companies/1")
     }
     return (
-        <div className={"px-4"}>
+        <div className={"px-md-4"}>
             <Button className={"mt-3 mb-3"} variant={"outlined"} onClick={returnPage}>
                 بازگشت به صفحه قبل
             </Button>

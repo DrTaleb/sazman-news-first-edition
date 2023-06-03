@@ -14,6 +14,7 @@ import {Breadcrumbs} from "@mui/material";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import Typography from "@mui/material/Typography";
+import Link from "next/link";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
@@ -26,12 +27,13 @@ const columns = [
 
 export default function SubMenus({data}) {
     const breadcrumbs = [
+        <Link key="1" color="inherit" href={"/admin/menus/header/1"}>
+            منو ها
+        </Link>,
         <span key="1" color="inherit">
-            زیر منو ها
+            زیر منو های {data.data.title}
         </span>,
-        <Typography key="3" color="text.primary" className={"color-my-purple"}>
-            {data.data.title}
-        </Typography>,
+
     ];
     const rows = []
     const router = useRouter()
@@ -99,8 +101,8 @@ export default function SubMenus({data}) {
 
 
     return (
-        <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+        <div className={"px-md-4"}>
+            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <Breadcrumbs className={"my-3 border-start border-3 ps-3"} separator="›" aria-label="breadcrumb">
                     {breadcrumbs}
                 </Breadcrumbs>

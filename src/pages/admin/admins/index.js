@@ -15,12 +15,15 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {Badge} from "react-bootstrap";
 import {Button} from "@mui/material";
+import Nprogress from "nprogress";
+import BlockIcon from "@mui/icons-material/Block";
+import axios from "axios";
+import {CheckCircleOutline} from "@mui/icons-material";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'name', label: 'نام', minWidth: 170, align: "left"},
-    {id: 'mobile', label: 'موبایل', minWidth: 170, align: 'left',},
-    {id: 'status', label: 'وضعیت', minWidth: 170, align: 'left',},
+    {id: 'mobile', label: 'موبایل', minWidth: 130, align: 'left',},
 ];
 
 export default function Admins({data}) {
@@ -45,9 +48,9 @@ export default function Admins({data}) {
         }).then(res => res.json()).then(data => setDATA(data.data.data))
     }
 
-    useEffect( ()=> {
-         dataFetch()
-    },[getData])
+    useEffect(() => {
+        dataFetch()
+    }, [getData])
 
     function createData(id, name, mobile, status, options) {
         return {id, name, mobile, status, options};
@@ -61,9 +64,59 @@ export default function Admins({data}) {
         setRowsPerPage(+event.target);
         setPage(0);
     };
+    const blockHandler = async (id) => {
+        const userData = DATA.find(item => Number(item.id) === Number(id))
+        Swal.fire({
+            text: `آیا از ${userData.user.status === "0" ? "رفع" : ""} مسدودسازی ادمین مورد نظر اطمینان دارید؟`,
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: "خیر",
+            confirmButtonColor: 'var(--main-purple)',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'بله'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                Nprogress.start()
+                await fetch(`${process.env.LOCAL_URL}/api/admin/admins/edit/${id}`, {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        mobile: userData.user.mobile,
+                        firstname: userData.firstname,
+                        lastname: userData.lastname,
+                        status: userData.user.status === "1" ? "0" : "1"
+                    })
+                }).then(res => res.json()).then(data => {
+                    console.log(data)
+                    if (data.status) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: "ادمین مورد نظر رفع مسدود سازی شد",
+                        })
+                        Nprogress.done()
+                        setGetData(!getData)
+                    } else if (!data.status) {
+                        Swal.fire({
+                            icon: 'warning',
+                            text: "مشکلی در سرور پیش آمده ٬ لطفا  بعدا دوباره تلاش کنید",
+                        })
+                        Nprogress.done()
+                    } else {
+                        Nprogress.done()
+                        Swal.fire({
+                            icon: 'warning',
+                            text: "دوباره تلاش کنید",
+                        })
+                    }
+                    Nprogress.done()
+                })
+            }
+        })
+
+
+    }
     const deleteHandler = async (id) => {
         Swal.fire({
-            text: "آیا از حذف آیتم مورد نظر اطمینان دارید؟",
+            text: "آیا از حذف ادمین مورد نظر اطمینان دارید؟",
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: "خیر",
@@ -99,10 +152,10 @@ export default function Admins({data}) {
 
 
     return (
-        <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/admins/add-admin"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن ادمین</Button>
+        <div className={"px-md-4"}>
+            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <Link href={"/admin/admins/add-admin"} className={"ps-2"}>
+                    <Button variant={"contained"} color={"success"}>افزودن ادمین</Button>
                 </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
@@ -117,7 +170,10 @@ export default function Admins({data}) {
                                         {column.label}
                                     </TableCell>
                                 ))}
-                                <TableCell>
+                                <TableCell align={"left"} sx={{minWidth: 130}}>
+                                    وضعیت
+                                </TableCell>
+                                <TableCell align={"left"} sx={{minWidth: 130}}>
                                     گزینه ها
                                 </TableCell>
                             </TableRow>
@@ -140,6 +196,28 @@ export default function Admins({data}) {
                                                 );
                                             })}
                                             <TableCell align={"left"}>
+                                                {
+                                                    row.status === "فعال" ?
+                                                        <Badge bg={"success"}>
+                                                            فعال
+                                                        </Badge> :
+                                                        <Badge bg={"danger"}>
+                                                            غیر فعال
+                                                        </Badge>
+                                                }
+                                            </TableCell>
+                                            <TableCell align={"left"}>
+                                                <IconButton color={"error"}
+                                                            onClick={() => blockHandler(row.id)}
+                                                >
+                                                    {
+                                                        row.status === "فعال"
+                                                            ?
+                                                            <BlockIcon></BlockIcon>
+                                                            :
+                                                            <CheckCircleOutline color={"success"}></CheckCircleOutline>
+                                                    }
+                                                </IconButton>
                                                 <IconButton color={"error"}
                                                             onClick={() => deleteHandler(row.id)}
                                                 >
@@ -153,43 +231,34 @@ export default function Admins({data}) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    labelRowsPerPage={"تعداد آیتم در هر صفحه"}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+
             </Paper>
         </div>
     );
 }
 
 
-export async function getServerSideProps(context) {
-    try {
-        const {req} = context
-        const authToken = req.cookies.authToken
-        // admins list
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/admins?page=1&limit=15`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization': `Bearer ${authToken}`
-            }
-        })
-        const data = await dataResponse.json()
+    export async function getServerSideProps(context) {
+        try {
+            const {req} = context
+            const authToken = req.cookies.authToken
+            // admins list
+            const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/admins?page=1&limit=15`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            const data = await dataResponse.json()
 
-        return {
-            props: {data}
-        }
-    } catch {
-        const data = {status: false, data: {data: []}}
-        return {
-            props: {data}
+            return {
+                props: {data}
+            }
+        } catch {
+            const data = {status: false, data: {data: []}}
+            return {
+                props: {data}
+            }
         }
     }
-}

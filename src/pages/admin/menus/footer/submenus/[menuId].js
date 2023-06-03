@@ -99,8 +99,8 @@ export default function SubMenus({data}) {
 
 
     return (
-        <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+        <div className={"px-md-4"}>
+            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <Breadcrumbs className={"my-3 border-start border-3 ps-3"} separator="›" aria-label="breadcrumb">
                     {breadcrumbs}
                 </Breadcrumbs>

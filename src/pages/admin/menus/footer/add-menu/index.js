@@ -13,8 +13,8 @@ import {headers} from "next/headers";
 
 export default function AddMenu({data}) {
     const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href={"/admin/menus"}>
-            منو
+        <Link underline="hover" key="1" color="inherit" href={"/admin/menus/footer/1"}>
+            منوی فوتر
         </Link>,
         <Typography key="3" color="text.primary" className={"color-my-purple"}>
             افزودن منو
@@ -26,8 +26,8 @@ export default function AddMenu({data}) {
         value: 0
     }])
     useEffect(() => {
-        const menuList = [{label : "بدون والد" , value : 0}]
-        data.data.data.map(item => menuList.push({label : item.title, value : item.id}))
+        const menuList = [{label: "بدون والد", value: 0}]
+        data.data.data.map(item => menuList.push({label: item.title, value: item.id}))
         setMenus(menuList)
     }, [data])
     const [statusOptions] = useState([
@@ -141,35 +141,37 @@ export default function AddMenu({data}) {
     if (data.status) {
         return (
             <Container>
-                <Breadcrumbs className={"ms-4"} separator="›" aria-label="breadcrumb">
+                <Breadcrumbs className={"ms-md-4"} separator="›" aria-label="breadcrumb">
                     {breadcrumbs}
                 </Breadcrumbs>
-                <div className={"d-flex flex-row justify-content-center"}>
+                <div className={"d-flex flex-row justify-content-center mt-3"}>
 
-                    <Col xs={11} sm={11} md={8} lg={6} xl={5} className={"bg-white rounded-3 shadow"}>
+                    <Col xs={12} sm={11} md={8} lg={6} xl={5} className={"bg-white rounded-3 shadow"}>
                         <form>
                             <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
-                                <TextField className={"w-75"}
-                                           label="نام منو"
-                                           variant="outlined"
-                                           value={name}
-                                           error={nameError}
-                                           InputLabelProps={{shrink: true}}
-                                           onInput={(event) => nameHandler(event)}
+                                <TextField
+                                    className={"col-md-9 col-11"}
+                                    label="نام منو"
+                                    variant="outlined"
+                                    value={name}
+                                    error={nameError}
+                                    InputLabelProps={{shrink: true}}
+                                    onInput={(event) => nameHandler(event)}
                                 />
-                                <TextField className={"w-75"}
-                                           label="ترتیب قرارگیری"
-                                           variant="outlined"
-                                           value={order}
-                                           type={"number"}
-                                           error={orderError}
-                                           InputLabelProps={{shrink: true}}
-                                           onInput={(event) => orderHandler(event)}
+                                <TextField
+                                    className={"col-md-9 col-11"}
+                                    label="ترتیب قرارگیری"
+                                    variant="outlined"
+                                    value={order}
+                                    type={"number"}
+                                    error={orderError}
+                                    InputLabelProps={{shrink: true}}
+                                    onInput={(event) => orderHandler(event)}
                                 />
                                 <TextField
                                     select
                                     label="نوع لینک"
-                                    className={"w-75"}
+                                    className={"col-md-9 col-11"}
                                     error={linkTypeError}
                                     value={linkType}
                                     onChange={linkTypeHandler}
@@ -180,19 +182,20 @@ export default function AddMenu({data}) {
                                         </MenuItem>
                                     ))}
                                 </TextField>
-                                <TextField className={"w-75"}
-                                           label="لینک"
-                                           variant="outlined"
-                                           value={link}
-                                           error={linkError}
-                                           disabled={linkDisable}
-                                           InputLabelProps={{shrink: true}}
-                                           onInput={(event) => linkHandler(event)}
+                                <TextField
+                                    className={"col-md-9 col-11"}
+                                    label="لینک"
+                                    variant="outlined"
+                                    value={link}
+                                    error={linkError}
+                                    disabled={linkDisable}
+                                    InputLabelProps={{shrink: true}}
+                                    onInput={(event) => linkHandler(event)}
                                 />
                                 <TextField
                                     select
                                     label="والد"
-                                    className={"w-75"}
+                                    className={"col-md-9 col-11"}
                                     value={parent}
                                     onChange={parentHandler}
                                     disabled={parentDisable}
@@ -206,7 +209,7 @@ export default function AddMenu({data}) {
                                 <TextField
                                     select
                                     label="وضعیت"
-                                    className={"w-75"}
+                                    className={"col-md-9 col-11"}
                                     value={status}
                                     onChange={statusHandler}
                                 >

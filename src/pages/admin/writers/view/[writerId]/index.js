@@ -118,14 +118,14 @@ export default function UserView({data}) {
     if (data.status) {
         return (
             <Container>
-                <Breadcrumbs className={"ms-4 py-3"} separator="›" aria-label="breadcrumb">
+                <Breadcrumbs className={"ms-md-4 py-3"} separator="›" aria-label="breadcrumb">
                     {breadcrumbs}
                 </Breadcrumbs>
                 <div className={"d-flex flex-row justify-content-center"}>
                     <Col xs={12} sm={11} md={8} lg={8} xl={7} className={"bg-white rounded-3 shadow"}>
                         <form>
-                            <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
-                                <div className={"w-75 d-flex flex-column align-items-center align-items-sm-start gap-4 border border-1 border-light p-2"}>
+                            <div className={"d-flex flex-column align-items-center gap-3 py-md-5 py-2"}>
+                                <div className={"col-md-9 col-12 d-flex flex-column align-items-center align-items-sm-start gap-4 border border-1 border-light p-2"}>
                                     <picture>
                                         <source className={"panel-writer-img"} srcSet={`${process.env.SERVER_URL}/${data.data.photo}`}/>
                                         <img alt={""} className={"panel-writer-img"} src={"/img/1.webp"}/>

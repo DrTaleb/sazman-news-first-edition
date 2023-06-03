@@ -145,7 +145,7 @@ export default function MainSetting({data}) {
         <Container>
             <div className={"d-flex flex-row justify-content-center mt-4"}>
 
-                <Col xs={11} sm={11} md={8} lg={6} xl={5} className={"shadow rounded-4 bg-white"}>
+                <Col xs={12} sm={11} md={8} lg={6} xl={5} className={"shadow rounded-4 bg-white"}>
                     <form>
                         <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
                             <picture>
@@ -154,14 +154,14 @@ export default function MainSetting({data}) {
                                 <img alt={""} className={"panel-writer-img"} src={"/img/1.webp"}/>
                             </picture>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="نام شرکت"
                                 variant="outlined"
                                 error={titleError}
                                 value={title}
                                 onInput={(event) => titleHandler(event)}/>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="توضیحات"
                                 variant="outlined"
                                 multiline
@@ -169,7 +169,7 @@ export default function MainSetting({data}) {
                                 value={descriptions}
                                 onInput={(event) => descriptionsHandler(event)}/>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="آدرس"
                                 variant="outlined"
                                 multiline
@@ -177,7 +177,7 @@ export default function MainSetting({data}) {
                                 value={address}
                                 onInput={(event) => addressHandler(event)}/>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="کپی رایت"
                                 variant="outlined"
                                 type={"text"}
@@ -186,7 +186,7 @@ export default function MainSetting({data}) {
                                 value={copyright}
                                 onInput={(event) => copyrightHandler(event)}/>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="تلفن"
                                 variant="outlined"
                                 error={phoneError}
@@ -194,7 +194,7 @@ export default function MainSetting({data}) {
                                 value={phone}
                                 onInput={(event) => phoneHandler(event)}/>
 
-                            <div className={"w-75 d-flex flex-column gap-3 p-1 bg-light align-items-center rounded-3"}>
+                            <div className={"col-md-9 col-11 d-flex flex-column gap-3 p-1 bg-light align-items-center rounded-3"}>
                                 <span>
                                     آدرس های شبکه های اجتماعی
                                 </span>

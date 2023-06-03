@@ -139,25 +139,25 @@ export default function AddAdmin() {
             </Breadcrumbs>
             <div className={"d-flex flex-row justify-content-center"}>
 
-                <Col xs={11} sm={11} md={8} lg={6} xl={5} className={"content bg-white shadow-sm mt-3"}>
+                <Col xs={12} sm={11} md={8} lg={6} xl={5} className={"content bg-white shadow-sm mt-3"}>
                     <form>
                     <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
                         <TextField
-                            className={"w-75"}
+                            className={"col-11 col-md-9"}
                             label="نام"
                             variant="outlined"
                             error={firstnameError}
                             value={firstname}
                             onInput={(event)=> firstnameHandler(event)}/>
                         <TextField
-                            className={"w-75"}
+                            className={"col-11 col-md-9"}
                             label="نام خانوادگی"
                             variant="outlined"
                             error={lastnameError}
                             value={lastname}
                             onInput={(event)=> lastnameHandler(event)}/>
                         <TextField
-                            className={"w-75"}
+                            className={"col-11 col-md-9"}
                             label="شماره تلفن"
                             variant="outlined"
                             type={"number"}
@@ -167,7 +167,7 @@ export default function AddAdmin() {
                         <TextField
                             select
                             label="وضعیت"
-                            className={"w-75"}
+                            className={"col-11 col-md-9"}
                             error={statusError}
                             onChange={statusHandler}
                             value={status}

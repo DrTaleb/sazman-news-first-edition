@@ -83,59 +83,6 @@ export default function PanelLayout({children}) {
                                 <div className="panel-switch-holder-back"></div>
                             </div>
                         </div>
-                        {/*<Tooltip title="منوی کاربری">*/}
-                        {/*    <IconButton*/}
-                        {/*        onClick={handleClick}*/}
-                        {/*        size="small"*/}
-                        {/*        aria-controls={open ? 'account-menu' : undefined}*/}
-                        {/*        aria-haspopup="true"*/}
-                        {/*        aria-expanded={open ? 'true' : undefined}*/}
-                        {/*    >*/}
-                        {/*        <Fab color="text" className={"bg-white shadow-sm"} size={"small"}>*/}
-                        {/*            <PersonIcon color="action"/>*/}
-                        {/*        </Fab>*/}
-                        {/*    </IconButton>*/}
-                        {/*</Tooltip>*/}
-                        <Menu
-                            anchorEl={profileOpener}
-                            id="account-menu"
-                            open={opener}
-                            onClose={profileClose}
-                            onClick={profileClickHandler}
-                            PaperProps={{
-                                elevation: 0,
-                                sx: {
-                                    overflow: 'visible',
-                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                    mt: 2,
-                                    '& .MuiAvatar-root': {
-                                        width: 32,
-                                        height: 32,
-                                        ml: -0.5,
-                                        mr: 1,
-                                    },
-                                },
-                            }}
-                            transformOrigin={{horizontal: 'right', vertical: 'top'}}
-                            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                        >
-                            <MenuItem onClick={handleClose}>
-                                <Avatar/> ورود به پنل کاربری
-                            </MenuItem>
-                            <Divider/>
-                            <MenuItem onClick={handleClose}>
-                                <ListItemIcon>
-                                    <Settings fontSize="small"/>
-                                </ListItemIcon>
-                                تنظیمات اکانت
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                <ListItemIcon>
-                                    <Logout fontSize="small"/>
-                                </ListItemIcon>
-                                خروج از حساب
-                            </MenuItem>
-                        </Menu>
                     </div>
                 </div>
             </nav>
@@ -290,9 +237,9 @@ export default function PanelLayout({children}) {
                                 </Link>
                                 <Link href={"/admin/setting"}>
                                     <MenuItem
-                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("setting") && "active"}`}>
+                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("setting") && !routerPath.includes("account") && "active"}`}>
                                         <SettingsIcon
-                                            className={`${routerPath.includes("setting") && "color-my-purple"}`}
+                                            className={`${routerPath.includes("setting") && !routerPath.includes("account") && "color-my-purple"}`}
                                         ></SettingsIcon>
                                         <span className="text-secondary">تنظیمات اصلی</span>
                                     </MenuItem>
@@ -362,7 +309,7 @@ export default function PanelLayout({children}) {
                                     transformOrigin={{horizontal: 'right', vertical: 'top'}}
                                     anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                                 >
-                                    <Link href={"/user-panel/register"}>
+                                    <Link href={"/admin/account-setting"}>
                                         <MenuItem onClick={handleClose}>
                                             <ListItemIcon>
                                                 <SettingsIcon fontSize="small"/>

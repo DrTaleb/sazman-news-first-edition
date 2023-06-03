@@ -185,11 +185,11 @@ export default function EditSlider({data}) {
             </Breadcrumbs>
             <div className={"d-flex flex-row justify-content-center mt-4"}>
 
-                <Col xs={11} sm={11} md={8} lg={6} xl={5} className={"shadow-sm bg-white"}>
+                <Col xs={12} sm={11} md={8} lg={6} xl={5} className={"shadow-sm bg-white"}>
                     <form>
                         <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="نام اسلاید"
                                 variant="outlined"
                                 error={titleError}
@@ -198,7 +198,7 @@ export default function EditSlider({data}) {
                             <TextField
                                 select
                                 label="نوع لینک"
-                                className={"w-75"}
+                                className={"col-9 col-11"}
                                 value={type}
                                 error={typeError}
                                 onChange={typeHandler}
@@ -210,7 +210,7 @@ export default function EditSlider({data}) {
                                 ))}
                             </TextField>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="لینک"
                                 variant="outlined"
                                 multiline
@@ -222,7 +222,7 @@ export default function EditSlider({data}) {
                                 select
                                 label="وضعیت"
                                 error={statusError}
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 onChange={statusHandler}
                                 value={status}
                             >
@@ -250,7 +250,7 @@ export default function EditSlider({data}) {
                                     ]}>
                                 </DatePicker>
                             </div>
-                            <div className={"w-75 d-flex flex-column align-items-center gap-3 p-2 border border-2 border-light rounded-3"}>
+                            <div className={"col-md-9 col-12 d-flex flex-column align-items-center gap-3 p-2 border border-2 border-light rounded-3"}>
                                 <span>
                                     عکس فعلی
                                 </span>

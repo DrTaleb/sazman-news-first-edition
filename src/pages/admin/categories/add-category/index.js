@@ -24,11 +24,11 @@ export default function AddCategory({data}) {
     const router = useRouter()
     const [menus, setMenus] = useState([])
     useEffect(() => {
-        const menuList = [{label : "بدون والد" , value : 0}]
-        data.data.data.map(item => menuList.push({label : item.title, value : item.id}))
+        const menuList = [{label: "بدون والد", value: 0}]
+        data.data.data.map(item => menuList.push({label: item.title, value: item.id}))
         setMenus(menuList)
     }, [data])
-    const [statusOptions, setStatusOptions] = useState([
+    const [statusOptions] = useState([
         {
             label: "غیر فعال",
             value: 0
@@ -38,16 +38,7 @@ export default function AddCategory({data}) {
             value: 1
         }
     ])
-    const [linkTypeList, setLinkTypeList] = useState([
-        {
-            label: "درونی",
-            value: 1
-        },
-        {
-            label: "بیرونی",
-            value: 2
-        }
-    ])
+
     // form input -----------------------------------
     const [name, setName] = useState("")
     const [nameError, setNameError] = useState(true)
@@ -112,26 +103,26 @@ export default function AddCategory({data}) {
     if (data.status) {
         return (
             <Container>
-                <Breadcrumbs className={"ms-4"} separator="›" aria-label="breadcrumb">
+                <Breadcrumbs className={"ms-md-4"} separator="›" aria-label="breadcrumb">
                     {breadcrumbs}
                 </Breadcrumbs>
-                <div className={"d-flex flex-row justify-content-center"}>
-
-                    <Col xs={11} sm={11} md={8} lg={6} xl={5} className={"bg-white rounded-3 shadow"}>
+                <div className={"d-flex flex-row justify-content-center mt-3"}>
+                    <Col xs={12} sm={11} md={8} lg={6} xl={5} className={"bg-white rounded-3 shadow"}>
                         <form>
                             <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
-                                <TextField className={"w-75"}
-                                           label="نام دسته"
-                                           variant="outlined"
-                                           value={name}
-                                           error={nameError}
-                                           InputLabelProps={{shrink: true}}
-                                           onInput={(event) => nameHandler(event)}
+                                <TextField
+                                    className={"col-md-9 col-11"}
+                                    label="نام دسته"
+                                    variant="outlined"
+                                    value={name}
+                                    error={nameError}
+                                    InputLabelProps={{shrink: true}}
+                                    onInput={(event) => nameHandler(event)}
                                 />
                                 <TextField
                                     select
                                     label="والد"
-                                    className={"w-75"}
+                                    className={"col-md-9 col-11"}
                                     value={parent}
                                     onChange={parentHandler}
                                     disabled={parentDisable}
@@ -145,7 +136,7 @@ export default function AddCategory({data}) {
                                 <TextField
                                     select
                                     label="وضعیت"
-                                    className={"w-75"}
+                                    className={"col-md-9 col-11"}
                                     value={status}
                                     onChange={statusHandler}
                                 >

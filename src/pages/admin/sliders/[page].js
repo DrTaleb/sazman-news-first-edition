@@ -132,10 +132,10 @@ export default function Sliders({data}) {
 
 
     return (
-        <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden' , boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/sliders/add-slider"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن اسلایدر</Button>
+        <div className={"px-md-4"}>
+            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden' , boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <Link href={"/admin/sliders/add-slider"}  className={"ps-2"}>
+                    <Button variant={"contained"} color={"success"}>افزودن اسلایدر</Button>
                 </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">

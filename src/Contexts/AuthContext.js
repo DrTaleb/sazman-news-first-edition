@@ -14,15 +14,21 @@ export const AuthProvider = ({children}) => {
             lastname : "",
             companies : [],
     });
+    const [userMobile , setUserMobile] = useState("")
+    const [userStatus , setUserStatus] = useState("")
 
     const getUserData = async () => {
         let massage;
+        let mobile;
+        let status;
         try {
             await fetch(`${process.env.LOCAL_URL}/api/auth/useinfo`, {
                 method: "GET",
             }).then(res => res.json()).then(data =>{
                 if (data.status){
                     massage = data.data.userable
+                    mobile = data.data.mobile
+                    status = data.status
                 }else {
                     massage = {
                             firstname : "",
@@ -32,6 +38,8 @@ export const AuthProvider = ({children}) => {
                 }
             })
             await setUserData(massage)
+            await setUserMobile(mobile)
+            await setUserStatus(status)
         }catch {
             setUserData(userData)
         }
@@ -83,7 +91,7 @@ export const AuthProvider = ({children}) => {
 
     return (
 
-        <AuthContext.Provider value={{login, SendCode, logOut, userData}}>
+        <AuthContext.Provider value={{login, SendCode, logOut, userData, userMobile,userStatus}}>
             {children}
         </AuthContext.Provider>
     )

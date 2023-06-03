@@ -15,11 +15,11 @@ export default function SliderId({data}) {
                 بازگشت به صفحه قبل
             </Button>
             <div className={"d-flex flex-row justify-content-center mt-4"}>
-                <Col xs={11} sm={11} md={8} lg={5} xl={5} className={"shadow-sm bg-white rounded-4"}>
+                <Col xs={12} sm={11} md={8} lg={5} xl={5} className={"shadow-sm bg-white rounded-4"}>
                     <form>
                         <div className={"d-flex flex-column align-items-center gap-3 py-5 px-sm-3"}>
                             <TextField
-                                className={"w-75"}
+                                className={"col-md-9 col-11"}
                                 label="عنوان"
                                 variant="outlined"
                                 disabled={true}

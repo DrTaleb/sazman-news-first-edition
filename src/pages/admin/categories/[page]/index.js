@@ -97,10 +97,10 @@ export default function Menus({data}) {
     }
 
     return (
-        <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/categories/add-category"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن دسته </Button>
+        <div className={"px-md-4"}>
+            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <Link href={"/admin/categories/add-category"} className={"ps-2"}>
+                    <Button variant={"contained"} color={"success"}>افزودن دسته </Button>
                 </Link>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">

@@ -100,12 +100,12 @@ export default function Menus({data}) {
     }
 
     return (
-        <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/menus/header/add-menu"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن منو و زیرمنو</Button>
+        <div className={"px-md-4"}>
+            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <Link href={"/admin/menus/header/add-menu"} className={"ps-2"}>
+                    <Button variant={"contained"} color={"success"}>افزودن منو و زیرمنو</Button>
                 </Link>
-                <TableContainer sx={{maxHeight: 600}}>
+                <TableContainer sx={{maxHeight: 600}} className={"mt-3"}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
@@ -162,7 +162,7 @@ export default function Menus({data}) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <div className={"d-flex flex-row justify-content-center mt-5"}>
+                <div className={"d-flex flex-row justify-content-center mt-5 mb-3"}>
                     <Pagination
                         count={pageCount}
                         onChange={(event, value) => clickHandler(event, value)}

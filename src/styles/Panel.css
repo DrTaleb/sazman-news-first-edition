@@ -127,7 +127,7 @@ html body {
     bottom: 0;
     right: -100%;
     display: flex;
-    transition: 0.6s;
+    transition: 0.4s;
     justify-content: flex-start;
     z-index: 1021;
     direction: rtl;

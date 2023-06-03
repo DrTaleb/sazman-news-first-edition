@@ -3,8 +3,9 @@ import React from "react";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArtTrackIcon from '@mui/icons-material/ArtTrack';
-import ApexLineChart from "@/Components/charts/ApexLineChart";
-import ApexMixedChart from "@/Components/charts/ApexMixedChart";
+// import ApexLineChart from "@/Components/charts/ApexLineChart";
+// import ApexMixedChart from "@/Components/charts/ApexMixedChart";
+
 export default function Monitoring(){
 
     const postItems = [
@@ -62,7 +63,7 @@ export default function Monitoring(){
                         <i className="fa fa-angle-down text-secondary"></i>
                     </span>
                     </div>
-                    <ApexMixedChart/>
+                    {/*<ApexMixedChart/>*/}
                 </div>
                 <div className={"mt-3"}>
                     <div className={"d-flex flex-row flex-wrap gap-3"}>
@@ -148,7 +149,7 @@ export default function Monitoring(){
                         <i className="fa fa-angle-down text-secondary"></i>
                     </span>
                     </div>
-                    <ApexLineChart></ApexLineChart>
+                    {/*<ApexLineChart></ApexLineChart>*/}
                 </div>
             </div>
         </div>

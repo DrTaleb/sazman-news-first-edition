@@ -142,7 +142,7 @@ export default function Companies({data}) {
             </div>
         )
     } else return (
-        <div className={"px-4"}>
+        <div className={"px-md-4"}>
             <div className={"panel-search-bar rounded-3 mb-3 gap-2"}>
                 <Col xl={3} className={"bg-white"}>
                     <TextField
