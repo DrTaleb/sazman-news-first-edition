@@ -226,7 +226,7 @@ export default function PanelLayout({children}) {
                                         <span className="text-secondary">گزارشات تخلف</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/admin/tickets"}>
+                                <Link href={"/admin/tickets/1"}>
                                     <MenuItem
                                         className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("tickets") && "active"}`}>
                                         <ConnectWithoutContactIcon

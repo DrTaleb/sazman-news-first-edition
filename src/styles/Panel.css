@@ -606,3 +606,19 @@ html body {
     display: flex;
     flex-direction: row;
 }
+.chat-item{
+    max-width: calc(100% - 50px);
+}
+@media (min-width: 768px) {
+    .chat-item{
+        max-width: 50%;
+    }
+}
+.chat-text-input{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-top: 10px;
+    min-height: 70px;
+    background-color: var(--white);
+}

@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
-import {Button} from "@mui/material";
+import {Button, styled} from "@mui/material";
 import {useRouter} from "next/router";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Badge} from "react-bootstrap";
@@ -44,13 +44,24 @@ export default function Tickets({data}) {
         router.push(`/admin/tickets/answer/${id}`)
     }
 
+    // head row style ---------
+    const StyledTableRow = styled(TableRow)(({theme}) => ({
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+            backgroundColor: "#f7f7f7",
+
+        },
+    }));
+    // end head row style-----------
+
     return (
-        <div className={"px-4"}>
-            <Paper className={"p-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+        <div className={"px-md-4"}>
+            <Paper className={"mt-3  rounded-3 overflow-hidden"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
-                            <TableRow>
+                            <StyledTableRow>
                                 {columns.map((column) => (
                                     <TableCell
                                         key={column.id}
@@ -66,7 +77,7 @@ export default function Tickets({data}) {
                                 <TableCell>
                                     گزینه ها
                                 </TableCell>
-                            </TableRow>
+                            </StyledTableRow>
                         </TableHead>
                         <TableBody>
                             {rows.map((row) => {
