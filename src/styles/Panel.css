@@ -609,16 +609,27 @@ html body {
 .chat-item{
     max-width: calc(100% - 50px);
 }
+
+.chat-text-input-section{
+    position: fixed;
+    padding-top: 5px;
+    bottom: 0;
+    width: 100%;
+    min-height: 70px;
+    background-color: var(--white);
+}
+.chat-text-input{
+    width: 70%;
+}
+
+.rotate-180{
+    transform: rotate(180deg);
+}
 @media (min-width: 768px) {
     .chat-item{
         max-width: 50%;
     }
-}
-.chat-text-input{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding-top: 10px;
-    min-height: 70px;
-    background-color: var(--white);
+    .chat-text-input{
+        width: 75%;
+    }
 }

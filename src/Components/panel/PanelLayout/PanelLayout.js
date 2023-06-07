@@ -90,7 +90,7 @@ export default function PanelLayout({children}) {
                 <div className="panel-navigation-menu panel-w-sidebar panel-w-sidebar-sm" ref={responsiveMenu}>
                     <div className="panel-side-bar col-12 position-relative d-lg-flex">
                         <div className="panel-nav-item-parent col-12 d-flex flex-column ps-3 mt-5  pt-md-0 mt-md-0">
-                            <div className="panel-menu-items-parent col-12">
+                            <div className="panel-menu-items-parent col-12 pb-5">
                                 <div className="service-section-opener d-flex flex-row">
                                     <div className="panel-title-parent w-100">
                                         <span
@@ -208,13 +208,22 @@ export default function PanelLayout({children}) {
                                         <span className="text-secondary"> لیست درخواست تبلیغات</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/admin/selected-posts"}>
+                                <Link href={"/admin/active-posts/1"}>
                                     <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("selected-posts") && "active"}`}>
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("active-posts") && "active"}`}>
                                         <WysiwygIcon
-                                            className={`${routerPath.includes("selected-posts") && "color-my-purple"}`}
+                                            className={`${routerPath.includes("active-posts") && "color-my-purple"}`}
                                         ></WysiwygIcon>
-                                        <span className="text-secondary">پست های منتخب</span>
+                                        <span className="text-secondary">پست های فعال</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/post-requests/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("post-requests") && "active"}`}>
+                                        <WysiwygIcon
+                                            className={`${routerPath.includes("post-requests") && "color-my-purple"}`}
+                                        ></WysiwygIcon>
+                                        <span className="text-secondary">درخواست های انتشار</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/admin/reports"}>
