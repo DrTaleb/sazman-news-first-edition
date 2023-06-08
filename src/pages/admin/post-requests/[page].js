@@ -54,7 +54,7 @@ export default function SelectedPosts({data}) {
 
 
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/posts/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/post-requests/${router.query.page}`)
         const data = await res.json()
         await setDATA(data)
     }
@@ -69,7 +69,6 @@ export default function SelectedPosts({data}) {
     }
 
     const rows = [];
-    console.log(DATA.data.data)
     DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.selected_status == 1 ? "فعال" : "غیر فعال"}`, `${item.type}`, `${item.view_count}`, `${item.like_count}`, `${item.published_at}`, `${item.category.title}`,`${item.company.title}`,`${item.writer.firstname} ${item.writer.lastname}`,`${item.writer.id}`, `${item.company_id}`)))
 
 
@@ -101,6 +100,7 @@ export default function SelectedPosts({data}) {
                     fetch(`${process.env.LOCAL_URL}/api/admin/posts/delete/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
+                        console.log(data)
                         if (data.status) {
                             setGetData(prev => !prev)
                             Nprogress.done()
@@ -115,7 +115,7 @@ export default function SelectedPosts({data}) {
                             Swal.fire(
                                 '',
                                 "مشکلی وجود دارد دوباره تلاش کنید",
-                                'success'
+                                'error'
                             )
                         }
                     })
@@ -168,7 +168,7 @@ export default function SelectedPosts({data}) {
                                 <TableCell>
                                     وضعیت
                                 </TableCell>
-                                <TableCell>
+                                <TableCell sx={{minWidth : "200px"}}>
                                     عضویت در پست های برتر
                                 </TableCell>
                                 <TableCell>
@@ -177,7 +177,7 @@ export default function SelectedPosts({data}) {
                                 <TableCell>
                                     نویسنده
                                 </TableCell>
-                                <TableCell>
+                                <TableCell sx={{minWidth : "200px"}}>
                                     گزینه ها
                                 </TableCell>
                             </StyledTableRow>

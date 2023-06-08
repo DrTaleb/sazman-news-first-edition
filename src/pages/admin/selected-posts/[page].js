@@ -54,7 +54,7 @@ export default function SelectedPosts({data}) {
 
 
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/posts/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/post-requests/${router.query.page}`)
         const data = await res.json()
         await setDATA(data)
     }
@@ -69,6 +69,7 @@ export default function SelectedPosts({data}) {
     }
 
     const rows = [];
+    console.log(DATA.data.data)
     DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.selected_status == 1 ? "فعال" : "غیر فعال"}`, `${item.type}`, `${item.view_count}`, `${item.like_count}`, `${item.published_at}`, `${item.category.title}`,`${item.company.title}`,`${item.writer.firstname} ${item.writer.lastname}`,`${item.writer.id}`, `${item.company_id}`)))
 
 
@@ -100,6 +101,7 @@ export default function SelectedPosts({data}) {
                     fetch(`${process.env.LOCAL_URL}/api/admin/posts/delete/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
+                        console.log(data)
                         if (data.status) {
                             setGetData(prev => !prev)
                             Nprogress.done()
@@ -114,7 +116,7 @@ export default function SelectedPosts({data}) {
                             Swal.fire(
                                 '',
                                 "مشکلی وجود دارد دوباره تلاش کنید",
-                                'success'
+                                'error'
                             )
                         }
                     })
@@ -150,7 +152,7 @@ export default function SelectedPosts({data}) {
 
     return (
         <div className={"px-md-4"}>
-            <Paper className={"mt-3 rounded-3 overflow-hidden"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+            <Paper className={"mt-3 rounded-3 overflow-hidden pb-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -279,7 +281,7 @@ export async function getServerSideProps(context) {
     try {
         const {params, req} = context
 
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/posts?page=${params.page}&limit=10&status=1`, {
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/posts?page=${params.page}&limit=10&selected_status=1`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',

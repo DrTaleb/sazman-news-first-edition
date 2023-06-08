@@ -11,27 +11,33 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
-import {Alert, Button, Pagination, PaginationItem, Skeleton} from "@mui/material";
+import {Alert, Button, Pagination, PaginationItem, Skeleton, styled} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import Nprogress from "nprogress";
 import {Badge} from "react-bootstrap";
+import Tooltip from "@mui/material/Tooltip";
 
 const columns = [
-    {id: 'id', label: 'آیدی', minWidth: 170},
-    {id: 'name', label: 'عنوان', minWidth: 170, align: "left"},
     {
-        id: 'link', label: 'لینک', minWidth: 170, align: 'left',
+        id: 'id', label: 'آیدی', minWidth: 170},
+    {
+        id: 'title', label: 'عنوان', minWidth: 170, align: "left"},
+    {
+        id: 'type', label: 'نوع پست', minWidth: 200, align: 'left',
     },
     {
-        id: 'link_type', label: 'نوع لینک', minWidth: 170, align: 'left',
+        id: 'view_count', label: 'تعداد بازدید', minWidth: 200, align: 'left',
     },
     {
-        id: 'start_at', label: 'تاریخ شروع', minWidth: 170, align: 'left',
+        id: 'like_count', label: 'تعداد لایک', minWidth: 170, align: 'left',
     },
     {
-        id: "end_at", label: 'تاریخ پایان', minWidth: 170, align: 'left',
+        id: 'published_at', label: 'تاریخ پخش', minWidth: 170, align: 'left',
+    },
+    {
+        id: "category", label: 'دسته بندی', minWidth: 170, align: 'left',
     },
 ];
 
@@ -56,17 +62,18 @@ export default function Posts() {
         if (companyItem != null) {
             const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/posts/${companyItem}/${router.query.page}`)
             const data = await res.json()
-            await setDATA(data)
-            await setPage(data.data.current_page)
-            await setRowsPerPage(data.data.per_page)
-            await setPageCount(data.data.last_page)
+            // await setDATA(data)
+            // await setPage(data.data.current_page)
+            // await setRowsPerPage(data.data.per_page)
+            // await setPageCount(data.data.last_page)
+            console.log(data)
         } else setDATA({status: null})
 
     }
 
 
-    function createData(id, name, status, link, link_type, start_at, end_at, options) {
-        return {id, name, status, link, link_type, start_at, end_at, options};
+    function createData(id, title, status, selected_status, type, view_count, like_count, published_at, category,company,writer,writer_id, company_id ,options) {
+        return {id, title, status, selected_status, type, view_count, like_count, published_at,category,company, writer,writer_id,company_id,options};
     }
 
     const rows = [];
@@ -76,7 +83,7 @@ export default function Posts() {
     }, [])
 
     if (DATA.status) {
-        DATA.status && DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.link}`, `${item.link_type == 1 ? "داخلی" : "خارجی"}`, `${item.start_at}`, `${item.end_at}`,)))
+        DATA.status && DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.selected_status == 1 ? "فعال" : "غیر فعال"}`, `${item.type}`, `${item.view_count}`, `${item.like_count}`, `${item.published_at}`, `${item.category.title}`,`${item.company.title}`,`${item.writer.firstname} ${item.writer.lastname}`,`${item.writer.id}`, `${item.company_id}`)))
     }
 
 
@@ -137,20 +144,24 @@ export default function Posts() {
         router.push(`/admin/sliders/${value}`)
         dataFetch()
     }
+    const StyledTableRow = styled(TableRow)(({theme}) => ({
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+            backgroundColor: "#f7f7f7",
+
+        },
+    }));
 
 
     if (DATA.status) {
         return (
             <div className={"px-md-4"}>
-                <Paper className={"p-3 rounded-4"}
-                       sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 .3rem rgba(0, 0, 0, .1)"}}>
-                    <Link href={"/admin/sliders/add-slider"}>
-                        <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن پست</Button>
-                    </Link>
+                <Paper className={"mt-3 rounded-3 overflow-hidden pb-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
-                                <TableRow>
+                                <StyledTableRow>
                                     {columns.map((column) => (
                                         <TableCell
                                             key={column.id}
@@ -163,10 +174,19 @@ export default function Posts() {
                                     <TableCell>
                                         وضعیت
                                     </TableCell>
+                                    <TableCell sx={{minWidth : "200px"}}>
+                                        عضویت در پست های برتر
+                                    </TableCell>
                                     <TableCell>
+                                        شرکت
+                                    </TableCell>
+                                    <TableCell>
+                                        نویسنده
+                                    </TableCell>
+                                    <TableCell sx={{minWidth : "200px"}}>
                                         گزینه ها
                                     </TableCell>
-                                </TableRow>
+                                </StyledTableRow>
                             </TableHead>
                             <TableBody>
                                 {rows.map((row) => {
@@ -175,8 +195,7 @@ export default function Posts() {
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 return (
-                                                    <TableCell key={column.id} align={column.align}
-                                                               className={"fw-bold"}>
+                                                    <TableCell key={column.id} align={column.align} className={"fw-bold"}>
                                                         {column.format && typeof value === 'number'
                                                             ? column.format(value)
                                                             : value}
@@ -185,27 +204,57 @@ export default function Posts() {
                                             })}
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                                 {
-                                                    row.status === "فعال" ?
-                                                        <Badge bg={"success"} className={"py-2 px-3"}>منتشر
-                                                            شده</Badge> :
-                                                        <Badge bg={"warning"}>در صف انتشار</Badge>
+                                                    row.status === "فعال"
+                                                        ?
+                                                        <Badge className={"px-3 py-2"} bg={"success"}>فعال</Badge>
+                                                        :
+                                                        <Badge className={"px-3 py-2"} bg={"error"}>غیر فعال</Badge>
                                                 }
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <IconButton color={"info"}
-                                                            onClick={() => viewHandler(row.id)}
-                                                ><RemoveRedEyeRoundedIcon/>
-                                                </IconButton>
-                                                <IconButton color={"warning"}
-                                                            onClick={() => editHandler(row.id)}
-                                                >
-                                                    <ModeEditOutlineRoundedIcon></ModeEditOutlineRoundedIcon>
-                                                </IconButton>
-                                                <IconButton color={"error"}
-                                                            onClick={() => deleteHandler(row.id)}
-                                                >
-                                                    <DeleteIcon></DeleteIcon>
-                                                </IconButton>
+                                                {
+                                                    row.selected_status === "فعال"
+                                                        ?
+                                                        <Badge className={"px-3 py-2"} bg={"success"}>فعال</Badge>
+                                                        :
+                                                        <Badge className={"px-3 py-2"} bg={"danger"}>غیر فعال</Badge>
+                                                }
+                                            </TableCell>
+                                            <TableCell align={"left"} sx={{minWidth: "200px"}}>
+                                                <Tooltip title={"مشاهده مشخصات شرکت"}>
+                                                    <Button variant={"outlined"} onClick={() => goToCompany(row.company_id)}>
+                                                        {row.company}
+                                                    </Button>
+                                                </Tooltip>
+                                            </TableCell>
+                                            <TableCell align={"left"} sx={{minWidth: "200px"}}>
+                                                <Tooltip title={"مشاهده مشخصات نویسنده"}>
+                                                    <Button variant={"outlined"} onClick={() => goToWriter(row.writer_id)}>
+                                                        {row.writer}
+                                                    </Button>
+                                                </Tooltip>
+                                            </TableCell>
+                                            <TableCell align={"left"} sx={{minWidth: "200px"}}>
+                                                <Tooltip title={"مشاهده پست"}>
+                                                    <IconButton color={"info"}
+                                                                onClick={() => viewHandler(row.id)}
+                                                    ><RemoveRedEyeRoundedIcon/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title={"ویرایش"}>
+                                                    <IconButton color={"warning"}
+                                                                onClick={() => editHandler(row.id)}
+                                                    >
+                                                        <ModeEditOutlineRoundedIcon></ModeEditOutlineRoundedIcon>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title={"حذف پست"}>
+                                                    <IconButton color={"error"}
+                                                                onClick={() => deleteHandler(row.id)}
+                                                    >
+                                                        <DeleteIcon></DeleteIcon>
+                                                    </IconButton>
+                                                </Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     )

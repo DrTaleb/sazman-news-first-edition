@@ -1,7 +1,7 @@
 export default async function Handler(req,res){
     const authToken = req.cookies.authToken
     if (req.method === "DELETE"){
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/posts/${req.query.postId}`,{
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/posts/${req.query.id}`,{
             method : "DELETE",
             headers : {
                 'Content-Type': 'application/json; charset=UTF-8',

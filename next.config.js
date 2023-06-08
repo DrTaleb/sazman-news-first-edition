@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   env :{
-    SERVER_URL : "https://newsapi.deltagroup.ir",
+    SERVER_URL : "http://newsapi.deltagroup.ir",
     LOCAL_URL : "http://localhost:3000"
   }
 }

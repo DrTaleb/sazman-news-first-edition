@@ -30,6 +30,7 @@ Router.events.on('routeChangeComplete', ()=>{
 export default function App({Component, pageProps, props}) {
 
 
+    console.log(props)
     const routerName = useRouter()
     const userAdminRoute = routerName.pathname.includes("user-panel")
     const adminRoute = routerName.pathname.includes("admin")

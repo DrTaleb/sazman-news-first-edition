@@ -26,7 +26,6 @@ export default function Tickets({data}) {
     const [DATA, setDATA] = useState(data.data.data)
     const [getData, setGetData] = useState(false)
 
-    console.log(data)
     useEffect(() => {
         fetch(`${process.env.LOCAL_URL}/api/admin/tickets/${router.query.page}`)
             .then(res => res.json())

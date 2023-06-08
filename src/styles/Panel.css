@@ -22,7 +22,9 @@
     --border-success: #badbcc;
     --bg-sucsses: #d1e7dd;
 }
-
+pre{
+    font-family: YekanBakh;
+}
 .danger {
     background: var(--bg-important-tag);
     border: 1px solid var(--border-important);
@@ -224,7 +226,7 @@ html body {
     flex-direction: row;
     align-items: center;
     height: 45px;
-    width: 91%;
+    width: 96%;
     /*box-shadow: 0 0 .1rem rgba(0, 0, 0, .2) !important;*/
     font-size: 16px;
 }
@@ -608,6 +610,7 @@ html body {
 }
 .chat-item{
     max-width: calc(100% - 50px);
+    min-width: 150px;
 }
 
 .chat-text-input-section{

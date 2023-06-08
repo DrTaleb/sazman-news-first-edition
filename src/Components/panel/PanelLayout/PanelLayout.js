@@ -154,15 +154,6 @@ export default function PanelLayout({children}) {
                                         <span className="text-secondary">دسته بندی ها</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/admin/company-requests/1"}>
-                                    <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("company-requests") && "active"}`}>
-                                        <AddTaskIcon
-                                            className={`${routerPath.includes("company-requests") && "color-my-purple"}`}
-                                        ></AddTaskIcon>
-                                        <span className="text-secondary">درخواست های ثبت شرکت</span>
-                                    </MenuItem>
-                                </Link>
                                 <Link href={"/admin/companies/1"}>
                                     <MenuItem
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("companies") && "active"}`}>
@@ -199,13 +190,13 @@ export default function PanelLayout({children}) {
                                         <span className="text-secondary"> لیست تبلیغات فعال</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/admin/ads-requests/1"}>
+                                <Link href={"/admin/selected-posts/1"}>
                                     <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("ads-requests") && "active"}`}>
-                                        <ListAltIcon
-                                            className={`${routerPath.includes("ads-requests") && "color-my-purple"}`}
-                                        ></ListAltIcon>
-                                        <span className="text-secondary"> لیست درخواست تبلیغات</span>
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("selected-posts") && "active"}`}>
+                                        <WysiwygIcon
+                                            className={`${routerPath.includes("selected-posts") && "color-my-purple"}`}
+                                        ></WysiwygIcon>
+                                        <span className="text-secondary">پست های برگزیده</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/admin/active-posts/1"}>
@@ -215,15 +206,6 @@ export default function PanelLayout({children}) {
                                             className={`${routerPath.includes("active-posts") && "color-my-purple"}`}
                                         ></WysiwygIcon>
                                         <span className="text-secondary">پست های فعال</span>
-                                    </MenuItem>
-                                </Link>
-                                <Link href={"/admin/post-requests/1"}>
-                                    <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("post-requests") && "active"}`}>
-                                        <WysiwygIcon
-                                            className={`${routerPath.includes("post-requests") && "color-my-purple"}`}
-                                        ></WysiwygIcon>
-                                        <span className="text-secondary">درخواست های انتشار</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/admin/reports"}>
@@ -253,6 +235,53 @@ export default function PanelLayout({children}) {
                                         <span className="text-secondary">تنظیمات اصلی</span>
                                     </MenuItem>
                                 </Link>
+                                <div className="service-section-opener d-flex flex-row">
+                                    <div className="panel-title-parent w-100">
+                                        <span
+                                            className="panel-main-title- text-capitalize panel-header-title text-secondary">
+                                           درخواست ها
+                                        </span>
+                                    </div>
+                                    <span className="mt-1 ms-2">
+                                   <i className="fa fa-angle-down text-secondary"></i>
+                                </span>
+                                </div>
+                                <Link href={"/admin/post-requests/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("post-requests") && "active"}`}>
+                                        <WysiwygIcon
+                                            className={`${routerPath.includes("post-requests") && "color-my-purple"}`}
+                                        ></WysiwygIcon>
+                                        <span className="text-secondary">درخواست های انتشار</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/selected-requests/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("selected-requests") && "active"}`}>
+                                        <WysiwygIcon
+                                            className={`${routerPath.includes("selected-requests") && "color-my-purple"}`}
+                                        ></WysiwygIcon>
+                                        <span className="text-secondary">درخواست های پست برگزیده</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/company-requests/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("company-requests") && "active"}`}>
+                                        <AddTaskIcon
+                                            className={`${routerPath.includes("company-requests") && "color-my-purple"}`}
+                                        ></AddTaskIcon>
+                                        <span className="text-secondary">درخواست های ثبت شرکت</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/ads-requests/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("ads-requests") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("ads-requests") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary"> لیست درخواست تبلیغات</span>
+                                    </MenuItem>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -279,7 +308,8 @@ export default function PanelLayout({children}) {
                                                 {userData.firstname} {userData.lastname}
                                             </span>
                                             :
-                                            <Skeleton className={"d-inline-block"} animation={"wave"} width={100} height={20}></Skeleton>
+                                            <Skeleton className={"d-inline-block"} animation={"wave"} width={100}
+                                                      height={20}></Skeleton>
                                     }
                                 </div>
                                 <Menu
