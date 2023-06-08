@@ -21,7 +21,6 @@ const columns = [
 
 export default function Tickets({data}) {
 
-
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const [getData, setGetData] = useState(false)

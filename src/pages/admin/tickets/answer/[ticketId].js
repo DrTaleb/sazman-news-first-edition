@@ -5,8 +5,10 @@ import IconButton from "@mui/material/IconButton";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
 import {Button, Skeleton} from "@mui/material";
-
-function TextSection({text, time}) {
+import Swal from "sweetalert2";
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+function TextSection({text, time, isSent}) {
     return (
         <>
             <div className={"d-flex flex-row gap-3 justify-content-end"}>
@@ -14,9 +16,15 @@ function TextSection({text, time}) {
                             <pre className={"text-justify mt-2"}>
                                 {text}
                             </pre>
-                    <small className={"align-self-end"}>
-                        {time}
-                    </small>
+                    <div className={"d-flex flex-row justify-content-between"}>
+                        <small className={"align-self-end"}>
+                            {isSent ? <CheckIcon fontSize={"small"} color={"success"}></CheckIcon> : <ClearIcon color={"error"} fontSize={"small"}/>}
+                        </small>
+                        <small className={"align-self-end"}>
+                            {time}
+                        </small>
+                    </div>
+
                 </div>
                 <Tooltip title={"پشتیبانی وبسایت"}>
                     <div className={"company-profile-img align-self-end  bg-transparent"}>
@@ -30,17 +38,19 @@ function TextSection({text, time}) {
 
 
 export default function Answer() {
+
     const router = useRouter()
     const scrollRef = useRef()
     const [DATA, setDATA] = useState({})
     const [getData, setGetData] = useState(false)
+    const [isSent, setIsSent] = useState(false)
+    const [massageList, setMassageList] = useState([])
 
     useEffect(() => {
         fetch(`${process.env.LOCAL_URL}/api/admin/tickets/single-ticket/${router.query.ticketId}`)
             .then(res => res.json())
             .then(data => {
                 setDATA(data)
-                console.log(data)
             })
 
     }, [getData])
@@ -50,13 +60,51 @@ export default function Answer() {
     const replyHandler = (event) => {
         setReply(event.target.value)
     }
-    const [massageList, setMassageList] = useState([])
 
-    const sendHandler = () => {
+    console.log(DATA.data)
+
+    const sendHandler = async () => {
         if (reply.replaceAll(" ", "").length > 0){
-            setMassageList([...massageList, {text : reply, time : "10"}])
-            setReply("")
-            scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+            try {
+                const dataFetch = await fetch(`${process.env.LOCAL_URL}/api/admin/tickets/reply/${DATA.data.id}`,{
+                    method : "PUT",
+                    body : JSON.stringify({
+                        _method : "PUT",
+                        text : reply,
+                    })
+                })
+                const data = await dataFetch.json()
+                console.log(data)
+                if (!data.status){
+                    await Swal.fire({
+                        text : "پیام ارسال نشد",
+                        icon : "error"
+                    })
+                    setIsSent(false)
+                    setReply("")
+                    await setMassageList([...massageList, {text : reply, time : "10", isSent : false}])
+                    await setReply("")
+                    await scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+                }else if (data.status){
+                    let time = new Date();
+                    await setMassageList([...massageList, {text : reply, time : `${time.getMinutes()} : ${time.getHours()}`, isSent : true}])
+                    await setReply("")
+                    await scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }else {
+                    setIsSent(false)
+                    setReply("")
+                    await setMassageList([...massageList, {text : reply, time : "10", isSent : false}])
+                    await setReply("")
+                    await scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }
+            }catch (err){
+                setIsSent(false)
+                setReply("")
+                await setMassageList([...massageList, {text : reply, time : "10", isSent : false}])
+                await setReply("")
+                await scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     }
     const goToWriter = (id) => {
@@ -80,9 +128,6 @@ export default function Answer() {
                             <span className={"text-justify py-3"}>
                                 سلام چطور میتونم کمکتون کنم ؟
                             </span>
-                                <small className={"align-self-end"}>
-                                    10:41
-                                </small>
                             </div>
                             <Tooltip title={"پشتیبانی وبسایت"}>
                                 <div className={"company-profile-img align-self-end  bg-transparent"}>
@@ -108,12 +153,14 @@ export default function Answer() {
                                                     {item.user.firstname} {item.user.lastname}
                                                 </Button>
                                             </Tooltip>
-                                            <pre className={"text-justify py-2"}>
+                                            <pre className={"text-justify pt-2"}>
                                                            {item.text}
                                             </pre>
-                                            <small className={"align-self-end"}>
-                                                10:41
-                                            </small>
+                                            <div className={"d-flex flex-row justify-content-end"}>
+                                                <small className={"align-self-end"}>
+                                                    10:41
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                     :
@@ -123,9 +170,14 @@ export default function Answer() {
                                                 <pre className={"text-justify pt-3"}>
                                                     {item.text}
                                                 </pre>
-                                            <small className={"align-self-end"}>
-                                                10:41
-                                            </small>
+                                            <div className={"d-flex flex-row justify-content-between"}>
+                                                <small className={"align-self-end"}>
+                                                    <CheckIcon fontSize={"small"} color={"success"}></CheckIcon>
+                                                </small>
+                                                <small className={"align-self-end"}>
+                                                    10:41
+                                                </small>
+                                            </div>
                                         </div>
                                         <Tooltip title={"پشتیبانی وبسایت"}>
                                             <div className={"company-profile-img align-self-end"}>
@@ -137,7 +189,7 @@ export default function Answer() {
                         }
                         {
                             massageList.map(item =>
-                                <TextSection key={item.text} text={item.text} time={item.time}></TextSection>
+                                <TextSection key={item.text} text={item.text} time={item.time} isSent={item.isSent}></TextSection>
                             )
                         }
                     </div>

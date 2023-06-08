@@ -27,7 +27,7 @@ import {Check} from "@mui/icons-material";
 import {Col} from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import AddTaskIcon from "@mui/icons-material/AddTask";
-
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 export default function UserPanelLayout({children}) {
 
 
@@ -305,7 +305,7 @@ export default function UserPanelLayout({children}) {
                                                                     </ListItemIcon>
                                                                     :
                                                                     <ListItemIcon>
-                                                                        <SettingsIcon fontSize={"small"}/>
+                                                                        <CheckBoxOutlineBlankIcon fontSize={"small"}/>
                                                                     </ListItemIcon>
                                                             }
                                                             {item.title}
