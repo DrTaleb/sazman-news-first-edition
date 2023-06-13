@@ -84,7 +84,7 @@ export default function UserPanelLayout({children}) {
     const {userData, logOut} = useContext(AuthContext)
     const [selectedCompany, setSelectedCompany] = useState("")
     useEffect(() => {
-        userData.companies &&  setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
+        // userData.companies &&  setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
 
     }, [userData])
     return (
@@ -295,23 +295,23 @@ export default function UserPanelLayout({children}) {
                                                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                                                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                                             >
-                                                {
-                                                    userData.companies.map(item =>
-                                                        <MenuItem key={item.id} onClick={handleClose}>
-                                                            {
-                                                                item.title === selectedCompany ?
-                                                                    <ListItemIcon>
-                                                                        <Check fontSize={"small"}/>
-                                                                    </ListItemIcon>
-                                                                    :
-                                                                    <ListItemIcon>
-                                                                        <CheckBoxOutlineBlankIcon fontSize={"small"}/>
-                                                                    </ListItemIcon>
-                                                            }
-                                                            {item.title}
-                                                        </MenuItem>
-                                                    )
-                                                }
+                                                {/*{*/}
+                                                {/*    userData.companies.map(item =>*/}
+                                                {/*        <MenuItem key={item.id} onClick={handleClose}>*/}
+                                                {/*            {*/}
+                                                {/*                item.title === selectedCompany ?*/}
+                                                {/*                    <ListItemIcon>*/}
+                                                {/*                        <Check fontSize={"small"}/>*/}
+                                                {/*                    </ListItemIcon>*/}
+                                                {/*                    :*/}
+                                                {/*                    <ListItemIcon>*/}
+                                                {/*                        <CheckBoxOutlineBlankIcon fontSize={"small"}/>*/}
+                                                {/*                    </ListItemIcon>*/}
+                                                {/*            }*/}
+                                                {/*            {item.title}*/}
+                                                {/*        </MenuItem>*/}
+                                                {/*    )*/}
+                                                {/*}*/}
                                             </Menu>
                                         </>
                                  :
