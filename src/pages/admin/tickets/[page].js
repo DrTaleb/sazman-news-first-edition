@@ -7,16 +7,21 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
-import {Button, styled} from "@mui/material";
+import {Button, Pagination, PaginationItem, styled} from "@mui/material";
 import {useRouter} from "next/router";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Badge} from "react-bootstrap";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Swal from "sweetalert2";
+import Nprogress from "nprogress";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'name', label: 'نام فرستنده', minWidth: 170, align: "left"},
-    {id: 'email', label: 'ایمیل', minWidth: 170, align: 'left',},
-    {id: 'mobile', label: 'شماره', minWidth: 170, align: 'left',},
+    {id: 'subject', label: 'موضوع', minWidth: 170, align: 'left',},
+    {id: 'mobile', label: 'شماره تماس', minWidth: 170, align: 'left',},
 ];
 
 export default function Tickets({data}) {
@@ -24,20 +29,26 @@ export default function Tickets({data}) {
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
     const [getData, setGetData] = useState(false)
+    const [page] = useState(data.data.current_page);
+    const [pageCount] = useState(data.data.last_page);
 
+    const dataFetch = async () => {
+        const dataFetch = await fetch(`${process.env.LOCAL_URL}/api/admin/tickets/${router.query.page}`)
+        const data = await dataFetch.json()
+        setDATA(data.data.data)
+    }
     useEffect(() => {
-        fetch(`${process.env.LOCAL_URL}/api/admin/tickets/${router.query.page}`)
-            .then(res => res.json())
-            .then(data => setDATA(data.data.data))
+        dataFetch()
     }, [getData])
 
-    function createData(id, name, email, mobile, is_answer) {
-        return {id, name, email, mobile, is_answer};
+    function createData(id, name, subject, mobile, status) {
+        return {id, name, subject, mobile, status};
     }
 
     const rows = [];
-    DATA.map(item => rows.push(createData(`${item.id}`, `${item.name}`, `${item.email}`, `${item.mobile}`, `${item.is_answer}`)))
+    DATA.map(item => rows.push(createData(`${item.id}`, `${item.company.title}`, `${item.subject}`, `${item.company.phone}`, `${item.status}`)))
 
+    console.log(DATA)
 
     const viewHandler = (id) => {
         router.push(`/admin/tickets/answer/${id}`)
@@ -54,9 +65,60 @@ export default function Tickets({data}) {
     }));
     // end head row style-----------
 
+    const clickHandler = async (event, value) => {
+        await router.push(`/admin/tickets/${value}`)
+        await setGetData(!getData)
+    }
+
+    const deleteHandler = async (id) => {
+        Swal.fire({
+            text: "آیا از حذف آیتم مورد نظر اطمینان دارید؟",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: "خیر",
+            confirmButtonColor: 'red',
+            confirmButtonText: 'بله'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Nprogress.start()
+                try {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/tickets/delete/${id}`, {
+                        method: "DELETE"
+                    }).then(res => res.json()).then(data => {
+                        if (data.status) {
+                            setGetData(prev => !prev)
+                            Nprogress.done()
+                            Swal.fire(
+                                '',
+                                "حذف با موفقیت انجام شد !",
+                                'success'
+                            )
+                            setGetData(!getData)
+                        } else {
+                            Nprogress.done()
+                            Swal.fire(
+                                '',
+                                "مشکلی وجود دارد دوباره تلاش کنید",
+                                'success'
+                            )
+                        }
+                    })
+                } catch {
+                    Nprogress.done()
+                    Swal.fire(
+                        '',
+                        "مشکلی در سرور وجود دارد دوباره تلاش کنید",
+                        'success'
+                    )
+                }
+            }
+        })
+    }
+
     return (
         <div className={"px-md-4"}>
-            <Paper className={"mt-3  rounded-3 overflow-hidden"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+            <Paper className={"mt-3  rounded-3 overflow-hidden"}
+                   sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -94,7 +156,7 @@ export default function Tickets({data}) {
                                             );
                                         })}
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            {row.is_answer === "true" ?
+                                            {row.status === "2" ?
                                                 <Badge bg={"success"}>
                                                     پاسخ داده شده
                                                 </Badge> :
@@ -102,19 +164,24 @@ export default function Tickets({data}) {
                                                     بدون پاسخ
                                                 </Badge>}
                                         </TableCell>
-                                        <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            {
-                                                row.is_answer === "true" ?
-                                                    <Button variant="outlined" color={"success"} startIcon={<CheckCircleOutlineIcon/>}
-                                                            onClick={() => viewHandler(row.id)}>
-                                                        مشاهده
-                                                    </Button>
-                                                    :
-                                                    <Button variant="outlined" color={"warning"} startIcon={<CheckCircleOutlineIcon/>}
-                                                            onClick={() => viewHandler(row.id)}>
-                                                        مشاهده و پاسخ
-                                                    </Button>
-                                            }
+                                        <TableCell align={"left"} sx={{
+                                            minWidth: "200px",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            gap: "5px"
+                                        }}>
+                                            <Button variant="outlined" color={"info"}
+                                                    startIcon={<CheckCircleOutlineIcon/>}
+                                                    onClick={() => viewHandler(row.id)}>
+                                                باز کردن چت
+                                            </Button>
+                                            <Tooltip title={"حذف تیکت"}>
+                                                <Button variant="outlined" color={"error"}
+                                                        startIcon={<DeleteIcon></DeleteIcon>}
+                                                        onClick={() => deleteHandler(row.id)}>
+                                                    حذف تیکت
+                                                </Button>
+                                            </Tooltip>
                                         </TableCell>
                                     </TableRow>
                                 )
@@ -123,25 +190,38 @@ export default function Tickets({data}) {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <div className={"d-flex flex-row justify-content-center mt-5 mb-3"}>
+                    <Pagination
+                        count={pageCount}
+                        onChange={(event, value) => clickHandler(event, value)}
+                        size="large"
+                        defaultPage={page}
+                        renderItem={(item) => (
+                            <PaginationItem
+                                {...item}
+                            />
+                        )}
+                    />
+                </div>
             </Paper>
         </div>
     );
 }
 
-export async function getServerSideProps(context){
+export async function getServerSideProps(context) {
 
-    const {params ,req} = context
+    const {params, req} = context
 
-    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/tickets?page=${params.page}&limit=10`,{
-        method : "GET",
-        headers : {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/tickets?page=${params.page}&limit=10`, {
+        method: "GET",
+        headers: {
             'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization' : `Bearer ${req.cookies.authToken}`
+            'Authorization': `Bearer ${req.cookies.authToken}`
         }
     })
     const data = await dataResponse.json()
 
     return {
-        props : {data}
+        props: {data}
     }
 }

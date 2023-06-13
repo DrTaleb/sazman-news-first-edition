@@ -190,7 +190,7 @@ html body {
 }
 
 .bg-my-purple {
-    background: var(--main-purple);
+    background: var(--main-purple) !important;
 }
 
 .Toastify__toast-theme--light.Toastify__toast--error {

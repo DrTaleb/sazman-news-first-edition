@@ -21,9 +21,11 @@ import Tooltip from "@mui/material/Tooltip";
 
 const columns = [
     {
-        id: 'id', label: 'آیدی', minWidth: 170},
+        id: 'id', label: 'آیدی', minWidth: 170
+    },
     {
-        id: 'title', label: 'عنوان', minWidth: 170, align: "left"},
+        id: 'title', label: 'عنوان', minWidth: 170, align: "left"
+    },
     {
         id: 'type', label: 'نوع پست', minWidth: 200, align: 'left',
     },
@@ -47,7 +49,7 @@ export default function Posts() {
 
     const router = useRouter()
 
-    const [DATA, setDATA] = useState({status : false})
+    const [DATA, setDATA] = useState({status: false})
 
     const [page, setPage] = useState("");
 
@@ -62,18 +64,32 @@ export default function Posts() {
         if (companyItem != null) {
             const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/posts/${companyItem}/${router.query.page}`)
             const data = await res.json()
-            // await setDATA(data)
-            // await setPage(data.data.current_page)
-            // await setRowsPerPage(data.data.per_page)
-            // await setPageCount(data.data.last_page)
-            console.log(data)
+            await setDATA(data)
+            await setPage(data.data.current_page)
+            await setRowsPerPage(data.data.per_page)
+            await setPageCount(data.data.last_page)
         } else setDATA({status: null})
 
     }
 
 
-    function createData(id, title, status, selected_status, type, view_count, like_count, published_at, category,company,writer,writer_id, company_id ,options) {
-        return {id, title, status, selected_status, type, view_count, like_count, published_at,category,company, writer,writer_id,company_id,options};
+    function createData(id, title, status, selected_status, type, view_count, like_count, published_at, category, company, writer, writer_id, company_id, options) {
+        return {
+            id,
+            title,
+            status,
+            selected_status,
+            type,
+            view_count,
+            like_count,
+            published_at,
+            category,
+            company,
+            writer,
+            writer_id,
+            company_id,
+            options
+        };
     }
 
     const rows = [];
@@ -83,7 +99,7 @@ export default function Posts() {
     }, [])
 
     if (DATA.status) {
-        DATA.status && DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.selected_status == 1 ? "فعال" : "غیر فعال"}`, `${item.type}`, `${item.view_count}`, `${item.like_count}`, `${item.published_at}`, `${item.category.title}`,`${item.company.title}`,`${item.writer.firstname} ${item.writer.lastname}`,`${item.writer.id}`, `${item.company_id}`)))
+        DATA.status && DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.selected_status == 1 ? "فعال" : "غیر فعال"}`, `${item.type}`, `${item.view_count}`, `${item.like_count}`, `${item.published_at}`, `${item.category.title}`, `${item.company.title}`, `${item.writer.firstname} ${item.writer.lastname}`, `${item.writer.id}`, `${item.company_id}`)))
     }
 
 
@@ -157,7 +173,8 @@ export default function Posts() {
     if (DATA.status) {
         return (
             <div className={"px-md-4"}>
-                <Paper className={"mt-3 rounded-3 overflow-hidden pb-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <Paper className={"mt-3 rounded-3 overflow-hidden pb-3"}
+                       sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
@@ -174,7 +191,7 @@ export default function Posts() {
                                     <TableCell>
                                         وضعیت
                                     </TableCell>
-                                    <TableCell sx={{minWidth : "200px"}}>
+                                    <TableCell sx={{minWidth: "200px"}}>
                                         عضویت در پست های برتر
                                     </TableCell>
                                     <TableCell>
@@ -183,7 +200,7 @@ export default function Posts() {
                                     <TableCell>
                                         نویسنده
                                     </TableCell>
-                                    <TableCell sx={{minWidth : "200px"}}>
+                                    <TableCell sx={{minWidth: "200px"}}>
                                         گزینه ها
                                     </TableCell>
                                 </StyledTableRow>
@@ -195,7 +212,8 @@ export default function Posts() {
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 return (
-                                                    <TableCell key={column.id} align={column.align} className={"fw-bold"}>
+                                                    <TableCell key={column.id} align={column.align}
+                                                               className={"fw-bold"}>
                                                         {column.format && typeof value === 'number'
                                                             ? column.format(value)
                                                             : value}
@@ -222,14 +240,16 @@ export default function Posts() {
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                                 <Tooltip title={"مشاهده مشخصات شرکت"}>
-                                                    <Button variant={"outlined"} onClick={() => goToCompany(row.company_id)}>
+                                                    <Button variant={"outlined"}
+                                                            onClick={() => goToCompany(row.company_id)}>
                                                         {row.company}
                                                     </Button>
                                                 </Tooltip>
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                                 <Tooltip title={"مشاهده مشخصات نویسنده"}>
-                                                    <Button variant={"outlined"} onClick={() => goToWriter(row.writer_id)}>
+                                                    <Button variant={"outlined"}
+                                                            onClick={() => goToWriter(row.writer_id)}>
                                                         {row.writer}
                                                     </Button>
                                                 </Tooltip>

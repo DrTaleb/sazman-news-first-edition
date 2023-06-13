@@ -84,7 +84,7 @@ export default function UserPanelLayout({children}) {
     const {userData, logOut} = useContext(AuthContext)
     const [selectedCompany, setSelectedCompany] = useState("")
     useEffect(() => {
-        userData.companies.length &&  setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
+        userData.companies &&  setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
 
     }, [userData])
     return (
@@ -226,13 +226,13 @@ export default function UserPanelLayout({children}) {
                                 </Link>
                                 <Link href={"/user-panel/setting"}>
                                     <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/ads") && "active"}`}>
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/setting") && "active"}`}>
                                         <SettingsIcon
-                                            className={`${routerPath.includes("/ads") && "color-my-purple"}`}></SettingsIcon>
+                                            className={`${routerPath.includes("/setting") && "color-my-purple"}`}></SettingsIcon>
                                         <span className="text-secondary">تنظیمات شرکت</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/support"}>
+                                <Link href={"/user-panel/support/1"}>
                                     <MenuItem
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/support") && "active"}`}>
                                         <SupportAgentIcon

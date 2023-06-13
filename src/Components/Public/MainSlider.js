@@ -10,7 +10,7 @@ export default function Slider({sliders}) {
                         <Link href={item.link}>
                             <img
                                 className="d-block w-100 rounded-3"
-                                src={`https://newsapi.deltagroup.ir/${item.image}`}
+                                src={`${process.env.SERVER_URL}/${item.image}`}
                                 alt={item.title}
                             />
                         </Link>
