@@ -28,6 +28,10 @@ import {Col} from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import * as React from "react";
+import Swal from "sweetalert2";
+import Nprogress from "nprogress";
+
 export default function UserPanelLayout({children}) {
 
 
@@ -81,13 +85,49 @@ export default function UserPanelLayout({children}) {
         responsiveMenu.current.classList.remove("active");
     }, [routerPath])
 
-    const {userData, logOut,userStatus} = useContext(AuthContext)
+    const {userData, logOut, userStatus} = useContext(AuthContext)
     const [selectedCompany, setSelectedCompany] = useState("")
     useEffect(() => {
-        if (userStatus){
-            userData.companies.length && setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
+        if (userStatus) {
+            if (localStorage.getItem("selectedCompany")) {
+                userData.companies.length && setSelectedCompany(userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
+            } else {
+                setSelectedCompany(null)
+            }
         }
+
     }, [userData])
+
+    const selectCompany = async (id)=>{
+        await Nprogress.start()
+        const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/set-company`,{
+            method : "POST",
+            body : JSON.stringify({
+                company_id : id
+            })
+        })
+        const data = await res.json()
+        if (data.status){
+            await localStorage.setItem("selectedCompany" , id)
+            await setSelectedCompany(userData.companies.find(item => item.id == id).title)
+            await Nprogress.done()
+            await router.reload(router.route)
+            await Swal.fire({
+                text : "داشبورد شرکت با موفقیت انتخاب شد",
+                icon : "success"
+            })
+        }else {
+            await Nprogress.done()
+            await Swal.fire({
+                text : "دوباره تلاش کنید",
+                icon : "error"
+            })
+        }
+    }
+    const handleCompanyAndClose = async (id)=>{
+        await selectCompany(id)
+        await handleClose()
+    }
 
     return (
         <main>
@@ -265,7 +305,7 @@ export default function UserPanelLayout({children}) {
                                                         aria-expanded={open2 ? 'true' : undefined}
                                                         className={"text-dark"}
                                                         endIcon={<ExpandMoreIcon/>}>
-                                                        {selectedCompany.length ?
+                                                        {selectedCompany ?
                                                             selectedCompany
                                                             : <Skeleton height={20} width={60}></Skeleton>
                                                         }
@@ -299,26 +339,26 @@ export default function UserPanelLayout({children}) {
                                             >
                                                 {
                                                     userData.companies.length &&
-                                                        userData.companies.map(item =>
-                                                            <MenuItem key={item.id} onClick={handleClose}>
-                                                                {
-                                                                    item.title === selectedCompany ?
-                                                                        <ListItemIcon>
-                                                                            <Check fontSize={"small"}/>
-                                                                        </ListItemIcon>
-                                                                        :
-                                                                        <ListItemIcon>
-                                                                            <CheckBoxOutlineBlankIcon fontSize={"small"}/>
-                                                                        </ListItemIcon>
-                                                                }
-                                                                {item.title}
-                                                            </MenuItem>
-                                                        )
+                                                    userData.companies.map(item =>
+                                                        <MenuItem key={item.id} onClick={()=> handleCompanyAndClose(item.id)}>
+                                                            {
+                                                                item.title === selectedCompany ?
+                                                                    <ListItemIcon>
+                                                                        <Check fontSize={"small"}/>
+                                                                    </ListItemIcon>
+                                                                    :
+                                                                    <ListItemIcon>
+                                                                        <CheckBoxOutlineBlankIcon fontSize={"small"}/>
+                                                                    </ListItemIcon>
+                                                            }
+                                                            {item.title}
+                                                        </MenuItem>
+                                                    )
                                                 }
                                             </Menu>
                                         </>
-                                 :
-                                userStatus === null &&
+                                        :
+                                        userStatus === null &&
                                         <MenuItem onClick={handleClose}>
                                             <ListItemIcon>
                                                 <AddTaskIcon className={"color-my-purple"} fontSize={"small"}/>
@@ -391,9 +431,33 @@ export default function UserPanelLayout({children}) {
                         </div>
                     </nav>
                     {
-                        userData.companies &&
-                        userData.companies.length ?
-                            children
+                        userStatus ?
+                            selectedCompany && userData.companies.length ?
+                                children
+                                :
+                                <div className={"d-flex flex-row justify-content-center"}>
+                                    <div className={"bg-white rounded-4 shadow-sm col-11 col-md-4 px-sm-4 py-4"}>
+                                        <div className="d-flex flex-row align-items-center mt-4 mt-md-0 mb-4">
+                                            <div className="panel-title-parent w-100">
+                                                <span className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                                                    شرکت مورد نظر خود را انتخاب کنید
+                                                </span>
+                                            </div>
+                                        </div>
+                                        {
+                                            userData.companies.map(item =>
+
+                                                <MenuItem key={item.id} onClick={()=> selectCompany(item.id)}>
+                                                    <ListItemIcon>
+                                                        <CheckBoxOutlineBlankIcon fontSize={"small"}/>
+                                                    </ListItemIcon>
+
+                                                    {item.title}
+                                                </MenuItem>
+                                            )
+                                        }
+                                    </div>
+                                </div>
                             :
                             <div className={"d-flex flex-row justify-content-center"}>
 
