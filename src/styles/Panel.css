@@ -496,7 +496,7 @@ html body {
 }
 .panel-statistic-card-section{
     background: var(--white);
-    box-shadow: 0 0 .2rem rgba(0, 0, 0, .1) !important;
+    box-shadow: 0 .1rem .4rem rgba(0, 0, 0, .1) !important;
     border-radius: 5px;
     padding: 20px;
 }
@@ -517,7 +517,7 @@ html body {
     border-right: var(--border-warning) 5px solid;
 }
 .panel-table-card{
-    box-shadow: 0 0 .2rem rgba(0, 0, 0, .1) !important;
+    box-shadow: 0 .1rem .4rem rgba(0, 0, 0, .1) !important;
     background: var(--white);
     border-radius: 7px;
 }
@@ -557,9 +557,7 @@ html body {
     opacity: .5;
 }
 
-.panel-no-shadow {
-    background: #0a53be;
-}
+
 
 .panel-main-title {
     font-size: 15px;
@@ -635,4 +633,17 @@ html body {
     .chat-text-input{
         width: 75%;
     }
+}
+
+
+.pricing {
+    background-color: var(--white);
+    transition: .7s ease-out;
+    box-shadow: 0 .1rem .5rem rgba(0, 0, 0, .15) !important
+}
+
+.pricing:hover, .pricing:active {
+    transform: translateY(-20px);
+    transition: .7s ease-out;
+    box-shadow: 0 .1rem 2rem rgba(0, 0, 0, .15) !important
 }

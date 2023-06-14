@@ -81,12 +81,14 @@ export default function UserPanelLayout({children}) {
         responsiveMenu.current.classList.remove("active");
     }, [routerPath])
 
-    const {userData, logOut} = useContext(AuthContext)
+    const {userData, logOut,userStatus} = useContext(AuthContext)
     const [selectedCompany, setSelectedCompany] = useState("")
     useEffect(() => {
-        // userData.companies &&  setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
-
+        if (userStatus){
+            userData.companies.length && setSelectedCompany(userData.companies.length && userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
+        }
     }, [userData])
+
     return (
         <main>
             <nav className="navbar navbar-expand bg-main-blue py-1 fixed-top">
@@ -192,15 +194,15 @@ export default function UserPanelLayout({children}) {
                                         <span className="text-secondary">مدیریت پست ها</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/user-panel/certifications"}>
+                                <Link href={"/user-panel/certificates/1"}>
                                     <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/certifications") && "active"}`}>
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/certificates") && "active"}`}>
                                         <WorkspacePremiumIcon
-                                            className={`${routerPath.includes("/certifications") && "color-my-purple"}`}></WorkspacePremiumIcon>
+                                            className={`${routerPath.includes("/certificates") && "color-my-purple"}`}></WorkspacePremiumIcon>
                                         <span className="text-secondary">گواهینامه ها</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/user-panel/gallery"}>
+                                <Link href={"/user-panel/gallery/1"}>
                                     <MenuItem
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/gallery") && "active"}`}>
                                         <CollectionsIcon
@@ -208,7 +210,7 @@ export default function UserPanelLayout({children}) {
                                         <span className="text-secondary">گالری عکس ها</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/user-panel/catalogs"}>
+                                <Link href={"/user-panel/catalogs/1"}>
                                     <MenuItem
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/catalogs") && "active"}`}>
                                         <CollectionsBookmarkIcon
@@ -250,7 +252,7 @@ export default function UserPanelLayout({children}) {
                         <div className="container">
                             <div className="d-flex flex-row justify-content-between align-items-center">
                                 {
-                                    userData.companies.length ?
+                                    userStatus ?
                                         <>
                                             <div>
                                                 <Tooltip title="تنظیمات اکانت شرکت">
@@ -295,32 +297,34 @@ export default function UserPanelLayout({children}) {
                                                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                                                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                                             >
-                                                {/*{*/}
-                                                {/*    userData.companies.map(item =>*/}
-                                                {/*        <MenuItem key={item.id} onClick={handleClose}>*/}
-                                                {/*            {*/}
-                                                {/*                item.title === selectedCompany ?*/}
-                                                {/*                    <ListItemIcon>*/}
-                                                {/*                        <Check fontSize={"small"}/>*/}
-                                                {/*                    </ListItemIcon>*/}
-                                                {/*                    :*/}
-                                                {/*                    <ListItemIcon>*/}
-                                                {/*                        <CheckBoxOutlineBlankIcon fontSize={"small"}/>*/}
-                                                {/*                    </ListItemIcon>*/}
-                                                {/*            }*/}
-                                                {/*            {item.title}*/}
-                                                {/*        </MenuItem>*/}
-                                                {/*    )*/}
-                                                {/*}*/}
+                                                {
+                                                    userData.companies.length &&
+                                                        userData.companies.map(item =>
+                                                            <MenuItem key={item.id} onClick={handleClose}>
+                                                                {
+                                                                    item.title === selectedCompany ?
+                                                                        <ListItemIcon>
+                                                                            <Check fontSize={"small"}/>
+                                                                        </ListItemIcon>
+                                                                        :
+                                                                        <ListItemIcon>
+                                                                            <CheckBoxOutlineBlankIcon fontSize={"small"}/>
+                                                                        </ListItemIcon>
+                                                                }
+                                                                {item.title}
+                                                            </MenuItem>
+                                                        )
+                                                }
                                             </Menu>
                                         </>
                                  :
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <AddTaskIcon className={"color-my-purple"} fontSize={"small"}/>
-                                    </ListItemIcon>
-                                    ثبت شرکت جدید
-                                </MenuItem>
+                                userStatus === null &&
+                                        <MenuItem onClick={handleClose}>
+                                            <ListItemIcon>
+                                                <AddTaskIcon className={"color-my-purple"} fontSize={"small"}/>
+                                            </ListItemIcon>
+                                            <Skeleton height={20} width={60}></Skeleton>
+                                        </MenuItem>
                                 }
                                 <div>
                                     <Tooltip title="منوی کاربری">

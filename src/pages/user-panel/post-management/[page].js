@@ -18,6 +18,9 @@ import {useRouter} from "next/router";
 import Nprogress from "nprogress";
 import {Badge} from "react-bootstrap";
 import Tooltip from "@mui/material/Tooltip";
+import AddTaskIcon from "@mui/icons-material/AddTask";
+import RemoveModeratorIcon from "@mui/icons-material/RemoveModerator";
+import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 
 const columns = [
     {
@@ -122,7 +125,7 @@ export default function Posts() {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`${process.env.LOCAL_URL}/api/admin/sliders/delete/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/user-panel/posts/delete/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.status) {
@@ -163,8 +166,9 @@ export default function Posts() {
     const StyledTableRow = styled(TableRow)(({theme}) => ({
         // hide last border
         '&:last-child td, &:last-child th': {
-            border: 0,
-            backgroundColor: "#f7f7f7",
+            // border: 0,
+            // color : "var(--main-purple)",
+            // backgroundColor: "var(--card-icon-bg)",
 
         },
     }));
@@ -173,8 +177,102 @@ export default function Posts() {
     if (DATA.status) {
         return (
             <div className={"px-md-4"}>
-                <Paper className={"mt-3 rounded-3 overflow-hidden pb-3"}
-                       sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <div className="d-flex flex-row align-items-center mt-md-0">
+                    <div className="panel-title-parent w-100">
+                        <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                            آمار پست های شما
+                        </h5>
+                    </div>
+                    <span className=" ms-2">
+                            <i className="fa fa-angle-down text-secondary"></i>
+                        </span>
+                </div>
+                <div className="d-flex flex-row flex-wrap gap-3 mt-4">
+                    <div className="col d-flex flex-column gap-3">
+                        <div className="col d-flex flex-row flex-wrap gap-3">
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            تعداد پست های باقی مانده از پلن
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <AddTaskIcon></AddTaskIcon>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        34
+                                    </h4>
+                                </div>
+                            </div>
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            تعداد پست های برتر باقی مانده
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <RemoveModeratorIcon></RemoveModeratorIcon>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        2
+                                    </h4>
+                                </div>
+                            </div>
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            درخواست های پست منتخب
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <WysiwygIcon></WysiwygIcon>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        23
+                                    </h4>
+                                </div>
+                            </div>
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            پست های منتخب فعال
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <WysiwygIcon></WysiwygIcon>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        23
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="d-flex flex-row align-items-center mt-5 ">
+                    <div className="panel-title-parent w-100">
+                        <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                            جدول پست های منتشر شده
+                        </h5>
+                    </div>
+                    <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                        <div className={"d-flex flex-row justify-content-center"}>
+                            <Link href={"/user-panel/post-management/add"}>
+                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن پست</Button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+                <Paper className={"mt-4 rounded-3 overflow-hidden pb-3"}
+                       sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 .5rem rgba(0, 0, 0, .1)"}}>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
@@ -193,9 +291,6 @@ export default function Posts() {
                                     </TableCell>
                                     <TableCell sx={{minWidth: "200px"}}>
                                         عضویت در پست های برتر
-                                    </TableCell>
-                                    <TableCell>
-                                        شرکت
                                     </TableCell>
                                     <TableCell>
                                         نویسنده
@@ -238,21 +333,8 @@ export default function Posts() {
                                                         <Badge className={"px-3 py-2"} bg={"danger"}>غیر فعال</Badge>
                                                 }
                                             </TableCell>
-                                            <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <Tooltip title={"مشاهده مشخصات شرکت"}>
-                                                    <Button variant={"outlined"}
-                                                            onClick={() => goToCompany(row.company_id)}>
-                                                        {row.company}
-                                                    </Button>
-                                                </Tooltip>
-                                            </TableCell>
-                                            <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <Tooltip title={"مشاهده مشخصات نویسنده"}>
-                                                    <Button variant={"outlined"}
-                                                            onClick={() => goToWriter(row.writer_id)}>
-                                                        {row.writer}
-                                                    </Button>
-                                                </Tooltip>
+                                            <TableCell className={"fw-bold"} align={"left"} sx={{minWidth: "200px"}}>
+                                                {row.writer}
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                                 <Tooltip title={"مشاهده پست"}>

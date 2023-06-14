@@ -30,7 +30,7 @@ export default function Tickets() {
     const [pageCount,setPageCount] = useState("");
 
     const dataFetch = async () => {
-        const dataRes = await fetch(`${process.env.LOCAL_URL}/api/user-panel/tickets/${localStorage.getItem("selectedCompany")}/${router.query.page}`)
+        const dataRes = await fetch(`${process.env.LOCAL_URL}/api/user-panel/tickets/${router.query.page}`)
         const data = await dataRes.json()
         setDATA(data)
         setPageCount(data.data.last_page)
@@ -174,7 +174,7 @@ export default function Tickets() {
                                                     </Badge>}
                                             </TableCell>
                                             <TableCell align={"left"} sx={{
-                                                minWidth: "200px",
+                                                minWidth: "300px",
                                                 display: "flex",
                                                 flexDirection: "row",
                                                 gap: "5px"

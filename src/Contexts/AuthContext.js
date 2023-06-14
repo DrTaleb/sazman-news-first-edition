@@ -15,7 +15,7 @@ export const AuthProvider = ({children}) => {
             companies : [],
     });
     const [userMobile , setUserMobile] = useState("")
-    const [userStatus , setUserStatus] = useState("")
+    const [userStatus , setUserStatus] = useState(null)
 
     const getUserData = async () => {
         let massage;
@@ -41,7 +41,8 @@ export const AuthProvider = ({children}) => {
             await setUserMobile(mobile)
             await setUserStatus(status)
         }catch {
-            setUserData(userData)
+            await setUserData(userData)
+            await setUserStatus(status)
         }
     }
     useEffect(()=>{

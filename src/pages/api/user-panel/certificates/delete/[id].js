@@ -1,9 +1,8 @@
-
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
-    if (req.method === "GET"){
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/tickets?page=${req.query.page[1]}&limit=10`,{
-            method : "GET",
+    if (req.method === "DELETE"){
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/certificates/${req.query.id}`,{
+            method : "DELETE",
             headers : {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'Authorization' : `Bearer ${authToken}`
@@ -12,7 +11,7 @@ export default async function Handler(req, res) {
         const data = await dataResponse.json()
         res.status(200).json(data)
     }else {
-        res.setHeader("Allow", ["post"]);
+        res.setHeader("Allow", ["DELETE"]);
         res.status(405).json({massage: "not allowed"})
     }
 }

@@ -1,8 +1,7 @@
-
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
     if (req.method === "GET"){
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/tickets?page=${req.query.page[1]}&limit=10`,{
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/galleries?page=${req.query.page[0]}&limit=10`,{
             method : "GET",
             headers : {
                 'Content-Type': 'application/json; charset=UTF-8',
