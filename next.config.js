@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   env :{
     SERVER_URL : "http://newsapi.deltagroup.ir",
-    LOCAL_URL : "http://localhost:3000"
+    LOCAL_URL : "https://sazman-news.iran.liara.run"
   }
 }
 
