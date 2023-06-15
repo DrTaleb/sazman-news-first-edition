@@ -90,7 +90,7 @@ export default function PanelLayout({children}) {
                 <div className="panel-navigation-menu panel-w-sidebar panel-w-sidebar-sm" ref={responsiveMenu}>
                     <div className="panel-side-bar col-12 position-relative d-lg-flex">
                         <div className="panel-nav-item-parent col-12 d-flex flex-column ps-3 mt-5  pt-md-0 mt-md-0">
-                            <div className="panel-menu-items-parent col-12 pb-5">
+                            <div className="panel-menu-items-parent col-12 pb-5 mb-5">
                                 <div className="service-section-opener d-flex flex-row">
                                     <div className="panel-title-parent w-100">
                                         <span
@@ -163,13 +163,31 @@ export default function PanelLayout({children}) {
                                         <span className="text-secondary">لیست شرکت ها</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/admin/certifications/1"}>
+                                <Link href={"/admin/certificates/1"}>
                                     <MenuItem
-                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("certifications") && "active"}`}>
+                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("certificates") && "active"}`}>
                                         <ListAltIcon
-                                            className={`${routerPath.includes("certifications") && "color-my-purple"}`}
+                                            className={`${routerPath.includes("certificates") && "color-my-purple"}`}
                                         ></ListAltIcon>
                                         <span className="text-secondary">لیست گواهینامه ها</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/catalogs/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("catalogs") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("catalogs") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary">لیست کاتالوگ ها</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/gallery/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item ripple-effect ripple-dark rounded gap-4 ps-3 ${routerPath.includes("gallery") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("gallery") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary">گالری شرکت ها</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/admin/writers/1"}>
@@ -280,6 +298,15 @@ export default function PanelLayout({children}) {
                                             className={`${routerPath.includes("ads-requests") && "color-my-purple"}`}
                                         ></ListAltIcon>
                                         <span className="text-secondary"> لیست درخواست تبلیغات</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/newsLetters/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("newsLetters") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("newsLetters") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary">خبرنامه</span>
                                     </MenuItem>
                                 </Link>
                             </div>

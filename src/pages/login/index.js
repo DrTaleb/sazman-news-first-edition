@@ -85,7 +85,7 @@ export default function LoginPage() {
             <Col className={`${styles.loginSection} d-flex flex-column align-items-center`} lg={6} md={7} xs={12}>
                 <Container className={"h-100"}>
                     <div className={`${styles.loginCardSection} d-flex flex-row justify-content-center`}>
-                        <Col className={"h-100 d-flex flex-row align-items-center"} xs={10} sm={10} md={10} lg={8}>
+                        <Col className={"h-100 d-flex flex-row align-items-center"} xs={12} sm={10} md={10} lg={8}>
                             <form className={"w-100"}>
                                 <div
                                     className={"w-100 login-card shadow d-flex flex-column align-items-center justify-content-center py-5"}>
@@ -97,7 +97,7 @@ export default function LoginPage() {
                                         </div>
                                     </div>
                                     <TextField
-                                        className={"col-9 mt-3"}
+                                        className={"col-md-9 col-11 mt-3"}
                                         disabled={isCodeSent}
                                         label="شماره تلفن"
                                         type={"number"}
@@ -108,11 +108,11 @@ export default function LoginPage() {
                                     />
                                     {showCodeInput &&
                                         <Fragment>
-                                            <Alert className={"mt-3 col-9"} severity="success">
+                                            <Alert className={"mt-3 col-md-9 col-11"} severity="success">
                                                 کد ارسال شده توسط اس ام اس را وارد کنید.
                                             </Alert>
                                             <TextField
-                                                className={"col-9 mt-3"}
+                                                className={"col-md-9 col-11 mt-3"}
                                                 id="codeInput"
                                                 label={"کد ارسال شده"}
                                                 type={"number"}
@@ -123,7 +123,7 @@ export default function LoginPage() {
                                             />
                                             {
                                                 loginError &&
-                                                <Alert className={"mt-3 col-9"} severity="error">
+                                                <Alert className={"mt-3 col-md-9 col-11"} severity="error">
                                                     کد وارد شده صحیح نیست
                                                 </Alert>
                                             }

@@ -82,6 +82,7 @@ export const AuthProvider = ({children}) => {
         await fetch(`${process.env.LOCAL_URL}/api/auth/logout`, {
             method: "POST",
         }).then(res => res.json()).then(data => massage = data)
+        localStorage.setItem("selectedCompany" , null)
         router.push("/")
     }
     //check if user logged in

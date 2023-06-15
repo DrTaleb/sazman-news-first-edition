@@ -23,7 +23,7 @@ import AdsClickIcon from '@mui/icons-material/AdsClick';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import AuthContext from "@/Contexts/AuthContext";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Check} from "@mui/icons-material";
+import {Check, Person} from "@mui/icons-material";
 import {Col} from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import AddTaskIcon from "@mui/icons-material/AddTask";
@@ -83,19 +83,19 @@ export default function UserPanelLayout({children}) {
     useEffect(() => {
         toggleElement.current.classList.remove("active");
         responsiveMenu.current.classList.remove("active");
+
     }, [routerPath])
 
     const {userData, logOut, userStatus} = useContext(AuthContext)
     const [selectedCompany, setSelectedCompany] = useState("")
     useEffect(() => {
         if (userStatus) {
-            if (localStorage.getItem("selectedCompany")) {
+            if (localStorage.getItem("selectedCompany") !== "null" || localStorage.getItem("selectedCompany")) {
                 userData.companies.length && setSelectedCompany(userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
             } else {
                 setSelectedCompany(null)
             }
         }
-
     }, [userData])
 
     const selectCompany = async (id)=>{
@@ -224,6 +224,14 @@ export default function UserPanelLayout({children}) {
                                         <MonitorIcon
                                             className={`${routerPath.includes("/monitoring") && "color-my-purple"}`}></MonitorIcon>
                                         <span className="text-secondary">مانیتورینگ</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/user-panel/writers/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/writers") && "active"}`}>
+                                        <Person
+                                            className={`${routerPath.includes("/writers") && "color-my-purple"}`}></Person>
+                                        <span className="text-secondary">نویسندگان شرکت</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/user-panel/post-management/1"}>

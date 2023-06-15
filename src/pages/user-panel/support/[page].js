@@ -15,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 import Nprogress from "nprogress";
+import Link from "next/link";
 
 const columns = [
     {id: 'id', label: '#', minWidth: 170},
@@ -123,9 +124,20 @@ export default function Tickets() {
     if (DATA.status) {
         return (
             <div className={"px-md-4"}>
-                <Button variant={"contained"} onClick={goToAddTicket} className={"bg-my-purple"}>
-                    برای ثبت درخواست جدید کلیک کنید
-                </Button>
+                <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
+                    <div className="panel-title-parent w-100">
+                        <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                            پشتیبانی
+                        </h5>
+                    </div>
+                    <div className={"col-7 col-sm-4 col-md-3 col-lg-2"}>
+                        <div className={"d-flex flex-row justify-content-center"}>
+                            <Button variant={"contained"} onClick={goToAddTicket} className={"bg-my-purple"}>
+                                برای ثبت درخواست جدید کلیک کنید
+                            </Button>
+                        </div>
+                    </div>
+                </div>
                 <Paper className={"mt-3  rounded-3 overflow-hidden"}
                        sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                     <TableContainer sx={{maxHeight: 600}}>
@@ -218,9 +230,20 @@ export default function Tickets() {
     } else {
         return (
             <div className={"px-md-4"}>
-                <Button variant={"contained"} onClick={goToAddTicket} className={"bg-my-purple"}>
-                    برای ثبت درخواست جدید کلیک کنید
-                </Button>
+                <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
+                    <div className="panel-title-parent w-100">
+                        <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                            پشتیبانی
+                        </h5>
+                    </div>
+                    <div className={"col-7 col-sm-4 col-md-3 col-lg-2"}>
+                        <div className={"d-flex flex-row justify-content-center"}>
+                            <Button variant={"contained"} onClick={goToAddTicket} className={"bg-my-purple"}>
+                                برای ثبت درخواست جدید کلیک کنید
+                            </Button>
+                        </div>
+                    </div>
+                </div>
                 <Paper className={"mt-3  rounded-3 overflow-hidden"}
                        sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                     <TableContainer sx={{maxHeight: 600}}>

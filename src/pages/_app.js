@@ -64,7 +64,7 @@ export default function App({Component, pageProps, props}) {
                         <Component {...pageProps} />
                     }
                     {
-                        routerName.pathname.includes("/login")  &&
+                        routerName.pathname.startsWith("/login")  &&
                         <CacheProvider value={cacheRtl}>
                             <ThemeProvider theme={theme}>
                                 <Component {...pageProps} />
@@ -72,7 +72,7 @@ export default function App({Component, pageProps, props}) {
                         </CacheProvider>
                     }
                     {
-                        userAdminRoute &&
+                        userAdminRoute && !routerName.pathname.startsWith("/login") &&
                         <CacheProvider value={cacheRtl}>
                             <ThemeProvider theme={theme}>
                                 <UserPanelLayout>
@@ -83,7 +83,7 @@ export default function App({Component, pageProps, props}) {
                         </CacheProvider>
                     }
                     {
-                        adminRoute &&
+                        adminRoute && !routerName.pathname.startsWith("/login") &&
                         <CacheProvider value={cacheRtl}>
                             <ThemeProvider theme={theme}>
                                 <PanelLayout>
@@ -94,7 +94,7 @@ export default function App({Component, pageProps, props}) {
                         </CacheProvider>
                     }
                     {
-                        !userAdminRoute && !adminRoute && !notFoundRoute &&
+                        !userAdminRoute && !adminRoute && !notFoundRoute && !routerName.pathname.startsWith("/login") &&
 
                         <CacheProvider value={cacheRtl}>
                             <ThemeProvider theme={theme}>
