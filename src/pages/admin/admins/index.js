@@ -5,7 +5,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
@@ -14,11 +13,12 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {Badge} from "react-bootstrap";
-import {Button} from "@mui/material";
+import {Button, FormControl, InputLabel, Select} from "@mui/material";
 import Nprogress from "nprogress";
 import BlockIcon from "@mui/icons-material/Block";
-import axios from "axios";
 import {CheckCircleOutline} from "@mui/icons-material";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
@@ -34,9 +34,7 @@ export default function Admins({data}) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [getData, setGetData] = useState(false)
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
+
 
     const dataFetch = async () => {
         await fetch(`${process.env.LOCAL_URL}/api/admin/admins`, {
@@ -86,7 +84,6 @@ export default function Admins({data}) {
                         status: userData.user.status === "1" ? "0" : "1"
                     })
                 }).then(res => res.json()).then(data => {
-                    console.log(data)
                     if (data.status) {
                         Swal.fire({
                             icon: 'success',
@@ -153,10 +150,38 @@ export default function Admins({data}) {
 
     return (
         <div className={"px-md-4"}>
-            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/admins/add-admin"} className={"ps-2"}>
-                    <Button variant={"contained"} color={"success"}>افزودن ادمین</Button>
-                </Link>
+            <div className="d-flex flex-row align-items-center ">
+                <div className="panel-title-parent w-100">
+                    <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                        لیست ادمین ها
+                    </h5>
+                </div>
+                <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                    <div className={"d-flex flex-row justify-content-center"}>
+                        <Link href={"/admin/admins/add-admin"} className={"ps-2"}>
+                            <Button className={"bg-my-purple"} variant={"contained"}>افزودن ادمین</Button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <Paper className={"p-md-3 pt-3 mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
+                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
+                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                        <InputLabel>جستجو بر اساس</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            // value={age}
+                            label="Age"
+                            // onChange={handleChange}
+                        >
+                            <MenuItem value={10}>آیدی</MenuItem>
+                            <MenuItem value={20}>نام</MenuItem>
+                            <MenuItem value={30}>شماره تلفن</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>

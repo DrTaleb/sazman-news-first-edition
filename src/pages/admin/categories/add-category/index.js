@@ -67,7 +67,7 @@ export default function AddCategory({data}) {
             Nprogress.done();
         } else {
             try {
-                const res = await fetch(`http://localhost:3000/api/admin/categories`, {
+                const res = await fetch(`${process.env.LOCAL_URL}/api/admin/categories`, {
                     method: "POST",
                     body: JSON.stringify({
                         parent_id: parent,
@@ -167,7 +167,7 @@ export async function getServerSideProps(context) {
 
     const {params, req} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/categories?page=1&limit=1000`, {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/categories?page=1&limit=1000`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

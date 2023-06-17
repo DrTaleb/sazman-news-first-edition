@@ -36,10 +36,9 @@ export default function SubMenus({data}) {
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.children)
     const dataFetch = async () => {
-        const res = await fetch(`http://localhost:3000/api/admin/categories/subcategories/${router.query.categoryId}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/categories/subcategories/${router.query.categoryId}`)
         const data = await res.json()
         await setDATA(data.data.children)
-        console.log(data)
     }
     useEffect(()=>{
         dataFetch()
@@ -65,7 +64,7 @@ export default function SubMenus({data}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 try {
-                    fetch(`http://localhost:3000/api/admin/menus/header/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/menus/header/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.massage.status) {
@@ -167,7 +166,7 @@ export async function getServerSideProps(context){
 
     const {params,req} = context
 
-    const dataResponse = await fetch(`https://newsapi.deltagroup.ir/panel/categories/${params.categoryId}`,{
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/categories/${params.categoryId}`,{
         method : "GET",
         headers : {
             'Content-Type': 'application/json; charset=UTF-8',

@@ -6,16 +6,17 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Fragment, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
-import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
-import {Button, Pagination, PaginationItem} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {Badge} from "react-bootstrap";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
@@ -36,9 +37,10 @@ export default function Menus({data}) {
         const data = await res.json()
         await setDATA(data.data.data)
     }
-    useEffect(()=>{
+    useEffect(() => {
         dataFetch()
-    },[router.query.page])
+    }, [router.query.page])
+
     function createData(id, title, link_type, link, order, childrenCount, status, subMenus, options) {
         return {id, title, link_type, link, order, childrenCount, status, subMenus, options};
     }
@@ -96,16 +98,45 @@ export default function Menus({data}) {
     const clickHandler = (event, value) => {
         router.replace(`/admin/menus/footer/${value}`)
     }
-    const seeChildren = (id) =>{
+    const seeChildren = (id) => {
         router.push(`/admin/menus/footer/submenus/${id}`)
     }
 
     return (
         <div className={"px-md-4"}>
-            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/menus/footer/add-menu"}>
-                    <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن منو یا زیرمنوی فوتر</Button>
-                </Link>
+            <div className="d-flex flex-row align-items-center ">
+                <div className="panel-title-parent w-100">
+                    <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                        لیست منوی فوتر
+                    </h5>
+                </div>
+                <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                    <div className={"d-flex flex-row justify-content-center"}>
+                        <Link href={"/admin/menus/footer/add-menu"}>
+                            <Button className={"bg-my-purple"} variant={"contained"}>افزودن منو یا زیرمنوی فوتر</Button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <Paper className={"p-md-3 pt-3 mt-3"}
+                   sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
+                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search"/>
+                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                        <InputLabel>جستجو بر اساس</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            // value={age}
+                            label="Age"
+                            // onChange={handleChange}
+                        >
+                            <MenuItem value={10}>آیدی</MenuItem>
+                            <MenuItem value={20}>نام</MenuItem>
+                            <MenuItem value={30}>لینک</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -142,7 +173,10 @@ export default function Menus({data}) {
                                             );
                                         })}
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            {row.childrenCount >= 1 ? <Button variant={"contained"} onClick={()=> seeChildren(row.id)}>مشاهده زیرمنو ها</Button> : <Badge bg={"secondary"} className={"p-2"}>هیج زیرمنویی ثبت نشده</Badge>}
+                                            {row.childrenCount >= 1 ?
+                                                <Button variant={"contained"} onClick={() => seeChildren(row.id)}>مشاهده
+                                                    زیرمنو ها</Button> :
+                                                <Badge bg={"secondary"} className={"p-2"}>هیج زیرمنویی ثبت نشده</Badge>}
                                         </TableCell>
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                             <IconButton color={"warning"}

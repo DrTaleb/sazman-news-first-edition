@@ -11,13 +11,15 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
-import {Button, Pagination, PaginationItem, styled} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select, styled} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import Nprogress from "nprogress";
 import Tooltip from "@mui/material/Tooltip";
 import {Badge} from "react-bootstrap";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {
@@ -151,8 +153,33 @@ export default function SelectedPosts({data}) {
 
     return (
         <div className={"px-md-4"}>
-            <Paper className={"mt-3 rounded-3 overflow-hidden pb-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <TableContainer sx={{maxHeight: 600}}>
+            <div className="d-flex flex-row align-items-center ">
+                <div className="panel-title-parent w-100">
+                    <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                        درخواست های انتشار
+                    </h5>
+                </div>
+            </div>
+            <Paper className={"p-md-3 pt-3 mt-3"}
+                   sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
+                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
+                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                        <InputLabel>جستجو بر اساس</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            // value={age}
+                            label="Age"
+                            // onChange={handleChange}
+                        >
+                            <MenuItem value={10}>آیدی</MenuItem>
+                            <MenuItem value={20}>عنوان</MenuItem>
+                            <MenuItem value={30}>نوع پست</MenuItem>
+                            <MenuItem value={30}>دسته بندی</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>                <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <StyledTableRow>

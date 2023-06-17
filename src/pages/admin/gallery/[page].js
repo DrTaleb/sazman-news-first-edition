@@ -8,7 +8,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
-import {Alert, Button, Pagination, PaginationItem, Skeleton, styled} from "@mui/material";
+import {
+    Alert,
+    Button,
+    FormControl,
+    InputLabel,
+    Pagination,
+    PaginationItem,
+    Select,
+    Skeleton,
+    styled
+} from "@mui/material";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import {Badge, Col, Row} from "react-bootstrap";
@@ -19,6 +29,8 @@ import Nprogress from "nprogress";
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import {DeleteForever, EditAttributes, EditNote, EditOutlined, ErrorOutline} from "@mui/icons-material";
 import Link from "next/link";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: '#', minWidth: 170},
@@ -174,8 +186,24 @@ export default function Companies() {
                         </h5>
                     </div>
                 </div>
-                <Paper className={"pb-3 shadow-sm mt-5 mt-sm-3"}
-                       sx={{width: '100%', overflow: 'hidden'}}>
+                <Paper className={"p-md-3 pt-3 mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 .4rem rgba(0, 0, 0, .1)"}}>
+                    <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
+                        <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
+                        <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                            <InputLabel>جستجو بر اساس</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                // value={age}
+                                label="Age"
+                                // onChange={handleChange}
+                            >
+                                <MenuItem value={10}>آیدی</MenuItem>
+                                <MenuItem value={20}>عنوان</MenuItem>
+                                <MenuItem value={20}>شرکت مربوطه</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>

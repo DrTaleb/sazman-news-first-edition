@@ -11,11 +11,13 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
-import {Button, Pagination, PaginationItem} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import Nprogress from "nprogress";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
@@ -42,7 +44,7 @@ export default function Sliders({data}) {
 
     const router = useRouter()
 
-    const [DATA,setDATA] = useState(data)
+    const [DATA, setDATA] = useState(data)
 
     const [page, setPage] = useState(data.data.current_page);
 
@@ -52,31 +54,30 @@ export default function Sliders({data}) {
 
     const [getData, setGetData] = useState(false)
 
-    const dataFetch = async ()=>{
+    const dataFetch = async () => {
         const res = await fetch(`${process.env.LOCAL_URL}/api/admin/sliders/${router.query.page}`)
         const data = await res.json()
         await setDATA(data)
     }
 
 
-    useEffect(()=>{
+    useEffect(() => {
         setDATA(data)
-    },[data])
+    }, [data])
 
-    function createData(id, name, status,link, link_type,start_at,end_at, options) {
-        return {id, name, status,link, link_type,start_at,end_at, options};
+    function createData(id, name, status, link, link_type, start_at, end_at, options) {
+        return {id, name, status, link, link_type, start_at, end_at, options};
     }
 
     const rows = [];
-    DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`,`${item.link}`, `${item.link_type == 1 ?  "داخلی" : "خارجی" }`,`${item.start_at}`,`${item.end_at}`,)))
-
+    DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.link}`, `${item.link_type == 1 ? "داخلی" : "خارجی"}`, `${item.start_at}`, `${item.end_at}`,)))
 
 
     const viewHandler = (id) => {
         router.push(`/admin/sliders/view/${id}`)
     }
     const editHandler = (id) => {
-       router.replace(`/admin/sliders/edit-slider/${id}`)
+        router.replace(`/admin/sliders/edit-slider/${id}`)
     }
 
     const deleteHandler = async (id) => {
@@ -92,9 +93,9 @@ export default function Sliders({data}) {
                 Nprogress.start()
                 try {
                     fetch(`${process.env.LOCAL_URL}/api/admin/sliders/delete/${id}`, {
-                        method : "DELETE"
+                        method: "DELETE"
                     }).then(res => res.json()).then(data => {
-                        if (data.status){
+                        if (data.status) {
                             setGetData(prev => !prev)
                             Nprogress.done()
                             Swal.fire(
@@ -103,7 +104,7 @@ export default function Sliders({data}) {
                                 'success'
                             )
                             dataFetch()
-                        }else {
+                        } else {
                             Nprogress.done()
                             Swal.fire(
                                 '',
@@ -112,7 +113,7 @@ export default function Sliders({data}) {
                             )
                         }
                     })
-                }catch {
+                } catch {
                     Nprogress.done()
                     Swal.fire(
                         '',
@@ -125,18 +126,47 @@ export default function Sliders({data}) {
     }
 
 
-    const clickHandler =  (event, value) => {
-         router.push(`/admin/sliders/${value}`)
+    const clickHandler = (event, value) => {
+        router.push(`/admin/sliders/${value}`)
         dataFetch()
     }
 
 
     return (
         <div className={"px-md-4"}>
-            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden' , boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/sliders/add-slider"}  className={"ps-2"}>
-                    <Button variant={"contained"} color={"success"}>افزودن اسلایدر</Button>
-                </Link>
+            <div className="d-flex flex-row align-items-center ">
+                <div className="panel-title-parent w-100">
+                    <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                        لیست اسلایدر ها
+                    </h5>
+                </div>
+                <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                    <div className={"d-flex flex-row justify-content-center"}>
+                        <Link href={"/admin/sliders/add-slider"} className={"ps-2"}>
+                            <Button variant={"contained"} className={"bg-my-purple"}>افزودن اسلایدر</Button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <Paper className={"p-md-3 pt-3 mt-3"}
+                   sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
+                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search"/>
+                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                        <InputLabel>جستجو بر اساس</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            // value={age}
+                            label="Age"
+                            // onChange={handleChange}
+                        >
+                            <MenuItem value={10}>آیدی</MenuItem>
+                            <MenuItem value={20}>نام</MenuItem>
+                            <MenuItem value={30}>لینک</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -157,38 +187,38 @@ export default function Sliders({data}) {
                         </TableHead>
                         <TableBody>
                             {rows.map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}  className={"fw-bold"}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                            <TableCell align={"left"} sx={{minWidth : "200px"}}>
-                                                <IconButton color={"info"}
-                                                            onClick={() => viewHandler(row.id)}
-                                                ><RemoveRedEyeRoundedIcon/>
-                                                </IconButton>
-                                                <IconButton color={"warning"}
-                                                            onClick={() => editHandler(row.id)}
-                                                >
-                                                    <ModeEditOutlineRoundedIcon></ModeEditOutlineRoundedIcon>
-                                                </IconButton>
-                                                <IconButton color={"error"}
-                                                            onClick={()=> deleteHandler( row.id)}
-                                                >
-                                                    <DeleteIcon></DeleteIcon>
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                        ;
-                                })}
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                                        {columns.map((column) => {
+                                            const value = row[column.id];
+                                            return (
+                                                <TableCell key={column.id} align={column.align} className={"fw-bold"}>
+                                                    {column.format && typeof value === 'number'
+                                                        ? column.format(value)
+                                                        : value}
+                                                </TableCell>
+                                            );
+                                        })}
+                                        <TableCell align={"left"} sx={{minWidth: "200px"}}>
+                                            <IconButton color={"info"}
+                                                        onClick={() => viewHandler(row.id)}
+                                            ><RemoveRedEyeRoundedIcon/>
+                                            </IconButton>
+                                            <IconButton color={"warning"}
+                                                        onClick={() => editHandler(row.id)}
+                                            >
+                                                <ModeEditOutlineRoundedIcon></ModeEditOutlineRoundedIcon>
+                                            </IconButton>
+                                            <IconButton color={"error"}
+                                                        onClick={() => deleteHandler(row.id)}
+                                            >
+                                                <DeleteIcon></DeleteIcon>
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                                    ;
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -211,20 +241,20 @@ export default function Sliders({data}) {
 }
 
 
-export async function getServerSideProps(context){
+export async function getServerSideProps(context) {
 
-    const {params ,req} = context
+    const {params, req} = context
 
-    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/sliders?page=${params.page}&limit=10`,{
-        method : "GET",
-        headers : {
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/sliders?page=${params.page}&limit=10`, {
+        method: "GET",
+        headers: {
             'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization' : `Bearer ${req.cookies.authToken}`
+            'Authorization': `Bearer ${req.cookies.authToken}`
         }
     })
     const data = await dataResponse.json()
 
     return {
-        props : {data}
+        props: {data}
     }
 }

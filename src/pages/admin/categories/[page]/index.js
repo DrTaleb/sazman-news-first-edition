@@ -10,11 +10,13 @@ import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
-import {Button, Pagination, PaginationItem} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {Badge} from "react-bootstrap";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
@@ -98,10 +100,37 @@ export default function Menus({data}) {
 
     return (
         <div className={"px-md-4"}>
-            <Paper className={"p-md-3 pt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                <Link href={"/admin/categories/add-category"} className={"ps-2"}>
-                    <Button variant={"contained"} color={"success"}>افزودن دسته </Button>
-                </Link>
+            <div className="d-flex flex-row align-items-center ">
+                <div className="panel-title-parent w-100">
+                    <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                        لیست دسته بندی ها
+                    </h5>
+                </div>
+                <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                    <div className={"d-flex flex-row justify-content-center"}>
+                        <Link href={"/admin/categories/add-category"} className={"ps-2"}>
+                            <Button variant={"contained"} className={"bg-my-purple"}>افزودن دسته </Button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <Paper className={"p-md-3 pt-3 mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
+                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
+                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                        <InputLabel>جستجو بر اساس</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            // value={age}
+                            label="Age"
+                            // onChange={handleChange}
+                        >
+                            <MenuItem value={10}>آیدی</MenuItem>
+                            <MenuItem value={20}>نام</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>

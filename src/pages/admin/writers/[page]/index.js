@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {Pagination, PaginationItem, styled} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select, styled} from "@mui/material";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
@@ -17,6 +17,8 @@ import Tooltip from "@mui/material/Tooltip";
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import {Badge} from "react-bootstrap";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
@@ -24,10 +26,10 @@ const columns = [
     {id: 'firstName', label: 'نام', minWidth: 170, align: "left"},
     {id: 'lastName', label: 'نام خانوادگی', minWidth: 170, align: 'left',},
     {id: 'mobile', label: 'موبایل', minWidth: 170, align: 'left',},
-    {id: 'status', label: 'وضعیت', minWidth: 170, align: 'left',},
 ];
 
 export default function Writers({data}) {
+    console.log(data)
     const rows = []
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
@@ -40,11 +42,11 @@ export default function Writers({data}) {
         dataFetch()
     }, [router.query.page])
 
-    function createData(id, photo, firstName, lastName, mobile, status, options) {
-        return {id, photo, firstName, lastName, mobile, status, options};
+    function createData(id, photo, firstName, lastName, mobile, status, company_id,options) {
+        return {id, photo, firstName, lastName, mobile, status,company_id, options};
     }
 
-    DATA.map(item => rows.push(createData(`${item.id}`, `${item.photo}`, `${item.firstname}`, `${item.lastname}`, `${item.user.mobile}`, `${item.user.status == 1 ? "فعال" : "غیر فعال"}`)))
+    DATA.map(item => rows.push(createData(`${item.id}`, `${item.photo}`, `${item.firstname}`, `${item.lastname}`, `${item.user.mobile}`, `${item.user.status == 1 ? "فعال" : "غیر فعال"}`, `${item.company_id}`)))
 
     const viewHandler = (id)=>{
         router.push(`/admin/writers/view/${id}`)
@@ -156,17 +158,42 @@ export default function Writers({data}) {
 
         },
     }));
+    const goToCompany = (id)=>{
+        router.push(`/admin/companies/edit-company/${id}`)
+    }
     return (
         <div className={"px-md-4"}>
-            <Paper className={"pb-3 rounded-4"}
+            <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
+                <div className="panel-title-parent w-100">
+                    <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                        لیست نویسندگان
+                    </h5>
+                </div>
+            </div>
+            <Paper className={"pb-3 mt-4 p-md-3"}
                    sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
+                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
+                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                        <InputLabel>جستجو بر اساس</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            // value={age}
+                            label="Age"
+                            // onChange={handleChange}
+                        >
+                            <MenuItem value={10}>آیدی</MenuItem>
+                            <MenuItem value={20}>نام</MenuItem>
+                            <MenuItem value={20}>نام خانوادگی</MenuItem>
+                            <MenuItem value={20}>موبایل</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <StyledTableRow sx={{background: "#000"}}>
-                                <TableCell>
-                                    پروفایل
-                                </TableCell>
                                 {columns.map((column) => (
                                     <TableCell
                                         key={column.id}
@@ -176,6 +203,9 @@ export default function Writers({data}) {
                                         {column.label}
                                     </TableCell>
                                 ))}
+                                <TableCell>
+                                    شرکت ساخته شده توسط نویسنده
+                                </TableCell>
                                 <TableCell>
                                     وضعیت
                                 </TableCell>
@@ -188,10 +218,6 @@ export default function Writers({data}) {
                             {rows.map((row) => {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                        <TableCell sx={{width: "100px"}}>
-                                            <img alt={""} className={"w-100"}
-                                                 src={`https://newsapi.deltagroup.ir/${row.photo}`}/>
-                                        </TableCell>
                                         {columns.map((column) => {
                                             const value = row[column.id];
                                             return (
@@ -202,6 +228,18 @@ export default function Writers({data}) {
                                                 </TableCell>
                                             );
                                         })}
+                                        <TableCell align={"left"} sx={{minWidth: "200px"}}>
+                                            {
+                                                row.company_id === "0" ?
+                                                    <Badge bg={"secondary"}>بدون شرکت</Badge>
+                                                    :
+                                                    <Tooltip title="مشاهده اکانت شرکت">
+                                                        <Button variant={"outlined"} onClick={()=> goToCompany(row.company_id)}>
+                                                            مشاهده اکانت شرکت
+                                                        </Button>
+                                                    </Tooltip>
+                                            }
+                                        </TableCell>
                                         <TableCell>
                                             {
                                                 row.status == "فعال" ?

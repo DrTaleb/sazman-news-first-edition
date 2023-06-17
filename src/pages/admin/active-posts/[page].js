@@ -11,19 +11,23 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
-import {Button, Pagination, PaginationItem, styled} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select, styled} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import Nprogress from "nprogress";
 import Tooltip from "@mui/material/Tooltip";
 import {Badge} from "react-bootstrap";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {
-        id: 'id', label: 'آیدی', minWidth: 170},
+        id: 'id', label: 'آیدی', minWidth: 170
+    },
     {
-        id: 'title', label: 'عنوان', minWidth: 170, align: "left"},
+        id: 'title', label: 'عنوان', minWidth: 170, align: "left"
+    },
     {
         id: 'type', label: 'نوع پست', minWidth: 200, align: 'left',
     },
@@ -64,12 +68,27 @@ export default function SelectedPosts({data}) {
         setDATA(data)
     }, [data])
 
-    function createData(id, title, status, selected_status, type, view_count, like_count, published_at, category,company,writer,writer_id, company_id ,options) {
-        return {id, title, status, selected_status, type, view_count, like_count, published_at,category,company, writer,writer_id,company_id,options};
+    function createData(id, title, status, selected_status, type, view_count, like_count, published_at, category, company, writer, writer_id, company_id, options) {
+        return {
+            id,
+            title,
+            status,
+            selected_status,
+            type,
+            view_count,
+            like_count,
+            published_at,
+            category,
+            company,
+            writer,
+            writer_id,
+            company_id,
+            options
+        };
     }
 
     const rows = [];
-    DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.selected_status == 1 ? "فعال" : "غیر فعال"}`, `${item.type}`, `${item.view_count}`, `${item.like_count}`, `${item.published_at}`, `${item.category.title}`,`${item.company.title}`,`${item.writer.firstname} ${item.writer.lastname}`,`${item.writer.id}`, `${item.company_id}`)))
+    DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.selected_status == 1 ? "فعال" : "غیر فعال"}`, `${item.type}`, `${item.view_count}`, `${item.like_count}`, `${item.published_at}`, `${item.category.title}`, `${item.company.title}`, `${item.writer.firstname} ${item.writer.lastname}`, `${item.writer.id}`, `${item.company_id}`)))
 
 
     const viewHandler = (id) => {
@@ -78,10 +97,10 @@ export default function SelectedPosts({data}) {
     const editHandler = (id) => {
         router.replace(`/admin/ads/edit/${id}`)
     }
-    const goToCompany = (id) =>{
+    const goToCompany = (id) => {
         router.replace(`/admin/companies/edit-company/${id}`)
     }
-    const goToWriter = (id) =>{
+    const goToWriter = (id) => {
         router.replace(`/admin/writers/view/${id}`)
     }
 
@@ -150,7 +169,33 @@ export default function SelectedPosts({data}) {
 
     return (
         <div className={"px-md-4"}>
-            <Paper className={"mt-3 rounded-3 overflow-hidden"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+            <div className="d-flex flex-row align-items-center ">
+                <div className="panel-title-parent w-100">
+                    <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                        لیست پست ها
+                    </h5>
+                </div>
+            </div>
+            <Paper className={"p-md-3 pt-3 mt-3"}
+                   sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
+                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
+                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                        <InputLabel>جستجو بر اساس</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            // value={age}
+                            label="Age"
+                            // onChange={handleChange}
+                        >
+                            <MenuItem value={10}>آیدی</MenuItem>
+                            <MenuItem value={20}>عنوان</MenuItem>
+                            <MenuItem value={30}>نوع پست</MenuItem>
+                            <MenuItem value={30}>دسته بندی</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -167,7 +212,7 @@ export default function SelectedPosts({data}) {
                                 <TableCell>
                                     وضعیت
                                 </TableCell>
-                                <TableCell sx={{minWidth : "200px"}}>
+                                <TableCell sx={{minWidth: "200px"}}>
                                     عضویت در پست های برتر
                                 </TableCell>
                                 <TableCell>
@@ -176,7 +221,7 @@ export default function SelectedPosts({data}) {
                                 <TableCell>
                                     نویسنده
                                 </TableCell>
-                                <TableCell sx={{minWidth : "200px"}}>
+                                <TableCell sx={{minWidth: "200px"}}>
                                     گزینه ها
                                 </TableCell>
                             </StyledTableRow>
@@ -215,7 +260,8 @@ export default function SelectedPosts({data}) {
                                         </TableCell>
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                             <Tooltip title={"مشاهده مشخصات شرکت"}>
-                                                <Button variant={"outlined"} onClick={() => goToCompany(row.company_id)}>
+                                                <Button variant={"outlined"}
+                                                        onClick={() => goToCompany(row.company_id)}>
                                                     {row.company}
                                                 </Button>
                                             </Tooltip>
