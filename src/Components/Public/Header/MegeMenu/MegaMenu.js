@@ -1,4 +1,4 @@
-import {Fragment, useContext, useEffect} from "react";
+import {Fragment, useContext, useEffect, useState} from "react";
 import $ from "jquery"
 import MegaMenuItem from "./MegaMenuItem";
 import MenuIcon from '@mui/icons-material/Menu';
@@ -8,6 +8,17 @@ import SideBarItem from "./SideBarItem";
 import PersonIcon from "@mui/icons-material/Person";
 import {Fab} from "@mui/material";
 import MenuContext from "@/Contexts/MenuContext";
+import Tooltip from "@mui/material/Tooltip";
+import Menu from "@mui/material/Menu";
+import Link from "next/link";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import LoginIcon from "@mui/icons-material/Login";
+import Divider from "@mui/material/Divider";
+import WysiwygIcon from "@mui/icons-material/Wysiwyg";
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
+import AuthContext from "@/Contexts/AuthContext";
 
 
 function megaMenuHandler() {
@@ -57,6 +68,22 @@ export default function MegaMenu() {
     }, [megaMenuItems])
 
 
+    const [anchorEl, setAnchorEl] = useState();
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.target);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const {userData,logOut,getUserData} = useContext(AuthContext)
+    const [isLogin , setIsLogin] = useState(false)
+
+    useEffect(()=>{
+        getUserData()
+        userData.firstname.length ? setIsLogin(true) : setIsLogin(false)
+    },[])
     return (
         <Fragment>
             {/*md menu*/}
@@ -93,9 +120,99 @@ export default function MegaMenu() {
                                         <Fab color="text" className={"bg-white shadow-sm"} size={"small"}>
                                             <SearchIcon color="action"/>
                                         </Fab>
-                                        <Fab color="text" className={"bg-white shadow-sm"} size={"small"}>
-                                            <PersonIcon color="action"/>
-                                        </Fab>
+                                        {isLogin ?
+                                            <Fragment>
+                                                <Tooltip title="منوی کاربری">
+                                                    <Fab color="text" className={"bg-white shadow-sm"} size={"small"}
+                                                         onClick={handleClick}
+                                                         aria-controls={open ? 'account-menu' : undefined}
+                                                         aria-haspopup="true"
+                                                         aria-expanded={open ? 'true' : undefined}>
+                                                        <PersonIcon color="action"/>
+                                                    </Fab>
+                                                </Tooltip>
+                                                <Menu
+                                                    anchorEl={anchorEl}
+                                                    id="account-menu"
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                    onClick={handleClose}
+                                                    PaperProps={{
+                                                        elevation: 0,
+                                                        sx: {
+                                                            overflow: 'visible',
+                                                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                            mt: 2,
+                                                            '& .MuiAvatar-root': {
+                                                                width: 42,
+                                                                height: 32,
+                                                                ml: -0.5,
+                                                                mr: 1,
+                                                            },
+                                                        },
+                                                    }}
+                                                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                                                >
+                                                    {
+
+                                                        userData.companies ?
+                                                            <Link href={"/user-panel"}>
+                                                                <MenuItem onClick={handleClose}>
+                                                                    <ListItemIcon>
+                                                                        <LoginIcon/>
+                                                                    </ListItemIcon>
+                                                                    ورود به پنل کاربری
+                                                                </MenuItem>
+                                                                <Divider />
+                                                            </Link>
+                                                            :
+                                                            <Link href={"/admin"}>
+                                                                <MenuItem onClick={handleClose}>
+                                                                    <ListItemIcon>
+                                                                        <LoginIcon/>
+                                                                    </ListItemIcon>
+                                                                    ورود به پنل ادمین
+                                                                </MenuItem>
+                                                                <Divider />
+                                                            </Link>
+
+                                                    }
+                                                    <Link href={"/my-news"}>
+                                                        <MenuItem onClick={handleClose}>
+                                                            <ListItemIcon>
+                                                                <WysiwygIcon color={"primary"} />
+                                                            </ListItemIcon>
+                                                            اخبار من
+                                                        </MenuItem>
+                                                        <Divider />
+                                                    </Link>
+                                                    <MenuItem onClick={handleClose}>
+                                                        <ListItemIcon>
+                                                            <Settings color={"info"} fontSize="small" />
+                                                        </ListItemIcon>
+                                                        تنظیمات اکانت
+                                                    </MenuItem>
+                                                    <Divider />
+                                                    <MenuItem onClick={()=>{
+                                                        logOut()
+                                                        setIsLogin(!isLogin)
+                                                    }
+                                                    }>
+                                                        <ListItemIcon>
+                                                            <Logout color={"error"} fontSize="small" />
+                                                        </ListItemIcon>
+                                                        خروج از حساب
+                                                    </MenuItem>
+                                                </Menu>
+                                            </Fragment>
+                                            :
+                                            <Link href={"/login"}>
+                                                <Fab color="text" className={"bg-white shadow-sm"} size={"small"}>
+                                                    <PersonIcon color="action"/>
+                                                </Fab>
+                                            </Link>
+                                        }
                                     </div>
                                 </div>
                             </div>

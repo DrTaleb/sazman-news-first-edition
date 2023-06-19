@@ -31,12 +31,15 @@ export default function TopNav() {
         setAnchorEl(null);
     };
 
-    const {userData,logOut} = useContext(AuthContext)
+    const {userData,logOut,getUserData} = useContext(AuthContext)
     const [isLogin , setIsLogin] = useState(false)
 
     useEffect(()=>{
+        getUserData()
+        console.log(userData)
         userData.firstname.length ? setIsLogin(true) : setIsLogin(false)
-    },[userData])
+    },[])
+
     return (
         <Fragment>
             <Navbar sticky={"top"} bg={"white"} className={`shadow-sm ${styles.dirSmLtr}`}>
@@ -143,7 +146,11 @@ export default function TopNav() {
                                             تنظیمات اکانت
                                         </MenuItem>
                                         <Divider />
-                                        <MenuItem onClick={()=> logOut()}>
+                                        <MenuItem onClick={()=>{
+                                            logOut()
+                                            setIsLogin(!isLogin)
+                                        }
+                                        }>
                                             <ListItemIcon>
                                                 <Logout color={"error"} fontSize="small" />
                                             </ListItemIcon>
