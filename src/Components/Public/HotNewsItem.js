@@ -6,14 +6,14 @@ function HotNewsItem(props) {
 
     return (
         <Link href={`/post/${props.title}`} className="news-card">
-            <img src={`https://newsapi.deltagroup.ir/${props.image}`} className="news-card-image"
+            <img src={`${process.env.SERVER_URL}${props.image}`} className="news-card-image"
                  alt=""/>
             <div className="news-card-overlay">
                 <div className="news-card-text-section-top col-12 d-flex flex-row justify-content-between px-4">
                     <div className="d-flex flex-row align-items-center gap-2">
-                        <Tooltip title={`${props.company.company_name}`} >
+                        <Tooltip title={`${props.company.title}`} >
                             <div className={"company-profile-img p-1 bg-white rounded-circle"}>
-                                <img className={"w-100 h-100"} src={`https://newsapi.deltagroup.ir/${props.company.logo}`}/>
+                                <img className={"w-100 h-100"} src={`${process.env.SERVER_URL}${props.company.logo}`}/>
                             </div>
                         </Tooltip>
                     </div>

@@ -17,8 +17,8 @@ import {ToastContainer} from "react-toastify";
 import Nprogress from "nprogress";
 import axios from "axios";
 import UserPanelLayout from "@/Components/userPanel/UserPanelLayout";
-import {useEffect} from "react";
-
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
 
 axios.defaults.baseURL = `${process.env.SERVER_URL}`;
 Router.events.on('routeChangeStart', ()=>{

@@ -647,3 +647,7 @@ html body {
     transition: .7s ease-out;
     box-shadow: 0 .1rem 2rem rgba(0, 0, 0, .15) !important
 }
+
+.tox-notifications-container{
+    display: none;
+}

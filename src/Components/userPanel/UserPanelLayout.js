@@ -90,7 +90,7 @@ export default function UserPanelLayout({children}) {
     const [selectedCompany, setSelectedCompany] = useState("")
     useEffect(() => {
         if (userStatus) {
-            if (localStorage.getItem("selectedCompany") !== "null" || localStorage.getItem("selectedCompany")) {
+            if (localStorage.getItem("selectedCompany") !== "null" && localStorage.getItem("selectedCompany")) {
                 userData.companies.length && setSelectedCompany(userData.companies.find(item => item.id == localStorage.getItem("selectedCompany")).title)
             } else {
                 setSelectedCompany(null)
