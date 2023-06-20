@@ -651,3 +651,7 @@ html body {
 .tox-notifications-container{
     display: none;
 }
+
+.max-height-400px{
+    height : 400px
+}

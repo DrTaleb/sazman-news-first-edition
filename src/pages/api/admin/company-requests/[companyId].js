@@ -1,7 +1,20 @@
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
     if (req.method === "GET"){
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/companies?page=${req.query.companyId}&limit=10&verify_status=0`,{
+        const myQueries = ()=>{
+            let myqueries ="";
+            if (req.query.brand_name){
+                myqueries += `&brand_name=${req.query.brand_name}`
+            }
+            if (req.query.company_name){
+                myqueries += `&company_name=${req.query.company_name}`
+            }
+            if (req.query.activity_type){
+                myqueries += `&activity_type=${req.query.activity_type}`
+            }
+            return myqueries
+        }
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/companies?page=${req.query.companyId}&limit=10&verify_status=0${myQueries()}`,{
             method : "GET",
             headers : {
                 'Content-Type': 'application/json; charset=UTF-8',

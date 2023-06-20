@@ -1,17 +1,17 @@
 
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
-    if (req.method === "GET"){
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/tickets?page=${req.query.page[1]}&limit=10`,{
-            method : "GET",
-            headers : {
+    if (req.method === "GET") {
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/charts/${req.query.type}`, {
+            method: "GET",
+            headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization' : `Bearer ${authToken}`
+                'Authorization': `Bearer ${authToken}`
             }
         })
         const data = await dataResponse.json()
         res.status(200).json(data)
-    }else {
+    } else {
         res.setHeader("Allow", ["post"]);
         res.status(405).json({massage: "not allowed"})
     }

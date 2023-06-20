@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
-import {FormControl, InputLabel, Pagination, PaginationItem, Select} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select} from "@mui/material";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import Tooltip from "@mui/material/Tooltip";
@@ -30,10 +30,28 @@ export default function Companies({data}) {
     const rows = []
     const router = useRouter()
     const [DATA, setDATA] = useState(data.data.data)
+    const [nameSearch, setNameSearch] = useState("")
+    const [nameSearchDisable, setNameSearchDisable] = useState(true)
+    const nameSearchHandler = (event)=>{
+        setNameSearch(event.target.value)
+    }
+    const [searchCategory, setSearchCategory] = useState("")
+    const handleSearchCategory = (event)=>{
+        setSearchCategory(event.target.value)
+        setNameSearchDisable(false)
+    }
+
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/company-requests/${router.query.page}`)
-        const data = await res.json()
-        await setDATA(data.data.data)
+        await fetch(`${process.env.LOCAL_URL}/api/admin/company-requests/${router.query.page}?${searchCategory}=${nameSearch}`, {
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(data => setDATA(data.data.data))
+    }
+    const search = ()=>{
+        dataFetch()
     }
     useEffect(() => {
         dataFetch()
@@ -112,22 +130,31 @@ export default function Companies({data}) {
             </div>
             <Paper className={"p-md-3 pt-3 mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
-                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
-                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                    <TextField
+                        className={"col-12 col-md-4 col-xl-3 mb-md-3"}
+                        label="محل جستجو"
+                        type="search"
+                        value={nameSearch}
+                        disabled={nameSearchDisable}
+                        onChange={nameSearchHandler}
+                    />
+                    <FormControl className={"col-12 col-md-4 col-xl-2"}>
                         <InputLabel>جستجو بر اساس</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={age}
+                            value={searchCategory}
                             label="Age"
-                            // onChange={handleChange}
+                            onChange={handleSearchCategory}
                         >
-                            <MenuItem value={10}>آیدی</MenuItem>
-                            <MenuItem value={20}>نام برند</MenuItem>
-                            <MenuItem value={30}>نام شرکت</MenuItem>
-                            <MenuItem value={30}>نوع فعالیت</MenuItem>
+                            <MenuItem value={"brand_name"}>نام برند</MenuItem>
+                            <MenuItem value={"company_name"}>نام شرکت</MenuItem>
+                            <MenuItem value={"activity_type"}>نوع فعالیت</MenuItem>
                         </Select>
                     </FormControl>
+                    <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
+                        جستجو
+                    </Button>
                 </div>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">

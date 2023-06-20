@@ -45,17 +45,31 @@ export default function Companies() {
     const [getData, setGeData] = useState(false)
     const [page, setPage] = useState("");
     const [pageCount, setPageCount] = useState("");
-    const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/certificates/${router.query.page}`)
-        const data = await res.json()
-        await setDATA(data)
-        console.log(data)
-        await setPage(data.data.current_page)
-        await setPageCount(data.data.last_page)
-    }
+
+    const [nameSearch, setNameSearch] = useState("")
+    const [nameSearchDisable, setNameSearchDisable] = useState(true)
     useEffect(() => {
         dataFetch()
     }, [getData])
+    const nameSearchHandler = (event)=>{
+        setNameSearch(event.target.value)
+    }
+    const [searchCategory, setSearchCategory] = useState("")
+    const handleSearchCategory = (event)=>{
+        setSearchCategory(event.target.value)
+        setNameSearchDisable(false)
+    }
+
+    const dataFetch = async () => {
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/certificates/${router.query.page}?${searchCategory}=${nameSearch}`)
+        const data = await res.json()
+        await setDATA(data)
+        await setPage(data.data.current_page)
+        await setPageCount(data.data.last_page)
+    }
+    const search = ()=>{
+        dataFetch()
+    }
 
     function createData(id, title, status,companyName,companyId) {
         return {id, title, status,companyName,companyId};
@@ -189,21 +203,30 @@ export default function Companies() {
                 </div>
                 <Paper className={"p-md-3 pt-3 mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 .4rem rgba(0, 0, 0, .1)"}}>
                     <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
-                        <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
-                        <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                        <TextField
+                            className={"col-12 col-md-4 col-xl-3 mb-md-3"}
+                            label="محل جستجو"
+                            type="search"
+                            value={nameSearch}
+                            disabled={nameSearchDisable}
+                            onChange={nameSearchHandler}
+                        />
+                        <FormControl className={"col-12 col-md-4 col-xl-2"}>
                             <InputLabel>جستجو بر اساس</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                // value={age}
+                                value={searchCategory}
                                 label="Age"
-                                // onChange={handleChange}
+                                onChange={handleSearchCategory}
                             >
-                                <MenuItem value={10}>آیدی</MenuItem>
-                                <MenuItem value={20}>عنوان</MenuItem>
-                                <MenuItem value={20}>شرکت مربوطه</MenuItem>
+                                <MenuItem value={"title"}>عنوان</MenuItem>
+                                <MenuItem value={"company_title"}>شرکت مربوطه</MenuItem>
                             </Select>
                         </FormControl>
+                        <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
+                            جستجو
+                        </Button>
                     </div>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">

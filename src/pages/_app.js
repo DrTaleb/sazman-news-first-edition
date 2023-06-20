@@ -19,6 +19,7 @@ import axios from "axios";
 import UserPanelLayout from "@/Components/userPanel/UserPanelLayout";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
+import "apexcharts/dist/apexcharts.css"
 
 axios.defaults.baseURL = `${process.env.SERVER_URL}`;
 Router.events.on('routeChangeStart', ()=>{
@@ -30,7 +31,6 @@ Router.events.on('routeChangeComplete', ()=>{
 export default function App({Component, pageProps, props}) {
 
 
-    console.log(props)
     const routerName = useRouter()
     const userAdminRoute = routerName.pathname.includes("user-panel")
     const adminRoute = routerName.pathname.includes("admin")

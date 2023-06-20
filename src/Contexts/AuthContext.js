@@ -22,27 +22,29 @@ export const AuthProvider = ({children}) => {
         let mobile;
         let status;
         try {
-            await fetch(`${process.env.LOCAL_URL}/api/auth/useinfo`, {
+            const res = await fetch(`${process.env.LOCAL_URL}/api/auth/useinfo`, {
                 method: "GET",
-            }).then(res => res.json()).then(data =>{
-                if (data.status){
-                    massage = data.data.userable
-                    mobile = data.data.mobile
-                    status = data.status
-                }else {
-                    massage = {
-                            firstname : "",
-                            lastname : "",
-                            companies : [],
-                    }
-                }
             })
+            const data = await res.json()
+            if (data.status){
+                massage = data.data.userable
+                mobile = data.data.mobile
+                status = data.status
+            }else {
+                massage = {
+                    firstname : "",
+                    lastname : "",
+                    companies : [],
+                }
+            }
             await setUserData(massage)
             await setUserMobile(mobile)
             await setUserStatus(status)
+            return data.status
         }catch {
             await setUserData(userData)
             await setUserStatus(status)
+            return false
         }
     }
     useEffect(()=>{

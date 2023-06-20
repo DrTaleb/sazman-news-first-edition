@@ -57,10 +57,40 @@ export default function Ads({data}) {
     const [getData, setGetData] = useState(false)
 
 
+    const [nameSearch, setNameSearch] = useState("")
+    const [nameSearchDisable, setNameSearchDisable] = useState(true)
+    const nameSearchHandler = (event)=>{
+        setNameSearch(event.target.value)
+    }
+    const [searchCategory, setSearchCategory] = useState("")
+    const handleSearchCategory = (event)=>{
+        let value = event.target.value
+        if (searchCategory === "position_id"){
+            value = value.replaceAll("۰","0")
+                .replaceAll("۱","1")
+                .replaceAll("۲","2")
+                .replaceAll("۳","3")
+                .replaceAll("۴","4")
+                .replaceAll("۵","5")
+                .replaceAll("۶","6")
+                .replaceAll("۷","7")
+                .replaceAll("۸","8")
+                .replaceAll("۹","9")
+        }
+        setSearchCategory(value)
+        setNameSearchDisable(false)
+    }
+
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-requests/${router.query.page}?${searchCategory}=${nameSearch}`)
         const data = await res.json()
         await setDATA(data)
+        await setPage(data.data.current_page)
+        await setPageCount(data.data.last_page)
+    }
+
+    const search = ()=>{
+        dataFetch()
     }
 
 
@@ -156,21 +186,31 @@ export default function Ads({data}) {
             </div>
             <Paper className={"p-md-3 pt-3 mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                 <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
-                    <TextField className={"col-12 col-md-4 col-xl-3 mb-md-3"} label="محل جستجو" type="search" />
-                    <FormControl className={"col-12 col-md-4 col-xl-2 mb-3 mb-md-0"}>
+                    <TextField
+                        className={"col-12 col-md-4 col-xl-3 mb-md-3"}
+                        label="محل جستجو"
+                        type="search"
+                        value={nameSearch}
+                        disabled={nameSearchDisable}
+                        onChange={nameSearchHandler}
+                    />
+                    <FormControl className={"col-12 col-md-4 col-xl-2"}>
                         <InputLabel>جستجو بر اساس</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={age}
+                            value={searchCategory}
                             label="Age"
-                            // onChange={handleChange}
+
+                            onChange={handleSearchCategory}
                         >
-                            <MenuItem value={10}>آیدی</MenuItem>
-                            <MenuItem value={20}>نام</MenuItem>
-                            <MenuItem value={30}>آیدی محل قرارگیری</MenuItem>
+                            <MenuItem value={"title"}>نام</MenuItem>
+                            <MenuItem value={"position_id"}>آیدی محل قرارگیری</MenuItem>
                         </Select>
                     </FormControl>
+                    <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
+                        جستجو
+                    </Button>
                 </div>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">

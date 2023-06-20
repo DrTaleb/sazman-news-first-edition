@@ -798,7 +798,7 @@ export default function EditCompany({data}) {
                                     <span>
                                         عکس کنونی لوگوی شرکت
                                     </span>
-                                    <img className={"w-25"} src={`https://newsapi.deltagroup.ir/${data.data.logo}`}/>
+                                    <img className={"w-25"} src={`${process.env.SERVER_URL}/${data.data.logo}`}/>
                                 </div>
                                 <div className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
                                     <span>
@@ -815,7 +815,7 @@ export default function EditCompany({data}) {
                                     <span>
                                         عکس کنونی پس زمینه شرکت
                                     </span>
-                                    <img className={"w-100"} src={`https://newsapi.deltagroup.ir/${data.data.banner}`}/>
+                                    <img className={"w-100"} src={`${process.env.SERVER_URL}/${data.data.banner}`}/>
                                 </div>
                                 <div className={"w-75 d-flex flex-column gap-2 p-2"}>
                                     <Button onClick={submitHandler}

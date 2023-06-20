@@ -1,17 +1,19 @@
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
-    if (req.method === "GET"){
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/certificates?page=${req.query.page[0]}&limit=10`,{
+    if (req.method === "GET") {
+        await fetch(`${process.env.SERVER_URL}/panel/categories?page=1&limit=1000`,{
             method : "GET",
-            headers : {
+            credentials : 'include',
+            headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'Authorization' : `Bearer ${authToken}`
-            }
+            },
+        }).then(res => res.json()).then(data =>{
+            res.status(200).json(data)
         })
-        const data = await dataResponse.json()
-        res.status(200).json(data)
+
     }else {
-        res.setHeader("Allow", ["post"]);
+        res.setHeader("Allow", ["GET"]);
         res.status(405).json({massage: "not allowed"})
     }
 }

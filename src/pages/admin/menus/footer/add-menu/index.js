@@ -69,7 +69,18 @@ export default function AddMenu({data}) {
         event.target.value.length ? setNameError(false) : setNameError(true)
     }
     const orderHandler = (event) => {
-        setOrder(event.target.value)
+        let value = event.target.value
+        value = value.replaceAll("۰","0")
+            .replaceAll("۱","1")
+            .replaceAll("۲","2")
+            .replaceAll("۳","3")
+            .replaceAll("۴","4")
+            .replaceAll("۵","5")
+            .replaceAll("۶","6")
+            .replaceAll("۷","7")
+            .replaceAll("۸","8")
+            .replaceAll("۹","9")
+        setOrder(value)
         event.target.value.length ? setOrderError(false) : setOrderError(true)
     }
     const linkHandler = (event) => {

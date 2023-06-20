@@ -24,6 +24,7 @@ import {ProgressBar} from 'primereact/progressbar';
 import {UploadFile} from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import {Editor} from '@tinymce/tinymce-react';
+import MenuItem from "@mui/material/MenuItem";
 
 
 
@@ -50,41 +51,41 @@ export default function AddAds() {
 
     const [titleError, setTitleError] = useState(true)
 
-    const [status, setStatus] = useState("")
+    const [subtitle, setSubtitle] = useState("")
 
-    const [statusError, setStatusError] = useState(true)
-
-    const fileTypes = ["JPG", "JPEG", "PNG", "WEBP"];
+    const [subtitleError, setSubtitleError] = useState(true)
 
     const [file, setFile] = useState(null);
 
     const [date, setDate] = useState("")
 
+    const [category, setCategory] = useState("")
 
-    const statusList = [
-        {
-            value: 1,
-            label: "فعال"
-        },
-        {
-            value: 0,
-            label: "غیر فعال"
-        }
-    ]
+    const [categories, setCategories] = useState([])
 
 
-    const handleChange = (file) => {
-        setFile(file);
-    };
+    const dataFetch = async () => {
+            const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/categories`)
+            const data = await res.json()
+            setCategories(data.data.data)
+    }
+    useEffect(()=>{
+       dataFetch()
+    },[])
+
+
 
 
     const titleHandler = (event) => {
         setTitle(event.target.value)
         event.target.value.length ? setTitleError(false) : setTitleError(true)
     }
-    const statusHandler = (event) => {
-        setStatus(event.target.value)
-        event.target.value === 0 || event.target.value === 1 ? setStatusError(false) : setStatusError(true)
+    const subtitleHandler = (event) => {
+        setSubtitle(event.target.value)
+        event.target.value.length ? setSubtitleError(false) : setSubtitleError(true)
+    }
+    const categoryHandler = (event) => {
+        setCategory(event.target.value)
     };
 
 
@@ -254,12 +255,25 @@ export default function AddAds() {
                                     value={title}
                                     onInput={(event) => titleHandler(event)}/>
                                 <TextField
-                                    className={"col-md col-11"}
+                                    className={"col-md-11 col-11"}
                                     label="توضیح در مورد پست"
                                     variant="outlined"
-                                    error={titleError}
-                                    value={title}
-                                    onInput={(event) => titleHandler(event)}/>
+                                    error={subtitleError}
+                                    value={subtitle}
+                                    onInput={(event) => subtitleHandler(event)}/>
+                                <TextField
+                                    select
+                                    label="دسته بندی"
+                                    className={"col-md-11 col-11"}
+                                    value={category}
+                                    onChange={categoryHandler}
+                                >
+                                    {categories.map((option) => (
+                                        <MenuItem key={option.id} value={option.id}>
+                                            {option.title}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                                 <div className={"col-11 bg-light rounded p-1"}>
                                     <Toast ref={toast}></Toast>
                                     <FileUpload
@@ -310,36 +324,7 @@ export default function AddAds() {
                                     </DatePicker>
                                 </div>
                             </div>
-                            <div className={"d-flex flex-row flex-wrap mt-3"}>
 
-
-                                {/*<TextField*/}
-                                {/*    select*/}
-                                {/*    label="وضعیت"*/}
-                                {/*    error={statusError}*/}
-                                {/*    className={"col-md-9 col-11"}*/}
-                                {/*    onChange={statusHandler}*/}
-                                {/*    value={status}*/}
-                                {/*>*/}
-                                {/*    {statusList.map((option) => (*/}
-                                {/*        <MenuItem key={option.value} value={option.value}>*/}
-                                {/*            {option.label}*/}
-                                {/*        </MenuItem>*/}
-                                {/*    ))}*/}
-                                {/*</TextField>*/}
-
-                                {/*<label>عکس  مورد نظر را وارد کنید</label>*/}
-
-                                {/*<FileUploader*/}
-                                {/*    handleChange={handleFileChange}*/}
-                                {/*    name="file"*/}
-                                {/*    types={fileTypes}*/}
-                                {/*    label={`فایل را وارد کنید`}*/}
-                                {/*/>*/}
-
-                                {/*<Button onClick={submitHandler} className={"col-8 mt-5"} variant={"contained"}*/}
-                                {/*        color={"success"}>افزودن</Button>*/}
-                            </div>
                         </form>
                     </Col>
                     <div className={"w-100"}>
@@ -375,6 +360,8 @@ export default function AddAds() {
                             }}
                         />
                     </div>
+
+                    <Button onClick={submitHandler} className={"col-lg-3 bg-my-purple mt-5 mb-5 align-self-end"} variant={"contained"}>افزودن</Button>
                 </div>
             </Container>
         </>
