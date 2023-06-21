@@ -49,8 +49,8 @@ export const AuthProvider = ({children}) => {
     }
     useEffect(()=>{
        getUserData()
-    },[])
-    // register
+    },[router.pathname])
+    // login
     const login = async (otp , mobile) => {
         let massage
         await fetch(`${process.env.LOCAL_URL}/api/auth/login`, {
@@ -60,11 +60,32 @@ export const AuthProvider = ({children}) => {
                 mobile: mobile,
                 otp : otp
             })
-        }).then(res => res.json()).then(data => massage = data.status)
+        }).then(res => res.json()).then(data => {
+            massage = data.status
+            console.log(data)
+        })
+        return massage
+    }
+    // signin
+    const signin = async (otp , mobile,firstname,lastname) => {
+        let massage
+        await fetch(`${process.env.LOCAL_URL}/api/auth/login`, {
+            method: "POST",
+            body: JSON.stringify({
+                type: "login2",
+                mobile: mobile,
+                otp : otp,
+                firstname : firstname,
+                lastname : lastname
+            })
+        }).then(res => res.json()).then(data => {
+            massage = data.status
+            console.log(data)
+        })
         return massage
     }
 
-    //login
+    //send code
     const SendCode = async (user) => {
         let isMassageSent;
         await fetch(`${process.env.LOCAL_URL}/api/auth/login`, {
@@ -73,7 +94,9 @@ export const AuthProvider = ({children}) => {
                 type: "login1",
                 mobile: user
             })
-        }).then(res => res.json()).then(data => isMassageSent = data.status)
+        }).then(res => res.json()).then(data => {
+            isMassageSent = data
+        })
         return isMassageSent
     }
 
@@ -95,7 +118,7 @@ export const AuthProvider = ({children}) => {
 
     return (
 
-        <AuthContext.Provider value={{login, SendCode, logOut, userData, userMobile,userStatus,getUserData}}>
+        <AuthContext.Provider value={{login, SendCode, logOut, userData, userMobile,userStatus,getUserData,signin}}>
             {children}
         </AuthContext.Provider>
     )

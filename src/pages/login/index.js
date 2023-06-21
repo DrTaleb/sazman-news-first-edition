@@ -21,21 +21,76 @@ export default function LoginPage() {
     const [loginError, setLoginError] = useState(false)
     const [startInterval, setStartInterval] = useState(false)
     const [disableSendAgain, setDisableSendAgain] = useState(true)
-    const {SendCode} = useContext(AuthContext)
-    const {login} = useContext(AuthContext)
+    const [isRegistered, setIsRegistered] = useState(false)
+    const [firstname, setFirstname] = useState("")
+    const [firstnameError, setFirstnameError] = useState(true)
+    const [lastname, setLastname] = useState("")
+    const [lastnameError, setLastnameError] = useState(true)
+    const {SendCode, login, signin} = useContext(AuthContext)
 
     const loginTelHandler = (event) => {
-        setLoginTel(event.target.value)
+        const value = event.target.value.replaceAll("۰","0")
+            .replaceAll("۱","1")
+            .replaceAll("۲","2")
+            .replaceAll("۳","3")
+            .replaceAll("۴","4")
+            .replaceAll("۵","5")
+            .replaceAll("۶","6")
+            .replaceAll("۷","7")
+            .replaceAll("۸","8")
+            .replaceAll("۹","9")
+        setLoginTel(value)
     }
     const loginCodeHandler = (event) => {
-        setLoginCode(event.target.value)
+        const value = event.target.value.replaceAll("۰","0")
+            .replaceAll("۱","1")
+            .replaceAll("۲","2")
+            .replaceAll("۳","3")
+            .replaceAll("۴","4")
+            .replaceAll("۵","5")
+            .replaceAll("۶","6")
+            .replaceAll("۷","7")
+            .replaceAll("۸","8")
+            .replaceAll("۹","9")
+        setLoginCode(value)
     }
+    const firstnameHandler = (event) => {
+        setFirstname(event.target.value)
+        event.target.value.length >= 3 && event.target.value.length <= 21 ? setFirstnameError(false) : setFirstnameError(true)
+    }
+    const lastnameHandler = (event) => {
+        setLastname(event.target.value)
+        event.target.value.length >= 3 && event.target.value.length <= 21 ? setLastnameError(false) : setLastnameError(true)
+    }
+
     useEffect(() => {
-        loginTel.length === 11 && loginTel[0] == 0 && loginTel[1] == 9 ?
+        let range = ["0","1","2","3","4","5","6","7","8","9"]
+        let error = false;
+
+        if (loginTel.length){
+            for (let i = 0 ; i < loginTel.length ;){
+                if (!range.includes(loginTel[i])){
+                    error = true
+                }
+                i ++
+            }
+        }
+        loginTel.length === 11 && loginTel[0] === "0" && loginTel[1] === "9" && !error ?
             setLoginTelError(false) : setLoginTelError(true)
     }, [loginTel])
     useEffect(() => {
-        loginCode.length === 4 ?
+        let range = ["0","1","2","3","4","5","6","7","8","9"]
+        let error = false;
+        if (loginCode.length){
+            for (let i = 0 ; i < loginCode.length ;){
+                if (!range.includes(loginCode[i])){
+                    error = true
+                }
+                i ++
+            }
+        }
+        console.log(error)
+        loginCode.length === 4 && !error ?
             setLoginCodeError(false) : setLoginCodeError(true)
     }, [loginCode])
     useEffect(() => {
@@ -52,20 +107,24 @@ export default function LoginPage() {
 
     const sendCode = async (event) => {
         await event.preventDefault()
-        await SendCode(loginTel)
-        if (SendCode(loginTel)) {
+        const data = await SendCode(loginTel)
+        if (data.status && data.register_status) {
+            await setIsRegistered(true)
             await setIsCodeSent(true)
-            toast.success("کد به صورت پیامک ارسال شد")
+        } else if (data.status && !data.register_status) {
+            await setIsRegistered(false)
+            await setIsCodeSent(true)
         } else {
-            toast.error("مشکلی پیش آمده لطفا دوباره تلاش کنید")
+            await toast.error("مشکلی پیش آمده لطفا دوباره تلاش کنید")
         }
 
     }
     const loginSubmitHandler = async (event) => {
         event.preventDefault()
         const response = await login(loginCode, loginTel)
+
         if (response === true) {
-            toast.success("خوش آمدید")
+            await toast.success("خوش آمدید")
             router.push("/")
         } else {
             toast.error("کد وارد شده صحیح نمی باشد")
@@ -73,6 +132,18 @@ export default function LoginPage() {
             setLoginCodeError(true)
         }
 
+    }
+    const signinSubmitHandler = async (event) => {
+        event.preventDefault()
+        const response = await signin(loginCode, loginTel,firstname,lastname)
+        if (response === true) {
+            await toast.success("خوش آمدید")
+            router.push("/")
+        } else {
+            await toast.error("کد وارد شده صحیح نمی باشد")
+            setLoginCode("")
+            setLoginCodeError(true)
+        }
     }
     const correctTel = () => {
         setIsCodeSent(false)
@@ -100,13 +171,13 @@ export default function LoginPage() {
                                         className={"col-md-9 col-11 mt-3"}
                                         disabled={isCodeSent}
                                         label="شماره تلفن"
-                                        type={"number"}
+                                        type={"tel"}
                                         variant="outlined"
                                         value={loginTel}
                                         error={loginTelError}
                                         onInput={(e) => loginTelHandler(e)}
                                     />
-                                    {showCodeInput &&
+                                    {showCodeInput && isRegistered &&
                                         <Fragment>
                                             <Alert className={"mt-3 col-md-9 col-11"} severity="success">
                                                 کد ارسال شده توسط اس ام اس را وارد کنید.
@@ -115,7 +186,7 @@ export default function LoginPage() {
                                                 className={"col-md-9 col-11 mt-3"}
                                                 id="codeInput"
                                                 label={"کد ارسال شده"}
-                                                type={"number"}
+                                                type={"tel"}
                                                 variant="outlined"
                                                 value={loginCode}
                                                 error={loginCodeError}
@@ -137,7 +208,84 @@ export default function LoginPage() {
                                                     type={"submit"}
                                                     onClick={(e) => loginSubmitHandler(e)}
                                                 >
-                                                    ورود یا ثبت نام
+                                                    ورود
+                                                </Button>
+                                                <Button
+                                                    variant={"outlined"}
+                                                    color={"warning"}
+                                                    className={"mt-4 gap-1"}
+                                                    type={"submit"}
+                                                    disabled={disableSendAgain}
+                                                    onClick={(e) => {
+                                                        sendCode(e)
+                                                    }}
+                                                >
+                                                    ارسال مجدد کد
+                                                </Button>
+                                                <Button
+                                                    variant={"outlined"}
+                                                    color={"secondary"}
+                                                    className={"mt-4"}
+                                                    type={"submit"}
+                                                    onClick={() => correctTel()}
+                                                >
+                                                    تصحیح شماره
+                                                </Button>
+                                            </div>
+                                        </Fragment>
+                                    }
+                                    {showCodeInput && !isRegistered &&
+                                        <Fragment>
+                                            <Alert className={"mt-3 col-md-9 col-11"} severity="success">
+                                                به سازمان نیوز خوش آمدید !
+                                            </Alert>
+                                            <TextField
+                                                className={"col-md-9 col-11 mt-3"}
+                                                id="codeInput"
+                                                label={"نام"}
+                                                type={"text"}
+                                                variant="outlined"
+                                                value={firstname}
+                                                error={firstnameError}
+                                                onInput={(e) => firstnameHandler(e)}
+                                            />
+                                            <TextField
+                                                className={"col-md-9 col-11 mt-3"}
+                                                id="codeInput"
+                                                label={"نام خانوادگی"}
+                                                type={"text"}
+                                                variant="outlined"
+                                                value={lastname}
+                                                error={lastnameError}
+                                                onInput={(e) => lastnameHandler(e)}
+                                            />
+                                            <TextField
+                                                className={"col-md-9 col-11 mt-3"}
+                                                id="codeInput"
+                                                label={"کد ارسال شده"}
+                                                type={"tel"}
+                                                variant="outlined"
+                                                value={loginCode}
+                                                error={loginCodeError}
+                                                onInput={(e) => loginCodeHandler(e)}
+                                            />
+                                            {
+                                                loginError &&
+                                                <Alert className={"mt-3 col-md-9 col-11"} severity="error">
+                                                    کد وارد شده صحیح نیست
+                                                </Alert>
+                                            }
+                                            <div className={"d-flex flex-row gap-2"}>
+                                                <Button
+                                                    sx={{background: "var(--main-purple)"}}
+                                                    variant={"contained"}
+                                                    color={"success"}
+                                                    className={"mt-4"}
+                                                    disabled={loginCodeError}
+                                                    type={"submit"}
+                                                    onClick={(e) => signinSubmitHandler(e)}
+                                                >
+                                                    ثبت نام
                                                 </Button>
                                                 <Button
                                                     variant={"outlined"}

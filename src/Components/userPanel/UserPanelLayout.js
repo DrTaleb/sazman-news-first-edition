@@ -346,7 +346,7 @@ export default function UserPanelLayout({children}) {
                                                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                                             >
                                                 {
-                                                    userData.companies.length &&
+                                                    userData.companies &&
                                                     userData.companies.map(item =>
                                                         <MenuItem key={item.id} onClick={()=> handleCompanyAndClose(item.id)}>
                                                             {
