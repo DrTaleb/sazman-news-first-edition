@@ -384,6 +384,100 @@ export default function Posts() {
     } else if (DATA.status === false) {
         return (
             <div className={"px-md-4"}>
+                <div className="d-flex flex-row align-items-center mt-md-0">
+                    <div className="panel-title-parent w-100">
+                        <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                            آمار پست های شما
+                        </h5>
+                    </div>
+                    <span className=" ms-2">
+                            <i className="fa fa-angle-down text-secondary"></i>
+                        </span>
+                </div>
+                <div className="d-flex flex-row flex-wrap gap-3 mt-4">
+                    <div className="col d-flex flex-column gap-3">
+                        <div className="col d-flex flex-row flex-wrap gap-3">
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            تعداد پست های باقی مانده از پلن
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <AddTaskIcon></AddTaskIcon>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        <Skeleton animation={"wave"} width={30} height={30} variant={"circular"}></Skeleton>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            تعداد پست های برتر باقی مانده
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <RemoveModeratorIcon></RemoveModeratorIcon>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        <Skeleton animation={"wave"} width={30} height={30} variant={"circular"}></Skeleton>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            درخواست های پست منتخب
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <WysiwygIcon></WysiwygIcon>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        <Skeleton animation={"wave"} width={30} height={30} variant={"circular"}></Skeleton>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            پست های منتخب فعال
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <WysiwygIcon></WysiwygIcon>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        <Skeleton animation={"wave"} width={30} height={30} variant={"circular"}></Skeleton>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="d-flex flex-row align-items-center mt-5 ">
+                    <div className="panel-title-parent w-100">
+                        <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                            جدول پست های منتشر شده
+                        </h5>
+                    </div>
+                    <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                        <div className={"d-flex flex-row justify-content-center"}>
+                            <Link href={"/user-panel/post-management/add"}>
+                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن پست</Button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
                 <Paper className={"p-3"}
                        sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
                     <Link href={"/admin/sliders/add-slider"}>

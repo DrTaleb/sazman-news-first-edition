@@ -214,13 +214,13 @@ export default function Companies() {
             <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                 <div className="panel-title-parent w-100">
                     <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                        گواهینامه ها
+                        نویسندگان
                     </h5>
                 </div>
                 <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
                     <div className={"d-flex flex-row justify-content-center"}>
                         <Link href={"/user-panel/certificates/add"}>
-                            <Button variant={"contained"} className={"bg-my-purple"}>افزودن گواهینامه</Button>
+                            <Button variant={"contained"} className={"bg-my-purple"}>افزودن نویسنده</Button>
                         </Link>
                     </div>
                 </div>

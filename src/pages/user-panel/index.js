@@ -2,14 +2,85 @@ import AddTaskIcon from "@mui/icons-material/AddTask";
 import RemoveModeratorIcon from "@mui/icons-material/RemoveModerator";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import * as React from "react";
-import {ArrowLeft, ForkLeft, Lightbulb} from "@mui/icons-material";
+import {ArrowLeft, ArrowRight, ForkLeft, Lightbulb} from "@mui/icons-material";
 import {Button} from "@mui/material";
 
+import dynamic from 'next/dynamic'
+import {Skeleton} from "@mui/material";
 
 export default function UserPanel() {
 
+    const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+    const [options,setOptions] =useState(null)
+    const [series,setSeries] = useState( [])
+
+    const [DATA, setData] = useState({})
+    const dataFetch = async () => {
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/dashboard`)
+        const data = await res.json()
+        setData(data)
+    }
+    const companyChartFetch = async () =>{
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/charts/posts`)
+        const data = await res.json()
+        setOptions({
+            chart: {
+                height: 300,
+                type: 'area',
+                toolbar: {
+                    show: true
+                }
+            },
+            markers: {
+                size: 3
+            },
+            legend: {
+                position: 'bottom',
+                horizontalAlign: 'left',
+                fontFamily: "IRANSans",
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 0,
+                    strokeColor: '#fff',
+                    radius: 12,
+                    offsetX: 5,
+                },
+                itemMargin: {
+                    horizontal: 10,
+                    vertical: 10
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 2
+            },
+            colors : ["#6610f2","#6c757d"],
+            xaxis: {
+                categories: data.months.map((item) => item[0])
+            },
+        })
+
+        setSeries([
+            {
+                name: "پست ها",
+                data: data.months.map(item => item[1])
+            }
+        ])
+
+
+    }
+    useEffect(() => {
+        if (!series.length){
+            companyChartFetch()
+        }
+        dataFetch()
+    }, [])
 
     return (
         <div className="panel-content-sec-one flex-wrap px-md-4 px-1 container">
@@ -31,7 +102,7 @@ export default function UserPanel() {
                                 تعداد دنبال کننده
                             </span>
                         <span className="fw-bolder">
-                                456
+                                {DATA.followers}
                             </span>
                     </div>
                     <div className="panel-statistic-card col-lg col-sm-5 col-12  panel-statistic-card-warning">
@@ -39,15 +110,15 @@ export default function UserPanel() {
                                 تعداد پست
                             </span>
                         <span className="fw-bolder">
-                                456
+                                {DATA.all_posts}
                             </span>
                     </div>
                     <div className="panel-statistic-card col-lg col-sm-5 col-12  panel-statistic-card-danger">
                             <span className="text-secondary">
-                                تعداد شرکت ها
+                                تعداد پست های منتخب
                             </span>
                         <span className="fw-bolder">
-                                456
+                            {DATA.selected_posts}
                             </span>
                     </div>
                     <div className="panel-statistic-card col-lg col-sm-5 col-12  panel-statistic-card-main">
@@ -55,7 +126,7 @@ export default function UserPanel() {
                                 تعداد نویسندگان فعال
                             </span>
                         <span className="fw-bolder">
-                                456
+                                {DATA.active_writers}
                             </span>
                     </div>
                 </div>
@@ -66,15 +137,15 @@ export default function UserPanel() {
                                 className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
                                 <div className="d-flex flex-row justify-content-between align-items-center">
                                         <span className="fw-bolder text-secondary">
-                                            شرکت های در انتظار تایید
+                                            تیکت های شما
                                         </span>
                                     <span className={"panel-card-icon p-2 rounded"}>
-                                       <AddTaskIcon></AddTaskIcon>
+                                       <ArrowRight></ArrowRight>
                                     </span>
                                 </div>
                                 <div className="d-flex flex-row justify-content-between align-items-center">
                                     <h4 className="fw-bold mt-4">
-                                        34
+                                        {DATA.all_tickets}
                                     </h4>
                                 </div>
                             </div>
@@ -82,15 +153,31 @@ export default function UserPanel() {
                                 className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
                                 <div className="d-flex flex-row justify-content-between align-items-center">
                                         <span className="fw-bolder text-secondary">
-                                            گزارشات تخلف
+                                            تیکت های پاسخ داده شده
                                         </span>
                                     <span className={"panel-card-icon p-2 rounded"}>
-                                       <RemoveModeratorIcon></RemoveModeratorIcon>
+                                       <ArrowRight></ArrowRight>
                                     </span>
                                 </div>
                                 <div className="d-flex flex-row justify-content-between align-items-center">
                                     <h4 className="fw-bold mt-4">
-                                        2
+                                        {DATA.answered_tickets}
+                                    </h4>
+                                </div>
+                            </div>
+                            <div
+                                className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                        <span className="fw-bolder text-secondary">
+                                            تیکت های در انتظار پاسخ
+                                        </span>
+                                    <span className={"panel-card-icon p-2 rounded"}>
+                                       <ArrowRight></ArrowRight>
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-row justify-content-between align-items-center">
+                                    <h4 className="fw-bold mt-4">
+                                        {DATA.not_answered_tickets}
                                     </h4>
                                 </div>
                             </div>
@@ -108,7 +195,7 @@ export default function UserPanel() {
                                 </div>
                                 <div className="d-flex flex-row justify-content-between align-items-center">
                                     <h4 className="fw-bold mt-4">
-                                        23
+                                        بدون دیتا
                                     </h4>
                                 </div>
                             </div>
@@ -116,32 +203,47 @@ export default function UserPanel() {
                                 className="panel-table-card col-sm col-12 d-flex flex-column justify-content-around p-3">
                                 <div className="d-flex flex-row justify-content-between align-items-center">
                                         <span className="fw-bolder text-secondary">
-                                            تیکت ها
+                                            پست های در انتظار پخش
                                         </span>
-
                                     <span className={"panel-card-icon p-2 rounded"}>
                                        <ConnectWithoutContactIcon></ConnectWithoutContactIcon>
                                     </span>
                                 </div>
                                 <div className="d-flex flex-row justify-content-between align-items-center">
                                     <h4 className="fw-bold mt-4">
-                                        56
+                                        {DATA.deactive_posts}
                                     </h4>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="panel-table-card card border-0 col-lg-7 col-12">
-                        <div className="card-body">
-                            <div
-                                className="d-flex flex-row align-items-center mt-4 mt-md-0">
-                                <div className="title-parent w-100">
-                                    <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize header-title text-secondary">
-                                        نمودار ارزیابی پست ها به تفکیک هر پست
-                                    </h5>
-                                </div>
+                </div>
+                <div className="panel-table-card card border-0 col-12">
+                    <div className="card-body">
+                        <div
+                            className="d-flex flex-row align-items-center mt-4 mt-md-0">
+                            <div className="title-parent w-100">
+                                <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize header-title text-secondary">
+                                    نمودار تعداد پست به تفکیک هر ماه
+                                </h5>
                             </div>
                         </div>
+                    </div>
+                    <div className="col-12 d-flex flex-column align-items-center">
+                        {
+                            options ?
+                                <div className="area-chart w-100">
+                                    <Chart
+                                        options={options}
+                                        series={series}
+                                        type="line"
+                                        className={"col-12"}
+                                        height={300}
+                                    />
+                                </div>
+                                :
+                                <Skeleton animation={"wave"} className={"w-75"} height={300}></Skeleton>
+                        }
                     </div>
                 </div>
                 <div className="d-flex flex-row align-items-center mt-4 mt-md-0">
