@@ -240,79 +240,6 @@ export default function Monitoring(){
     return(
         <div className={"px-md-4"}>
             <div className={"container"}>
-                <div className={"mt-3"}>
-                    <div className={"d-flex flex-row flex-wrap gap-3"}>
-                        <div className="panel-table-card col-lg col-12 d-flex flex-column justify-content-around p-3">
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                            <span className="fw-bolder text-secondary">
-                                تعداد پست ها
-                            </span>
-                                <span  className={"panel-card-icon p-2 rounded"}>
-                                <ArtTrackIcon fontSize={"small"}></ArtTrackIcon>
-                            </span>
-                            </div>
-                            <div className="d-flex flex-row justify-content-between align-items-center mt-4">
-                                <h4 className="fw-bold">
-                                    56
-                                </h4>
-                            </div>
-                        </div>
-                        <div className="panel-table-card col-lg col-12 d-flex flex-column justify-content-around p-3">
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                            <span className="fw-bolder text-secondary">
-                                بازدید از پروفایل
-                            </span>
-                                <span  className={"panel-card-icon p-2 rounded"}>
-                                <RemoveRedEyeIcon fontSize={"small"}></RemoveRedEyeIcon>
-                            </span>
-                            </div>
-                            <div className="d-flex flex-row justify-content-between align-items-center mt-4">
-                                <h4 className="fw-bold">
-                                    56
-                                </h4>
-                            </div>
-                        </div>
-                        <div className="panel-table-card col-lg col-12 d-flex flex-column justify-content-around p-3">
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                            <span className="fw-bolder text-secondary">
-                                بازدید از پروفایل
-                            </span>
-                                <span  className={"panel-card-icon p-2 rounded"}>
-                                <RemoveRedEyeIcon fontSize={"small"}></RemoveRedEyeIcon>
-                            </span>
-                            </div>
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                                <h4 className="fw-bold">
-                                    56
-                                </h4>
-                                <span className="text-danger pe-2">
-                                <KeyboardArrowDownIcon fontSize={"small"}></KeyboardArrowDownIcon>
-                                ۲۳%
-                            </span>
-                            </div>
-                        </div>
-                        <div className="panel-table-card col-lg col-12 d-flex flex-column justify-content-around p-3">
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                            <span className="fw-bolder text-secondary">
-                                بازدید از پروفایل
-                            </span>
-                                <span  className={"panel-card-icon p-2 rounded"}>
-                                <RemoveRedEyeIcon fontSize={"small"}></RemoveRedEyeIcon>
-                            </span>
-                            </div>
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                                <h4 className="fw-bold">
-                                    56
-                                </h4>
-                                <span className="text-danger pe-2">
-                                <KeyboardArrowDownIcon fontSize={"small"}></KeyboardArrowDownIcon>
-                                ۲۳%
-                            </span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
                 <div className={"shadow-sm bg-white mt-3 p-md-4"}>
                     <div className="service-section-opener d-flex flex-row">
                         <div className="panel-title-parent w-100 mb-4">
@@ -360,86 +287,13 @@ export default function Monitoring(){
                                         options={monthViewsOptions}
                                         series={monthViewsSeries}
                                         type="line"
-                                        className={"col-12"}
+                                        className={"col-12 w-100"}
                                         height={300}
                                     />
                                 </div>
                                 :
                                 <Skeleton animation={"wave"} className={"w-75"} height={300}></Skeleton>
                         }
-                    </div>
-                </div>
-                <div className={"mt-3"}>
-                    <div className={"d-flex flex-row flex-wrap gap-3"}>
-                        <div className="panel-table-card col-lg col-12 d-flex flex-column justify-content-around p-3">
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                            <span className="fw-bolder text-secondary">
-                                تعداد پست ها
-                            </span>
-                                <span  className={"panel-card-icon p-2 rounded"}>
-                                <ArtTrackIcon fontSize={"small"}></ArtTrackIcon>
-                            </span>
-                            </div>
-                            <div className="d-flex flex-row justify-content-between align-items-center mt-4">
-                                <h4 className="fw-bold">
-                                    56
-                                </h4>
-                            </div>
-                        </div>
-                        <div className="panel-table-card col-lg col-12 d-flex flex-column justify-content-around p-3">
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                            <span className="fw-bolder text-secondary">
-                                بازدید از پروفایل
-                            </span>
-                                <span  className={"panel-card-icon p-2 rounded"}>
-                                <RemoveRedEyeIcon fontSize={"small"}></RemoveRedEyeIcon>
-                            </span>
-                            </div>
-                            <div className="d-flex flex-row justify-content-between align-items-center mt-4">
-                                <h4 className="fw-bold">
-                                    56
-                                </h4>
-                            </div>
-                        </div>
-                        <div className="panel-table-card col-lg col-12 d-flex flex-column justify-content-around p-3">
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                            <span className="fw-bolder text-secondary">
-                                بازدید از پروفایل
-                            </span>
-                                <span  className={"panel-card-icon p-2 rounded"}>
-                                <RemoveRedEyeIcon fontSize={"small"}></RemoveRedEyeIcon>
-                            </span>
-                            </div>
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                                <h4 className="fw-bold">
-                                    56
-                                </h4>
-                                <span className="text-danger pe-2">
-                                <KeyboardArrowDownIcon fontSize={"small"}></KeyboardArrowDownIcon>
-                                ۲۳%
-                            </span>
-                            </div>
-                        </div>
-                        <div className="panel-table-card col-lg col-12 d-flex flex-column justify-content-around p-3">
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                            <span className="fw-bolder text-secondary">
-                                بازدید از پروفایل
-                            </span>
-                                <span  className={"panel-card-icon p-2 rounded"}>
-                                <RemoveRedEyeIcon fontSize={"small"}></RemoveRedEyeIcon>
-                            </span>
-                            </div>
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                                <h4 className="fw-bold">
-                                    56
-                                </h4>
-                                <span className="text-danger pe-2">
-                                <KeyboardArrowDownIcon fontSize={"small"}></KeyboardArrowDownIcon>
-                                ۲۳%
-                            </span>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
                 <div className={"shadow-sm bg-white mt-3 p-md-4"}>

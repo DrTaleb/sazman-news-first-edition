@@ -9,6 +9,7 @@ export default async function Handler(req, res) {
             }
         })
         const data = await dataResponse.json()
+        console.log(data)
         res.status(200).json(data)
     }else {
         res.setHeader("Allow", ["GET"]);

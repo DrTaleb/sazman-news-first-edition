@@ -22,19 +22,11 @@ export default function AddAdmin() {
     ];
 
 
-    const typeList = [
-        {
-            value: "full",
-            label: "full"
-        },
-    ]
+
     // form input -----------------------------------
 
     const [mobile , setMobile] = useState("")
     const [mobileError, setMobileError] = useState(true)
-
-    const [type , setType] = useState("")
-    const [typeError, setTypeError] = useState(true)
 
 
 
@@ -52,15 +44,12 @@ export default function AddAdmin() {
             .replaceAll("۰", "0"))
         event.target.value.length === 11 && event.target.value[0] == 0 &&  event.target.value[1] == 9 ? setMobileError(false) : setMobileError(true)
     }
-    const typeHandler = (event)=> {
-        setType(event.target.value)
-        setTypeError(false)
-    }
+
 
     const submitHandler = async (event) =>{
         event.preventDefault()
         Nprogress.start()
-        if (mobileError || typeError){
+        if (mobileError){
             Swal.fire({
                 icon: 'error',
                 text: "لطفا فیلد ها را به درستی پر کنید",
@@ -71,7 +60,7 @@ export default function AddAdmin() {
                 method: "POST",
                 body: JSON.stringify({
                     writer_mobile : mobile,
-                    type : type
+                    type : "full"
                 })
             }).then(res => res.json()).then(data => {
                 if (data.status){
@@ -84,7 +73,7 @@ export default function AddAdmin() {
                 }else if (!data.status && data.errors.some(item => item === "writer is exists")){
                     Swal.fire({
                         icon: 'warning',
-                        text: "این اکانت قبلا نویسندگان ثبت شده",
+                        text: "این اکانت قبلا به عنوان نویسنده ثبت شده",
                     })
                     setMobile("")
                     Nprogress.done()
@@ -129,20 +118,6 @@ export default function AddAdmin() {
                                 error={mobileError}
                                 value={mobile}
                                 onInput={(event)=> mobileHandler(event)}/>
-                            <TextField
-                                select
-                                label="دسترسی"
-                                className={"col-11 col-md-9"}
-                                error={typeError}
-                                onChange={typeHandler}
-                                value={type}
-                            >
-                                {typeList.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
                             <Button onClick={submitHandler} className={"col-8 mt-5"} variant={"contained"} color={"success"}>افزودن</Button>
                         </div>
                     </form>

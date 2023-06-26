@@ -8,7 +8,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
-import {Alert, Button, Pagination, PaginationItem, Skeleton, styled} from "@mui/material";
+import {
+    Alert,
+    Button,
+    FormControl,
+    InputLabel,
+    Pagination,
+    PaginationItem,
+    Select,
+    Skeleton,
+    styled
+} from "@mui/material";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import {Badge, Col, Row} from "react-bootstrap";
@@ -19,6 +29,8 @@ import Nprogress from "nprogress";
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import {DeleteForever, EditAttributes, EditNote, EditOutlined, ErrorOutline} from "@mui/icons-material";
 import Link from "next/link";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: '#', minWidth: 170},
@@ -33,12 +45,27 @@ export default function Companies() {
     const [getData, setGeData] = useState(false)
     const [page, setPage] = useState("");
     const [pageCount, setPageCount] = useState("");
+    const [nameSearch, setNameSearch] = useState("")
+    const [nameSearchDisable, setNameSearchDisable] = useState(true)
+
+    const nameSearchHandler = (event)=>{
+        setNameSearch(event.target.value)
+    }
+    const [searchCategory, setSearchCategory] = useState("")
+    const handleSearchCategory = (event)=>{
+        setSearchCategory(event.target.value)
+        setNameSearchDisable(false)
+    }
+
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/gallery/${router.query.page}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/gallery/${router.query.page}?${searchCategory}=${nameSearch}`)
         const data = await res.json()
         await setDATA(data)
         await setPage(data.data.current_page)
         await setPageCount(data.data.last_page)
+    }
+    const search = ()=>{
+        dataFetch()
     }
     useEffect(() => {
         dataFetch()
@@ -180,6 +207,31 @@ export default function Companies() {
                 </div>
                 <Paper className={"pb-3 shadow-sm mt-5 mt-sm-3"}
                        sx={{width: '100%', overflow: 'hidden'}}>
+                    <div className={"d-flex flex-row flex-wrap gap-3 p-3"}>
+                        <TextField
+                            className={"col-12 col-md-4 col-xl-3 mb-md-3"}
+                            label="محل جستجو"
+                            type="search"
+                            value={nameSearch}
+                            disabled={nameSearchDisable}
+                            onChange={nameSearchHandler}
+                        />
+                        <FormControl className={"col-12 col-md-4 col-xl-2"}>
+                            <InputLabel>جستجو بر اساس</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={searchCategory}
+                                label="Age"
+                                onChange={handleSearchCategory}
+                            >
+                                <MenuItem value={"title"}>عنوان</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
+                            جستجو
+                        </Button>
+                    </div>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>

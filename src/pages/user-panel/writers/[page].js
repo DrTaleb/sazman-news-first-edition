@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
-import {Button, Pagination, PaginationItem, Skeleton, styled} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select, Skeleton, styled} from "@mui/material";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import {Badge} from "react-bootstrap";
@@ -16,6 +16,8 @@ import Tooltip from "@mui/material/Tooltip";
 import Nprogress from "nprogress";
 import {DeleteForever,} from "@mui/icons-material";
 import Link from "next/link";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: '#', minWidth: 170},
@@ -31,16 +33,31 @@ export default function Companies() {
     const [getData, setGeData] = useState(false)
     const [page, setPage] = useState("");
     const [pageCount, setPageCount] = useState("");
+
+    const [nameSearch, setNameSearch] = useState("")
+    const [nameSearchDisable, setNameSearchDisable] = useState(true)
+    const nameSearchHandler = (event)=>{
+        setNameSearch(event.target.value)
+    }
+    const [searchCategory, setSearchCategory] = useState("")
+    const handleSearchCategory = (event)=>{
+        setSearchCategory(event.target.value)
+        setNameSearchDisable(false)
+    }
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/writers/${router.query.page}/${localStorage.getItem("selectedCompany")}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/writers/${router.query.page}?${searchCategory}=${nameSearch}&company_id=${localStorage.getItem("selectedCompany")}`)
         const data = await res.json()
         await setDATA(data)
         await setPage(data.data.current_page)
         await setPageCount(data.data.last_page)
     }
+    const search = ()=>{
+        dataFetch()
+    }
     useEffect(() => {
         dataFetch()
-    }, [getData])
+    }, [])
+
 
     function createData(id, name, mobile, type) {
         return {id, name, mobile, type};
@@ -116,19 +133,46 @@ export default function Companies() {
                 <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                     <div className="panel-title-parent w-100">
                         <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                            نویسنده های شرکت
+                             کارمندان شما
                         </h5>
                     </div>
                     <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
                         <div className={"d-flex flex-row justify-content-center"}>
                             <Link href={"/user-panel/writers/add"}>
-                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن نویسنده</Button>
+                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن کارمند</Button>
                             </Link>
                         </div>
                     </div>
                 </div>
                 <Paper className={"pb-3 shadow-sm mt-3"}
                        sx={{width: '100%', overflow: 'hidden'}}>
+                    <div className={"d-flex flex-row flex-wrap gap-3 p-3"}>
+                        <TextField
+                            className={"col-12 col-md-4 col-xl-3 mb-md-3"}
+                            label="محل جستجو"
+                            type="search"
+                            value={nameSearch}
+                            disabled={nameSearchDisable}
+                            onChange={nameSearchHandler}
+                        />
+                        <FormControl className={"col-12 col-md-4 col-xl-2"}>
+                            <InputLabel>جستجو بر اساس</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={searchCategory}
+                                label="Age"
+                                onChange={handleSearchCategory}
+                            >
+                                <MenuItem value={"firstname"}>نام</MenuItem>
+                                <MenuItem value={"lastname"}>نام خانوادگی</MenuItem>
+                                <MenuItem value={"mobile"}>شماره</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
+                            جستجو
+                        </Button>
+                    </div>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
@@ -142,9 +186,6 @@ export default function Companies() {
                                             {column.label}
                                         </TableCell>
                                     ))}
-                                    <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                        وضعیت
-                                    </TableCell>
                                     <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                         گزینه ها
                                     </TableCell>
@@ -165,18 +206,6 @@ export default function Companies() {
                                                     </TableCell>
                                                 );
                                             })}
-                                            <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                {
-                                                    row.type === "full" ?
-                                                        <Badge bg={"success"} className={"px-3 py-2"}>
-                                                            دسترسی کامل
-                                                        </Badge>
-                                                        :
-                                                        <Badge bg={"warning"} className={"px-3 py-2"}>
-                                                            غیر فعال
-                                                        </Badge>
-                                                }
-                                            </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                                 <Tooltip title={"حذف نویسنده"}>
                                                     <IconButton color={"error"}
@@ -214,13 +243,13 @@ export default function Companies() {
             <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                 <div className="panel-title-parent w-100">
                     <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                        نویسندگان
+                        کارمندان شما
                     </h5>
                 </div>
                 <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
                     <div className={"d-flex flex-row justify-content-center"}>
                         <Link href={"/user-panel/certificates/add"}>
-                            <Button variant={"contained"} className={"bg-my-purple"}>افزودن نویسنده</Button>
+                            <Button variant={"contained"} className={"bg-my-purple"}>افزودن کارمند</Button>
                         </Link>
                     </div>
                 </div>

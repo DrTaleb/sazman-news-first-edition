@@ -1,8 +1,9 @@
+
 export default async function Handler(req, res) {
     const authToken = req.cookies.authToken
-    if (req.method === "GET"){
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/catalogs?page=${req.query.page[0]}&limit=10`,{
-            method : "GET",
+    if (req.method === "DELETE"){
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/posts/${req.query.id}`,{
+            method : "DELETE",
             headers : {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'Authorization' : `Bearer ${authToken}`

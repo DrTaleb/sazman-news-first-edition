@@ -11,7 +11,17 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
-import {Alert, Button, Pagination, PaginationItem, Skeleton, styled} from "@mui/material";
+import {
+    Alert,
+    Button,
+    FormControl,
+    InputLabel,
+    Pagination,
+    PaginationItem,
+    Select,
+    Skeleton,
+    styled
+} from "@mui/material";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -21,6 +31,8 @@ import Tooltip from "@mui/material/Tooltip";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import RemoveModeratorIcon from "@mui/icons-material/RemoveModerator";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {
@@ -62,17 +74,31 @@ export default function Posts() {
 
     const [getData, setGetData] = useState(false)
 
+
+    const [nameSearch, setNameSearch] = useState("")
+    const [nameSearchDisable, setNameSearchDisable] = useState(true)
+    const nameSearchHandler = (event)=>{
+        setNameSearch(event.target.value)
+    }
+    const [searchCategory, setSearchCategory] = useState("")
+    const handleSearchCategory = (event)=>{
+        setSearchCategory(event.target.value)
+        setNameSearchDisable(false)
+    }
+
     const dataFetch = async () => {
-        const companyItem = localStorage.getItem('selectedCompany')
+        let companyItem = localStorage.getItem("selectedCompany")
         if (companyItem != null) {
-            const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/posts/${companyItem}/${router.query.page}`)
+            const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/posts/${router.query.page}?${searchCategory}=${nameSearch}&company_id=${companyItem}`)
             const data = await res.json()
             await setDATA(data)
             await setPage(data.data.current_page)
             await setRowsPerPage(data.data.per_page)
             await setPageCount(data.data.last_page)
         } else setDATA({status: null})
-
+    }
+    const search = ()=>{
+        dataFetch()
     }
 
 
@@ -107,10 +133,10 @@ export default function Posts() {
 
 
     const viewHandler = (id) => {
-        router.push(`/admin/sliders/view/${id}`)
+        // router.push(`/admin/sliders/view/${id}`)
     }
     const editHandler = (id) => {
-        router.replace(`/admin/sliders/edit-slider/${id}`)
+        router.push(`/user-panel/post-management/edit/${id}`)
     }
 
     const deleteHandler = async (id) => {
@@ -142,7 +168,7 @@ export default function Posts() {
                             Swal.fire(
                                 '',
                                 "مشکلی وجود دارد دوباره تلاش کنید",
-                                'success'
+                                'error'
                             )
                         }
                     })
@@ -151,7 +177,7 @@ export default function Posts() {
                     Swal.fire(
                         '',
                         "مشکلی در سرور وجود دارد دوباره تلاش کنید",
-                        'success'
+                        'error'
                     )
                 }
             }
@@ -273,6 +299,35 @@ export default function Posts() {
                 </div>
                 <Paper className={"mt-4 rounded-3 overflow-hidden pb-3"}
                        sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 .5rem rgba(0, 0, 0, .1)"}}>
+                    <div className={"d-flex flex-row flex-wrap gap-3 p-3 "}>
+                        <TextField
+                            className={"col-12 col-md-4 col-xl-3 mb-md-3"}
+                            label="محل جستجو"
+                            type="search"
+                            value={nameSearch}
+                            disabled={nameSearchDisable}
+                            onChange={nameSearchHandler}
+                        />
+                        <FormControl className={"col-12 col-md-4 col-xl-2"}>
+                            <InputLabel>جستجو بر اساس</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={searchCategory}
+                                label="Age"
+                                error={nameSearchDisable}
+
+                                onChange={handleSearchCategory}
+                            >
+                                <MenuItem value={"title"}>عنوان</MenuItem>
+                                <MenuItem value={"type"}>نوع پست</MenuItem>
+                                <MenuItem value={"category_title"}>دسته بندی</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
+                            جستجو
+                        </Button>
+                    </div>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
@@ -321,7 +376,7 @@ export default function Posts() {
                                                         ?
                                                         <Badge className={"px-3 py-2"} bg={"success"}>فعال</Badge>
                                                         :
-                                                        <Badge className={"px-3 py-2"} bg={"error"}>غیر فعال</Badge>
+                                                        <Badge className={"px-3 py-2"} bg={"danger"}>غیر فعال</Badge>
                                                 }
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
@@ -480,9 +535,6 @@ export default function Posts() {
                 </div>
                 <Paper className={"p-3"}
                        sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
-                    <Link href={"/admin/sliders/add-slider"}>
-                        <Button className={"ps-2"} variant={"contained"} color={"success"}>افزودن پست</Button>
-                    </Link>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>

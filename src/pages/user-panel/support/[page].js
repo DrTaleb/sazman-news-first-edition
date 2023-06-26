@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
-import {Button, Pagination, PaginationItem, Skeleton, styled} from "@mui/material";
+import {Button, FormControl, InputLabel, Pagination, PaginationItem, Select, Skeleton, styled} from "@mui/material";
 import {useRouter} from "next/router";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Badge} from "react-bootstrap";
@@ -16,6 +16,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 import Nprogress from "nprogress";
 import Link from "next/link";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: '#', minWidth: 170},
@@ -30,13 +32,44 @@ export default function Tickets() {
     const [page,setPage] = useState("");
     const [pageCount,setPageCount] = useState("");
 
-    const dataFetch = async () => {
-        const dataRes = await fetch(`${process.env.LOCAL_URL}/api/user-panel/tickets/${router.query.page}`)
-        const data = await dataRes.json()
-        setDATA(data)
-        setPageCount(data.data.last_page)
-        setPage(data.data.current_page)
+    const [nameSearch, setNameSearch] = useState("")
+    const [nameSearchDisable, setNameSearchDisable] = useState(true)
+
+    const [searchCategory, setSearchCategory] = useState("")
+    const nameSearchHandler = (event)=>{
+        let value = event.target.value
+        if (searchCategory === "id"){
+            value = value.replaceAll("۰","0")
+                .replaceAll("۱","1")
+                .replaceAll("۲","2")
+                .replaceAll("۳","3")
+                .replaceAll("۴","4")
+                .replaceAll("۵","5")
+                .replaceAll("۶","6")
+                .replaceAll("۷","7")
+                .replaceAll("۸","8")
+                .replaceAll("۹","9")
+        }
+        setNameSearch(value)
+
     }
+    const handleSearchCategory = (event)=>{
+        setSearchCategory(event.target.value)
+        setNameSearchDisable(false)
+    }
+
+    const dataFetch = async () => {
+        const dataFetch = await fetch(`${process.env.LOCAL_URL}/api/user-panel/tickets/${router.query.page}?${searchCategory}=${nameSearch}`)
+        const data = await dataFetch.json()
+        await setDATA(data)
+        await setPage(data.data.current_page)
+        await setPageCount(data.data.last_page)
+    }
+
+    const search = ()=>{
+        dataFetch()
+    }
+
 
     useEffect(() => {
         dataFetch()
@@ -48,7 +81,6 @@ export default function Tickets() {
 
     const rows = [];
     if (DATA.status) {
-        console.log(DATA)
         DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.subject}`, `${item.status}`)))
     }
 
@@ -140,6 +172,32 @@ export default function Tickets() {
                 </div>
                 <Paper className={"mt-3  rounded-3 overflow-hidden"}
                        sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 1rem rgba(0, 0, 0, .1)"}}>
+                    <div className={"d-flex flex-row flex-wrap gap-3 p-3"}>
+                        <TextField
+                            className={"col-12 col-md-4 col-xl-3 mb-md-3"}
+                            label="محل جستجو"
+                            type="search"
+                            value={nameSearch}
+                            disabled={nameSearchDisable}
+                            onChange={nameSearchHandler}
+                        />
+                        <FormControl className={"col-12 col-md-4 col-xl-2"}>
+                            <InputLabel>جستجو بر اساس</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={searchCategory}
+                                label="Age"
+                                onChange={handleSearchCategory}
+                            >
+                                <MenuItem value={"id"}>آیدی</MenuItem>
+                                <MenuItem value={"subject"}>موضوع</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
+                            جستجو
+                        </Button>
+                    </div>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>

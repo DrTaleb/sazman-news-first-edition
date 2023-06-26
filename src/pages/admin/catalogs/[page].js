@@ -69,6 +69,7 @@ export default function Companies() {
     const search = ()=>{
         dataFetch()
     }
+
     useEffect(() => {
         dataFetch()
     }, [getData])

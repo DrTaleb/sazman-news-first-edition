@@ -26,11 +26,12 @@ import Tooltip from "@mui/material/Tooltip";
 import {Editor} from '@tinymce/tinymce-react';
 import MenuItem from "@mui/material/MenuItem";
 import AuthContext from "@/Contexts/AuthContext";
+import Image from "next/image";
 
 
 // Initialize the app
 
-export default function AddAds() {
+export default function EditPosts({data}) {
 
     const router = useRouter()
     const breadcrumbs = [
@@ -51,56 +52,39 @@ export default function AddAds() {
     // form input -----------------------------------
     const formData = new FormData();
 
-    const [title, setTitle] = useState("")
+    const [title, setTitle] = useState(data.data.title)
 
-    const [titleError, setTitleError] = useState(true)
+    const [titleError, setTitleError] = useState(false)
 
-    const [subtitle, setSubtitle] = useState("")
+    const [subtitle, setSubtitle] = useState(data.data.subtitle)
 
-    const [subtitleError, setSubtitleError] = useState(true)
+    const [subtitleError, setSubtitleError] = useState(false)
 
     const [file, setFile] = useState(null);
 
-    const [date, setDate] = useState("")
+    const [date, setDate] = useState(data.data.published_at
+        .replaceAll("-", "/")
+        .replaceAll("۱","1")
+        .replaceAll("۲","2")
+        .replaceAll("۳","3")
+        .replaceAll("۴","4")
+        .replaceAll("۵","5")
+        .replaceAll("۶","6")
+        .replaceAll("۷","7")
+        .replaceAll("۸","8")
+        .replaceAll("۹","9")
+        .replaceAll("۰","0")
+    )
 
-    const [category, setCategory] = useState("")
+console.log(data.data.published_at)
+    const [text, setText] = useState(data.data.text)
 
-    const [categories, setCategories] = useState([])
-
-    const [categoryError, setCategoryError] = useState(true)
-
-    const [subCategories, setSubCategories] = useState([])
-
-    const [subCategoryError, setSubCategoryError] = useState(true)
-
-    const [subCategory, setSubCategory] = useState("")
-
-    const [subCategoryDisable, setSubCategoryDisable] = useState(true)
-
-    const [text, setText] = useState("")
-
-    const [textError, setTextError] = useState("")
+    const [textError, setTextError] = useState(false)
 
     useEffect(()=>{
         text.length ? setTextError(false) : setTextError(true)
     },[text])
 
-
-    const categoryFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/categories`)
-        const data = await res.json()
-        setCategories(data.data.data)
-    }
-
-    const subCategoryFetch = async (id) => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/categories/subcategories/${id}`)
-        const data = await res.json()
-        await setSubCategories(data.data.children)
-    }
-
-    useEffect(() => {
-        categoryFetch()
-    }, [])
 
 
     const titleHandler = (event) => {
@@ -111,47 +95,33 @@ export default function AddAds() {
         setSubtitle(event.target.value)
         event.target.value.replaceAll(" ", "").length ? setSubtitleError(false) : setSubtitleError(true)
     }
-    const categoryHandler = async (event) => {
-        await setCategory(event.target.value)
-        await subCategoryFetch(event.target.value)
-        await setSubCategoryDisable(false)
-        await setCategoryError(false)
-    };
-    const subCategoryHandler = (event) => {
-        setSubCategory(event.target.value)
-        setSubCategoryError(false)
-    }
 
 
 
     const submitHandler = async (event) => {
         event.preventDefault()
         Nprogress.start()
-        if (titleError || subtitleError || categoryError || subCategoryError || textError || !date.length) {
+        if (false) {
             await Swal.fire({
                 icon: 'error',
                 text: "لطفا تمام فیلد ها را پر کنید",
             })
             Nprogress.done()
-        } else if (!file) {
-            await Swal.fire({
-                icon: 'error',
-                text: "لطفا عکس پست را وارد کنید",
-            })
-            Nprogress.done()
-        } else {
+        }else {
             await formData.append("title", title);
 
             await formData.append("subtitle", subtitle)
 
-            await formData.append("image", file)
 
-            await formData.append("category_id", subCategory)
+            if (file){
+                await formData.append("image", file)
+            }
+
+            await formData.append("category_id", data.data.category_id)
 
             await formData.append("writer_id", userData.id)
 
-            await formData.append("published_at", date
-                .replaceAll("-", "/")
+            await formData.append("published_at",   date.replaceAll("-", "/")
                 .replaceAll("۰","0")
                 .replaceAll("۱","1")
                 .replaceAll("۲","2")
@@ -162,13 +132,12 @@ export default function AddAds() {
                 .replaceAll("۷","7")
                 .replaceAll("۸","8")
                 .replaceAll("۹","9")
-
             )
 
             await formData.append("text", text)
 
             try {
-                const res = await axios.post(`${process.env.LOCAL_URL}/api/user-panel/posts/add`, formData, {
+                const res = await axios.put(`${process.env.LOCAL_URL}/api/user-panel/posts/edit/${router.query.id}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         }
@@ -178,7 +147,7 @@ export default function AddAds() {
                     Nprogress.done()
                     await Swal.fire({
                         icon: 'success',
-                        text: "پست با موفقیت تشکیل شد",
+                        text: "پست با موفقیت به روز شد",
                     })
                     await router.push("/user-panel/post-management/1")
                 } else {
@@ -287,12 +256,12 @@ export default function AddAds() {
 
     const handleEditorChange = (e) => {
 
-       setText(e.target.getContent())
+        setText(e.target.getContent())
     }
-
     const dateHandler = (val) => {
         setDate(val.format("YYYY-MM-DD HH:mm"))
     }
+
 
     return (
         <>
@@ -311,6 +280,7 @@ export default function AddAds() {
                                     className={"col-md-11 col-11"}
                                     label="عنوان پست"
                                     variant="outlined"
+                                    InputLabelProps={{ shrink: true }}
                                     error={titleError}
                                     value={title}
                                     onInput={(event) => titleHandler(event)}/>
@@ -322,38 +292,18 @@ export default function AddAds() {
                                     error={subtitleError}
                                     value={subtitle}
                                     onInput={(event) => subtitleHandler(event)}/>
-                                <Alert color={"warning"} className={"col-11"}>
-                                    لطفا ابتدا دسته بندی و سپس زیر دسته را انتخاب کنید
-                                </Alert>
-                                <TextField
-                                    select
-                                    label="دسته بندی"
-                                    className={"col-md-11 col-11"}
-                                    value={category}
-                                    onChange={categoryHandler}
-                                    error={categoryError}
-                                >
-                                    {categories.map((option) => (
-                                        <MenuItem key={option.id} value={option.id}>
-                                            {option.title}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                                <TextField
-                                    select
-                                    label="زیردسته"
-                                    error={subCategoryError}
-                                    disabled={subCategoryDisable}
-                                    className={"col-md-11 col-11"}
-                                    value={subCategory}
-                                    onChange={subCategoryHandler}
-                                >
-                                    {subCategories.map((option) => (
-                                        <MenuItem key={option.id} value={option.id}>
-                                            {option.title}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                                <div className={"col-9 d-flex flex-column gap-3 align-items-center"}>
+                                    <span>
+                                        عکس کاور فعلی
+                                    </span>
+                                    <Image
+                                        alt={""}
+                                        width={"200"}
+                                        height="0"
+                                        className="w-100 h-auto rounded-3"
+                                        src={`${process.env.SERVER_URL}${data.data.image}`}
+                                    ></Image>
+                                </div>
                                 <div className={"col-11 bg-light rounded p-1"}>
                                     <Toast ref={toast}></Toast>
                                     <FileUpload
@@ -378,8 +328,12 @@ export default function AddAds() {
                                 </span>
                                     <DatePicker
                                         className={"col-12"}
-                                        render={<Button variant={"contained"}
-                                                        className={"py-2 col-12 bg-my-purple"}>{date ? date.replaceAll("-", "/") : "انتخاب تاریخ انتشار پست"}</Button>}
+                                        render={
+                                        <Button
+                                            variant={"contained"}
+                                            className={"py-2 col-12 bg-my-purple"}>
+                                            {date}
+                                        </Button>}
                                         calendar={persian}
                                         animations={[
                                             transition({duration: 400, from: 35}),
@@ -421,7 +375,7 @@ export default function AddAds() {
                             tinymce-script-src="tinymce/tinymce.min.js"
                             onInit={(evt, editor) => editorRef.current = editor}
                             onChange={handleEditorChange}
-                            initialValue=""
+                            initialValue={data.data.text}
                             init={{
 
                                 selector: 'textarea#file-picker',
@@ -467,4 +421,28 @@ export default function AddAds() {
             </Container>
         </>
     )
+}
+
+export async function getServerSideProps(context) {
+    try {
+        const {params, req} = context
+
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/posts/${params.id}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': `Bearer ${req.cookies.authToken}`
+            }
+        })
+        const data = await dataResponse.json()
+
+        return {
+            props: {data}
+        }
+    } catch {
+        const data = {status: false, data: {data: []}}
+        return {
+            props: {data}
+        }
+    }
 }

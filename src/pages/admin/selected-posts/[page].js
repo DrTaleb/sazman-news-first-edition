@@ -89,11 +89,9 @@ export default function SelectedPosts({data}) {
     DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`, `${item.selected_status == 1 ? "فعال" : "غیر فعال"}`, `${item.type}`, `${item.view_count}`, `${item.like_count}`, `${item.published_at}`, `${item.category.title}`,`${item.company.title}`,`${item.writer.firstname} ${item.writer.lastname}`,`${item.writer.id}`, `${item.company_id}`)))
 
 
-    const viewHandler = (id) => {
-        router.push(`/post/${id}`)
-    }
+
     const editHandler = (id) => {
-        router.replace(`/admin/ads/edit/${id}`)
+        router.replace(`/admin/selected-posts/edit/${id}`)
     }
     const goToCompany = (id) =>{
         router.replace(`/admin/companies/edit-company/${id}`)
@@ -281,12 +279,6 @@ export default function SelectedPosts({data}) {
                                             </Tooltip>
                                         </TableCell>
                                         <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                            <Tooltip title={"مشاهده پست"}>
-                                                <IconButton color={"info"}
-                                                            onClick={() => viewHandler(row.id)}
-                                                ><RemoveRedEyeRoundedIcon/>
-                                                </IconButton>
-                                            </Tooltip>
                                             <Tooltip title={"ویرایش"}>
                                                 <IconButton color={"warning"}
                                                             onClick={() => editHandler(row.id)}

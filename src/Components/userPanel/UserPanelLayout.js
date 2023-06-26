@@ -31,6 +31,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import * as React from "react";
 import Swal from "sweetalert2";
 import Nprogress from "nprogress";
+import Image from "next/image"
 
 export default function UserPanelLayout({children}) {
 
@@ -87,6 +88,7 @@ export default function UserPanelLayout({children}) {
     }, [routerPath])
 
     const {userData, logOut, userStatus} = useContext(AuthContext)
+
     const [selectedCompany, setSelectedCompany] = useState("")
     useEffect(() => {
         if (userStatus) {
@@ -98,33 +100,33 @@ export default function UserPanelLayout({children}) {
         }
     }, [userData])
 
-    const selectCompany = async (id)=>{
+    const selectCompany = async (id) => {
         await Nprogress.start()
-        const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/set-company`,{
-            method : "POST",
-            body : JSON.stringify({
-                company_id : id
+        const res = await fetch(`${process.env.LOCAL_URL}/api/user-panel/set-company`, {
+            method: "POST",
+            body: JSON.stringify({
+                company_id: id
             })
         })
         const data = await res.json()
-        if (data.status){
-            await localStorage.setItem("selectedCompany" , id)
+        if (data.status) {
+            await localStorage.setItem("selectedCompany", id)
             await setSelectedCompany(userData.companies.find(item => item.id == id).title)
             await Nprogress.done()
             await router.reload(router.route)
             await Swal.fire({
-                text : "داشبورد شرکت با موفقیت انتخاب شد",
-                icon : "success"
+                text: "داشبورد شرکت با موفقیت انتخاب شد",
+                icon: "success"
             })
-        }else {
+        } else {
             await Nprogress.done()
             await Swal.fire({
-                text : "دوباره تلاش کنید",
-                icon : "error"
+                text: "دوباره تلاش کنید",
+                icon: "error"
             })
         }
     }
-    const handleCompanyAndClose = async (id)=>{
+    const handleCompanyAndClose = async (id) => {
         await selectCompany(id)
         await handleClose()
     }
@@ -139,7 +141,7 @@ export default function UserPanelLayout({children}) {
                              ref={toggleElement}>
                             <MenuIcon sx={{color: "var(--white)"}}></MenuIcon>
                         </div>
-                        <span className="navbar-brand text-white">سازمان نیوز</span>
+                        <span className="navbar-brand text-white">مراسم چین</span>
                     </div>
                     <div className="d-flex flex-row align-items-center gap-4">
                         <div className="d-inline-block">
@@ -179,10 +181,12 @@ export default function UserPanelLayout({children}) {
                             </MenuItem>
                             <Divider/>
                             <MenuItem onClick={handleClose}>
-                                <ListItemIcon>
-                                    <Settings fontSize="small"/>
-                                </ListItemIcon>
-                                تنظیمات اکانت
+                                <Link href={"/user-panel/account-setting"}>
+                                    <ListItemIcon>
+                                        <Settings fontSize="small"/>
+                                    </ListItemIcon>
+                                    تنظیمات اکانت
+                                </Link>
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
                                 <ListItemIcon>
@@ -231,7 +235,7 @@ export default function UserPanelLayout({children}) {
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/writers") && "active"}`}>
                                         <Person
                                             className={`${routerPath.includes("/writers") && "color-my-purple"}`}></Person>
-                                        <span className="text-secondary">نویسندگان شرکت</span>
+                                        <span className="text-secondary">کارمندان</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/user-panel/post-management/1"}>
@@ -348,7 +352,8 @@ export default function UserPanelLayout({children}) {
                                                 {
                                                     userData.companies &&
                                                     userData.companies.map(item =>
-                                                        <MenuItem key={item.id} onClick={()=> handleCompanyAndClose(item.id)}>
+                                                        <MenuItem key={item.id}
+                                                                  onClick={() => handleCompanyAndClose(item.id)}>
                                                             {
                                                                 item.title === selectedCompany ?
                                                                     <ListItemIcon>
@@ -383,7 +388,13 @@ export default function UserPanelLayout({children}) {
                                                     aria-haspopup="true"
                                                     aria-expanded={open ? 'true' : undefined}>
                                             <Badge color="success" variant="dot">
-                                                <Avatar></Avatar>
+                                                {
+                                                    userData.photo ?
+                                                        <Image  className={"rounded-circle"} src={`${process.env.SERVER_URL}${userData.photo}`}
+                                                               height={40} width={40} alt={""}></Image>
+                                                        :
+                                                        <Avatar fontSize="small"/>
+                                                }
                                             </Badge>
                                         </IconButton>
                                     </Tooltip>
@@ -415,19 +426,25 @@ export default function UserPanelLayout({children}) {
                                 >
                                     <MenuItem onClick={handleClose}>
                                         <ListItemIcon>
-                                            <Avatar fontSize="small"/>
+                                            {
+                                                userData.photo ?
+                                                    <Image className={"rounded-circle"} src={`${process.env.SERVER_URL}${userData.photo}`}
+                                                           height={40} width={40} alt={""}></Image>
+                                                    :
+                                                    <Avatar fontSize="small"/>
+                                            }
                                         </ListItemIcon>
                                         {userData.firstname} {userData.lastname}
                                     </MenuItem>
                                     <Divider/>
-                                    <Link href={"/user-panel/register"}>
-                                        <MenuItem onClick={handleClose}>
+                                    <MenuItem onClick={handleClose}>
+                                        <Link href={"/user-panel/account-setting"}>
                                             <ListItemIcon>
-                                                <SettingsIcon fontSize="small"/>
+                                                <Settings fontSize="small"/>
                                             </ListItemIcon>
                                             تنظیمات اکانت
-                                        </MenuItem>
-                                    </Link>
+                                        </Link>
+                                    </MenuItem>
                                     <MenuItem onClick={logOut}>
                                         <ListItemIcon>
                                             <Logout fontSize="small"/>
@@ -439,7 +456,7 @@ export default function UserPanelLayout({children}) {
                         </div>
                     </nav>
                     {
-                        userStatus ?
+                        userStatus && userData.companies.length ?
                             selectedCompany && userData.companies.length ?
                                 children
                                 :
@@ -447,7 +464,8 @@ export default function UserPanelLayout({children}) {
                                     <div className={"bg-white rounded-4 shadow-sm col-11 col-md-4 px-sm-4 py-4"}>
                                         <div className="d-flex flex-row align-items-center mt-4 mt-md-0 mb-4">
                                             <div className="panel-title-parent w-100">
-                                                <span className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                                                <span
+                                                    className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
                                                     شرکت مورد نظر خود را انتخاب کنید
                                                 </span>
                                             </div>
@@ -455,7 +473,7 @@ export default function UserPanelLayout({children}) {
                                         {
                                             userData.companies.map(item =>
 
-                                                <MenuItem key={item.id} onClick={()=> selectCompany(item.id)}>
+                                                <MenuItem key={item.id} onClick={() => selectCompany(item.id)}>
                                                     <ListItemIcon>
                                                         <CheckBoxOutlineBlankIcon fontSize={"small"}/>
                                                     </ListItemIcon>
@@ -467,16 +485,61 @@ export default function UserPanelLayout({children}) {
                                     </div>
                                 </div>
                             :
-                            <div className={"d-flex flex-row justify-content-center"}>
-
-                                <Col xs={11} sm={11} md={8} lg={6} xl={7} className={"content bg-white shadow-sm mt-3"}>
-                                    <form>
-                                        <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
-                                            <Button className={"col-5 mt-5"} variant={"contained"}
-                                                    color={"success"}>افزودن</Button>
+                            <div className="container">
+                                <div className="d-flex flex-column flex-xl-row justify-content-center align-items-center">
+                                    <div className="col-xl-6">
+                                        <div className="d-flex flex-column">
+                                            <h1 className="mt-3">به مراسم چین خوش آمدید !</h1>
+                                            <p className="text-secondary mt-3 text-justify">
+                                                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده
+                                                از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و
+                                                سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای
+                                                متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه
+                                                درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با
+                                                نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان
+                                                خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید
+                                                داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان
+                                                رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات
+                                                پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                                            </p>
+                                            <div className="d-flex flex-row justify-content-between ">
+                                                <div className="d-flex flex-column align-items-start">
+                                                    <div className="d-flex flex-row gap-3 align-items-center">
+                                                        <img src="/img/check-green.svg"/>
+                                                        <span className="small mt-1 fw-bold">لورم ایپسوم</span>
+                                                    </div>
+                                                    <div className="py-3 border-start border-1 ms-2"></div>
+                                                    <div className="d-flex flex-row gap-3 align-items-center">
+                                                        <img src="/img/check-green.svg"/>
+                                                        <span class="small mt-1">لورم ایپسوم </span>
+                                                    </div>
+                                                    <div class="py-3 border-start border-1 ms-2"></div>
+                                                    <div class="d-flex flex-row gap-3 align-items-center">
+                                                        <img src="/img/check-green.svg"/>
+                                                        <span class="small mt-1">لورم ایپسوم</span>
+                                                    </div>
+                                                    <div class="py-3 border-start border-1 ms-2"></div>
+                                                    <div class="d-flex flex-row gap-3 align-items-center">
+                                                        <img src="/img/check-green.svg"/>
+                                                        <span class="small mt-1">لورم ایپسوم</span>
+                                                    </div>
+                                                    <div class="py-3 border-start border-1 ms-2"></div>
+                                                    <div class="d-flex flex-row gap-3 align-items-center">
+                                                        <img src="/img/check-green.svg"/>
+                                                        <span class="small mt-1">لورم ایپسوم</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <Button variant={"contained"} className={"bg-my-purple align-self-end"}>
+                                                ثبت محل در مراسم چین
+                                            </Button>
                                         </div>
-                                    </form>
-                                </Col>
+                                    </div>
+                                    <div
+                                        class="col-12 col-xl-5 d-flex flex-column align-items-center mt-5 mt-md-0">
+                                        <img className="col-12 col-xl-11 rounded-4" src="/img/3344442.png"/>
+                                    </div>
+                                </div>
                             </div>
                     }
                 </div>
