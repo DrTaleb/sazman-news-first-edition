@@ -24,7 +24,6 @@ export default async function Handler(req, res) {
                 },
             })
 
-            console.log(data.data)
             await res.status(200).json(data.data)
         })
 

@@ -18,10 +18,11 @@ export default async function Handler(req, res) {
                 var formData = new FormData();
                 await formData.append("title", fields.title)
                 await formData.append("subtitle", fields.subtitle)
-                await formData.append("type", "text")
+                await formData.append("type", fields.type)
                 await formData.append("category_id", fields.category_id)
                 await formData.append("writer_id", fields.writer_id)
                 await formData.append("text", fields.text)
+                await formData.append("video", fields.video)
                 await formData.append("status", "0")
                 await formData.append("published_at", fields.published_at)
                 await formData.append("selected_status", "0")

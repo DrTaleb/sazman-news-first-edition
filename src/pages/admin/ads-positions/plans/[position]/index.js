@@ -9,86 +9,62 @@ import TableRow from '@mui/material/TableRow';
 import {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import {
-    Alert,
     Button,
-    FormControl,
-    InputLabel,
-    Pagination,
-    PaginationItem,
-    Select,
     Skeleton,
     styled
 } from "@mui/material";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
-import {Badge, Col, Row} from "react-bootstrap";
+import {Badge} from "react-bootstrap";
 import Tooltip from "@mui/material/Tooltip";
 import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
-import axios from "axios";
 import Nprogress from "nprogress";
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import {DeleteForever, EditOutlined} from "@mui/icons-material";
 import Link from "next/link";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
-    {id: 'id', label: '#', minWidth: 170},
+    {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'title', label: 'عنوان', minWidth: 170, align: "left"},
+    {id: 'category', label: 'دسته بندی', minWidth: 170, align: "left"},
+    {id: 'days', label: 'تعداد روز', minWidth: 170, align: "left"},
+    {id: 'price', label: 'قیمت', minWidth: 170, align: "left"},
 ];
 
 
-export default function Companies() {
+export default function AdsPositions() {
     const rows = []
     const router = useRouter()
     const [DATA, setDATA] = useState({})
     const [getData, setGeData] = useState(false)
-    const [page, setPage] = useState("");
-    const [pageCount, setPageCount] = useState("");
-    const [nameSearch, setNameSearch] = useState("")
-    const [nameSearchDisable, setNameSearchDisable] = useState(true)
-    useEffect(() => {
-        dataFetch()
-    }, [getData])
-    const nameSearchHandler = (event)=>{
-        setNameSearch(event.target.value)
-    }
-    const [searchCategory, setSearchCategory] = useState("")
-    const handleSearchCategory = (event)=>{
-        setSearchCategory(event.target.value)
-        setNameSearchDisable(false)
-    }
 
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/catalogs/${router.query.page}?${searchCategory}=${nameSearch}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.position}`)
         const data = await res.json()
         await setDATA(data)
-        await setPage(data.data.current_page)
-        await setPageCount(data.data.last_page)
-    }
-    const search = ()=>{
-        dataFetch()
+        console.log(data)
     }
 
     useEffect(() => {
         dataFetch()
     }, [getData])
 
-    function createData(id, title, status,companyId) {
-        return {id, title, status,companyId};
+    function createData(id, title,category,days,price,status) {
+        return {id, title,category,days,price,status};
     }
 
     if (DATA.status) {
-        DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`,`${item.company_id}`,)))
+        DATA.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`,`${item.category.title}`,`${item.days}`,` ${item.price}  تومان `,`${item.status == 1 ? "فعال" : "غیر فعال"}`)))
     }
     const editHandler = (id) => {
-        router.push(`/admin/catalogs/edit/${id}`)
+        router.push(`/admin/ads-positions/plans/${router.query.position}/edit/${id}`)
     }
-    const formData = new FormData();
+
     const blockHandler = async (id) => {
         const selectedCatalog = DATA.data.data.find(item => item.id == id)
+        console.log(selectedCatalog)
         Swal.fire({
-            text: `آیا از ${selectedCatalog.status === "1" ? "" : "رفع"} غیر فعال سازی کاتالوگ مورد نظر اطمینان دارید؟`,
+            text: `آیا از ${selectedCatalog.status === "1" ? "" : "رفع"} غیر فعال سازی جایگاه مورد نظر اطمینان دارید؟`,
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: "خیر",
@@ -97,20 +73,21 @@ export default function Companies() {
             confirmButtonText: 'بله'
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await formData.append("title", selectedCatalog.title)
-                await formData.append("status", selectedCatalog.status === "1" ? 0 : 1)
                 try {
-                    const res = await axios.put(`${process.env.LOCAL_URL}/api/admin/catalogs/edit/${id}`, formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                            }
-                        }
-                    )
-                    if (res.data.status) {
+                    const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-positions/edit/${id}`,{
+                        method : "PUT",
+                        body : JSON.stringify({
+                            title : selectedCatalog.title,
+                            status : selectedCatalog.status === "1" ? 0 : 1
+                        })
+                    })
+                    const data = await res.json()
+                    console.log(data)
+                    if (data.status) {
                         Nprogress.done()
                         await Swal.fire({
                             icon: 'success',
-                            text: ` کاتالوگ ${selectedCatalog.title}${selectedCatalog.status === "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
+                            text: ` جایگاه ${selectedCatalog.title}${selectedCatalog.status === "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
                         })
                         await setGeData(!getData)
                     } else {
@@ -143,9 +120,10 @@ export default function Companies() {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`${process.env.LOCAL_URL}/api/admin/catalogs/delete/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/ads-positions/delete/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
+                        console.log(data)
                         if (data.status) {
                             Nprogress.done()
                             Swal.fire(
@@ -154,15 +132,16 @@ export default function Companies() {
                                 'success'
                             )
                             setGeData(!getData)
-                        } else {
+                        } else if (!data.status && data.errors[0] === "this position exists data") {
                             Nprogress.done()
                             Swal.fire(
                                 '',
-                                "مشکلی وجود دارد دوباره تلاش کنید",
+                                "در حال حاضر در این محل تبلیغ وجود دارد",
                                 'error'
                             )
                         }
                     })
+                    Nprogress.done()
                 } catch {
                     Nprogress.done()
                     Swal.fire(
@@ -175,14 +154,7 @@ export default function Companies() {
         })
     }
 
-    const goToCompany = (id)=>{
-        router.push(`/admin/companies/edit-company/${id}`)
-    }
 
-    const clickHandler = async (event, value) => {
-        await router.push(`/admin/catalogs/${value}`)
-        await setGeData(!getData)
-    }
 
     // head row style ---------
     const StyledTableRow = styled(TableRow)(({theme}) => ({
@@ -200,37 +172,18 @@ export default function Companies() {
                 <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                     <div className="panel-title-parent w-100">
                         <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                            کاتالوگ ها
+                            جایگاه های نصب تبلیغ
                         </h5>
                     </div>
-                </div>
-                <Paper className={"p-md-3 pt-3 mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 .4rem rgba(0, 0, 0, .1)"}}>
-                    <div className={"d-flex flex-row flex-wrap gap-3 px-3 px-md-0"}>
-                        <TextField
-                            className={"col-12 col-md-4 col-xl-3 mb-md-3"}
-                            label="محل جستجو"
-                            type="search"
-                            value={nameSearch}
-                            disabled={nameSearchDisable}
-                            onChange={nameSearchHandler}
-                        />
-                        <FormControl className={"col-12 col-md-4 col-xl-2"}>
-                            <InputLabel>جستجو بر اساس</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={searchCategory}
-                                label="Age"
-                                onChange={handleSearchCategory}
-                            >
-                                <MenuItem value={"title"}>عنوان</MenuItem>
-                                <MenuItem value={"company_title"}>شرکت مربوطه</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
-                            جستجو
-                        </Button>
+                    <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                        <div className={"d-flex flex-row justify-content-center"}>
+                            <Link href={"/admin/ads-positions/add"} className={"ps-2"}>
+                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن جایگاه</Button>
+                            </Link>
+                        </div>
                     </div>
+                </div>
+                <Paper className={"mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 .4rem rgba(0, 0, 0, .1)"}}>
                     <TableContainer sx={{maxHeight: 600}}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
@@ -244,9 +197,6 @@ export default function Companies() {
                                             {column.label}
                                         </TableCell>
                                     ))}
-                                    <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                        شرکت مربوطه
-                                    </TableCell>
                                     <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                         وضعیت نمایش
                                     </TableCell>
@@ -271,13 +221,6 @@ export default function Companies() {
                                                 );
                                             })}
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <Tooltip title="مشاهده اکانت شرکت">
-                                                    <Button variant={"outlined"} onClick={()=> goToCompany(row.companyId)}>
-                                                        مشاهده اکانت شرکت
-                                                    </Button>
-                                                </Tooltip>
-                                            </TableCell>
-                                            <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                                 {
                                                     row.status === "فعال" ?
                                                         <Badge bg={"success"} className={"px-3 py-2"}>
@@ -290,7 +233,7 @@ export default function Companies() {
                                                 }
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <Tooltip title="مشاهده و ویرایش کاتالوگ">
+                                                <Tooltip title="مشاهده و ویرایش محل">
                                                     <IconButton color={"warning"}
                                                                 onClick={() => editHandler(row.id)}
                                                     >
@@ -314,7 +257,7 @@ export default function Companies() {
                                                             </IconButton>
                                                         </Tooltip>
                                                 }
-                                                <Tooltip title={"حذف کاتالوگ"}>
+                                                <Tooltip title={"حذف محل"}>
                                                     <IconButton color={"error"}
                                                                 onClick={() => deleteHandler(row.id)}
                                                     >
@@ -329,19 +272,6 @@ export default function Companies() {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <div className={"d-flex flex-row justify-content-center mt-5"}>
-                        <Pagination
-                            count={pageCount}
-                            onChange={(event, value) => clickHandler(event, value)}
-                            size="large"
-                            defaultPage={page}
-                            renderItem={(item) => (
-                                <PaginationItem
-                                    {...item}
-                                />
-                            )}
-                        />
-                    </div>
                 </Paper>
             </div>
         )

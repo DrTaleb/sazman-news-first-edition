@@ -283,7 +283,7 @@ export default function UserPanelLayout({children}) {
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/setting") && "active"}`}>
                                         <SettingsIcon
                                             className={`${routerPath.includes("/setting") && "color-my-purple"}`}></SettingsIcon>
-                                        <span className="text-secondary">تنظیمات شرکت</span>
+                                        <span className="text-secondary">تنظیمات مجموعه</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/user-panel/support/1"}>
@@ -390,7 +390,8 @@ export default function UserPanelLayout({children}) {
                                             <Badge color="success" variant="dot">
                                                 {
                                                     userData.photo ?
-                                                        <Image  className={"rounded-circle"} src={`${process.env.SERVER_URL}${userData.photo}`}
+                                                        <Image className={"rounded-circle"}
+                                                               src={`${process.env.SERVER_URL}${userData.photo}`}
                                                                height={40} width={40} alt={""}></Image>
                                                         :
                                                         <Avatar fontSize="small"/>
@@ -428,13 +429,16 @@ export default function UserPanelLayout({children}) {
                                         <ListItemIcon>
                                             {
                                                 userData.photo ?
-                                                    <Image className={"rounded-circle"} src={`${process.env.SERVER_URL}${userData.photo}`}
-                                                           height={40} width={40} alt={""}></Image>
+                                                    <Image className={"rounded-circle"}
+                                                           src={`${process.env.SERVER_URL}${userData.photo}`}
+                                                           height={35} width={35} alt={""}></Image>
                                                     :
                                                     <Avatar fontSize="small"/>
                                             }
                                         </ListItemIcon>
-                                        {userData.firstname} {userData.lastname}
+                                        <span className={"ms-1"}>
+                                            {userData.firstname} {userData.lastname}
+                                        </span>
                                     </MenuItem>
                                     <Divider/>
                                     <MenuItem onClick={handleClose}>
@@ -456,91 +460,94 @@ export default function UserPanelLayout({children}) {
                         </div>
                     </nav>
                     {
-                        userStatus && userData.companies.length ?
-                            selectedCompany && userData.companies.length ?
-                                children
-                                :
-                                <div className={"d-flex flex-row justify-content-center"}>
-                                    <div className={"bg-white rounded-4 shadow-sm col-11 col-md-4 px-sm-4 py-4"}>
-                                        <div className="d-flex flex-row align-items-center mt-4 mt-md-0 mb-4">
-                                            <div className="panel-title-parent w-100">
-                                                <span
-                                                    className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                                                    شرکت مورد نظر خود را انتخاب کنید
-                                                </span>
-                                            </div>
-                                        </div>
-                                        {
-                                            userData.companies.map(item =>
-
-                                                <MenuItem key={item.id} onClick={() => selectCompany(item.id)}>
-                                                    <ListItemIcon>
-                                                        <CheckBoxOutlineBlankIcon fontSize={"small"}/>
-                                                    </ListItemIcon>
-
-                                                    {item.title}
-                                                </MenuItem>
-                                            )
-                                        }
-                                    </div>
-                                </div>
-                            :
-                            <div className="container">
-                                <div className="d-flex flex-column flex-xl-row justify-content-center align-items-center">
-                                    <div className="col-xl-6">
-                                        <div className="d-flex flex-column">
-                                            <h1 className="mt-3">به مراسم چین خوش آمدید !</h1>
-                                            <p className="text-secondary mt-3 text-justify">
-                                                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده
-                                                از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و
-                                                سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای
-                                                متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه
-                                                درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با
-                                                نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان
-                                                خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید
-                                                داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان
-                                                رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات
-                                                پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                                            </p>
-                                            <div className="d-flex flex-row justify-content-between ">
-                                                <div className="d-flex flex-column align-items-start">
-                                                    <div className="d-flex flex-row gap-3 align-items-center">
-                                                        <img src="/img/check-green.svg"/>
-                                                        <span className="small mt-1 fw-bold">لورم ایپسوم</span>
-                                                    </div>
-                                                    <div className="py-3 border-start border-1 ms-2"></div>
-                                                    <div className="d-flex flex-row gap-3 align-items-center">
-                                                        <img src="/img/check-green.svg"/>
-                                                        <span class="small mt-1">لورم ایپسوم </span>
-                                                    </div>
-                                                    <div class="py-3 border-start border-1 ms-2"></div>
-                                                    <div class="d-flex flex-row gap-3 align-items-center">
-                                                        <img src="/img/check-green.svg"/>
-                                                        <span class="small mt-1">لورم ایپسوم</span>
-                                                    </div>
-                                                    <div class="py-3 border-start border-1 ms-2"></div>
-                                                    <div class="d-flex flex-row gap-3 align-items-center">
-                                                        <img src="/img/check-green.svg"/>
-                                                        <span class="small mt-1">لورم ایپسوم</span>
-                                                    </div>
-                                                    <div class="py-3 border-start border-1 ms-2"></div>
-                                                    <div class="d-flex flex-row gap-3 align-items-center">
-                                                        <img src="/img/check-green.svg"/>
-                                                        <span class="small mt-1">لورم ایپسوم</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <Button variant={"contained"} className={"bg-my-purple align-self-end"}>
-                                                ثبت محل در مراسم چین
-                                            </Button>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="col-12 col-xl-5 d-flex flex-column align-items-center mt-5 mt-md-0">
-                                        <img className="col-12 col-xl-11 rounded-4" src="/img/3344442.png"/>
-                                    </div>
-                                </div>
-                            </div>
+                        userStatus && userData.companies.length && !router.pathname.includes("/add-company") && selectedCompany && userData.companies.length &&
+                            children
+                            // :
+                            // <div className={"d-flex flex-row justify-content-center"}>
+                            //     <div className={"bg-white rounded-4 shadow-sm col-11 col-md-4 px-sm-4 py-4"}>
+                            //         <div className="d-flex flex-row align-items-center mt-4 mt-md-0 mb-4">
+                            //             <div className="panel-title-parent w-100">
+                            //                     <span
+                            //                         className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                            //                         شرکت مورد نظر خود را انتخاب کنید
+                            //                     </span>
+                            //             </div>
+                            //         </div>
+                            //         {
+                            //             userData.companies.map(item =>
+                            //
+                            //                 <MenuItem key={item.id} onClick={() => selectCompany(item.id)}>
+                            //                     <ListItemIcon>
+                            //                         <CheckBoxOutlineBlankIcon fontSize={"small"}/>
+                            //                     </ListItemIcon>
+                            //
+                            //                     {item.title}
+                            //                 </MenuItem>
+                            //             )
+                            //         }
+                            //     </div>
+                            // </div>
+                        // :
+                        // <div className="container">
+                        //     <div className="d-flex flex-column flex-xl-row justify-content-center align-items-center">
+                        //         <div className="col-xl-6">
+                        //             <div className="d-flex flex-column">
+                        //                 <h1 className="mt-3">به مراسم چین خوش آمدید !</h1>
+                        //                 <p className="text-secondary mt-3 text-justify">
+                        //                     لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده
+                        //                     از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و
+                        //                     سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای
+                        //                     متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه
+                        //                     درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با
+                        //                     نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان
+                        //                     خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید
+                        //                     داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان
+                        //                     رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات
+                        //                     پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                        //                 </p>
+                        //                 <div className="d-flex flex-row justify-content-between ">
+                        //                     <div className="d-flex flex-column align-items-start">
+                        //                         <div className="d-flex flex-row gap-3 align-items-center">
+                        //                             <img src="/img/check-green.svg"/>
+                        //                             <span className="small mt-1 fw-bold">لورم ایپسوم</span>
+                        //                         </div>
+                        //                         <div className="py-3 border-start border-1 ms-2"></div>
+                        //                         <div className="d-flex flex-row gap-3 align-items-center">
+                        //                             <img src="/img/check-green.svg"/>
+                        //                             <span className="small mt-1">لورم ایپسوم </span>
+                        //                         </div>
+                        //                         <div className="py-3 border-start border-1 ms-2"></div>
+                        //                         <div className="d-flex flex-row gap-3 align-items-center">
+                        //                             <img src="/img/check-green.svg"/>
+                        //                             <span className="small mt-1">لورم ایپسوم</span>
+                        //                         </div>
+                        //                         <div className="py-3 border-start border-1 ms-2"></div>
+                        //                         <div className="d-flex flex-row gap-3 align-items-center">
+                        //                             <img src="/img/check-green.svg"/>
+                        //                             <span className="small mt-1">لورم ایپسوم</span>
+                        //                         </div>
+                        //                         <div className="py-3 border-start border-1 ms-2"></div>
+                        //                         <div className="d-flex flex-row gap-3 align-items-center">
+                        //                             <img src="/img/check-green.svg"/>
+                        //                             <span className="small mt-1">لورم ایپسوم</span>
+                        //                         </div>
+                        //                     </div>
+                        //                 </div>
+                        //                 <Button variant={"contained"} className={"bg-my-purple align-self-end"}>
+                        //                     ثبت مجموعه در مراسم چین
+                        //                 </Button>
+                        //             </div>
+                        //         </div>
+                        //         <div
+                        //             class="col-12 col-xl-5 d-flex flex-column align-items-center mt-5 mt-md-0">
+                        //             <img className="col-12 col-xl-11 rounded-4" src="/img/3344442.png"/>
+                        //         </div>
+                        //     </div>
+                        // </div>
+                    }
+                    {
+                        userStatus && !userData.companies.length && router.pathname.includes("/add-company") &&
+                        children
                     }
                 </div>
             </div>

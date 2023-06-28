@@ -199,15 +199,7 @@ export default function PanelLayout({children}) {
                                         <span className="text-secondary">لیست نویسندگان</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/admin/ads/1"}>
-                                    <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("ads") && !routerPath.includes("ads-requests") && "active"}`}>
-                                        <ListAltIcon
-                                            className={`${routerPath.includes("ads") && !routerPath.includes("ads-requests") && "color-my-purple"}`}
-                                        ></ListAltIcon>
-                                        <span className="text-secondary"> لیست تبلیغات فعال</span>
-                                    </MenuItem>
-                                </Link>
+
                                 <Link href={"/admin/selected-posts/1"}>
                                     <MenuItem
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("selected-posts") && "active"}`}>
@@ -248,6 +240,53 @@ export default function PanelLayout({children}) {
                                     <div className="panel-title-parent w-100">
                                         <span
                                             className="panel-main-title- text-capitalize panel-header-title text-secondary">
+                                            تبلیغات
+                                        </span>
+                                    </div>
+                                    <span className="mt-1 ms-2">
+                                   <i className="fa fa-angle-down text-secondary"></i>
+                                </span>
+                                </div>
+                                <Link href={"/admin/ads/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("ads") && !routerPath.includes("ads-requests")  && !routerPath.includes("ads-positions") && !routerPath.includes("ads-categories") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("ads") && !routerPath.includes("ads-positions") && !routerPath.includes("ads-categories") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary"> لیست تبلیغات فعال</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/ads-requests/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("ads-requests") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("ads-requests") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary"> لیست درخواست تبلیغات</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/ads-positions/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("ads-positions") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("ads-positions") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary"> جایگاه های تبلیغات</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/ads-categories/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("ads-categories") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("ads-categories") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary">دسته بندی تبلیغات</span>
+                                    </MenuItem>
+                                </Link>
+                                <div className="service-section-opener d-flex flex-row">
+                                    <div className="panel-title-parent w-100">
+                                        <span
+                                            className="panel-main-title- text-capitalize panel-header-title text-secondary">
                                            درخواست ها
                                         </span>
                                     </div>
@@ -280,15 +319,6 @@ export default function PanelLayout({children}) {
                                             className={`${routerPath.includes("company-requests") && "color-my-purple"}`}
                                         ></AddTaskIcon>
                                         <span className="text-secondary">درخواست های ثبت شرکت</span>
-                                    </MenuItem>
-                                </Link>
-                                <Link href={"/admin/ads-requests/1"}>
-                                    <MenuItem
-                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("ads-requests") && "active"}`}>
-                                        <ListAltIcon
-                                            className={`${routerPath.includes("ads-requests") && "color-my-purple"}`}
-                                        ></ListAltIcon>
-                                        <span className="text-secondary"> لیست درخواست تبلیغات</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/admin/newsLetters/1"}>

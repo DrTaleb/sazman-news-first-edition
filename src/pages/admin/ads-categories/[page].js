@@ -33,12 +33,12 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
-    {id: 'id', label: '#', minWidth: 170},
+    {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'title', label: 'عنوان', minWidth: 170, align: "left"},
 ];
 
 
-export default function Companies() {
+export default function AdsPositions() {
     const rows = []
     const router = useRouter()
     const [DATA, setDATA] = useState({})
@@ -60,7 +60,7 @@ export default function Companies() {
     }
 
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/catalogs/${router.query.page}?${searchCategory}=${nameSearch}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-categories/${router.query.page}?${searchCategory}=${nameSearch}`)
         const data = await res.json()
         await setDATA(data)
         await setPage(data.data.current_page)
@@ -82,13 +82,13 @@ export default function Companies() {
         DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`,`${item.company_id}`,)))
     }
     const editHandler = (id) => {
-        router.push(`/admin/catalogs/edit/${id}`)
+        router.push(`/admin/ads-categories/edit/${id}`)
     }
-    const formData = new FormData();
     const blockHandler = async (id) => {
         const selectedCatalog = DATA.data.data.find(item => item.id == id)
+        console.log(selectedCatalog)
         Swal.fire({
-            text: `آیا از ${selectedCatalog.status === "1" ? "" : "رفع"} غیر فعال سازی کاتالوگ مورد نظر اطمینان دارید؟`,
+            text: `آیا از ${selectedCatalog.status === "1" ? "" : "رفع"} غیر فعال سازی دسته مورد نظر اطمینان دارید؟`,
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: "خیر",
@@ -97,20 +97,21 @@ export default function Companies() {
             confirmButtonText: 'بله'
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await formData.append("title", selectedCatalog.title)
-                await formData.append("status", selectedCatalog.status === "1" ? 0 : 1)
                 try {
-                    const res = await axios.put(`${process.env.LOCAL_URL}/api/admin/catalogs/edit/${id}`, formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                            }
-                        }
-                    )
-                    if (res.data.status) {
+                    const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-categories/edit/${id}`,{
+                        method : "PUT",
+                        body : JSON.stringify({
+                            title : selectedCatalog.title,
+                            status : selectedCatalog.status === "1" ? 0 : 1
+                        })
+                    })
+                    const data = await res.json()
+                    console.log(data)
+                    if (data.status) {
                         Nprogress.done()
                         await Swal.fire({
                             icon: 'success',
-                            text: ` کاتالوگ ${selectedCatalog.title}${selectedCatalog.status === "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
+                            text: ` دسته ${selectedCatalog.title}${selectedCatalog.status === "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
                         })
                         await setGeData(!getData)
                     } else {
@@ -143,9 +144,10 @@ export default function Companies() {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`${process.env.LOCAL_URL}/api/admin/catalogs/delete/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/ads-categories/delete/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
+                        console.log(data)
                         if (data.status) {
                             Nprogress.done()
                             Swal.fire(
@@ -154,15 +156,16 @@ export default function Companies() {
                                 'success'
                             )
                             setGeData(!getData)
-                        } else {
+                        } else if (!data.status && data.errors[0] === "this position exists data") {
                             Nprogress.done()
                             Swal.fire(
                                 '',
-                                "مشکلی وجود دارد دوباره تلاش کنید",
+                                "در حال حاضر در این محل تبلیغ وجود دارد",
                                 'error'
                             )
                         }
                     })
+                    Nprogress.done()
                 } catch {
                     Nprogress.done()
                     Swal.fire(
@@ -175,12 +178,8 @@ export default function Companies() {
         })
     }
 
-    const goToCompany = (id)=>{
-        router.push(`/admin/companies/edit-company/${id}`)
-    }
-
     const clickHandler = async (event, value) => {
-        await router.push(`/admin/catalogs/${value}`)
+        await router.push(`/admin/ads-categories/${value}`)
         await setGeData(!getData)
     }
 
@@ -200,8 +199,15 @@ export default function Companies() {
                 <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                     <div className="panel-title-parent w-100">
                         <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                            کاتالوگ ها
+                             دسته بندی تبلیغات
                         </h5>
+                    </div>
+                    <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                        <div className={"d-flex flex-row justify-content-center"}>
+                            <Link href={"/admin/ads-categories/add"} className={"ps-2"}>
+                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن دسته</Button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 <Paper className={"p-md-3 pt-3 mt-3"} sx={{width: '100%', overflow: 'hidden', boxShadow: "0 0 .4rem rgba(0, 0, 0, .1)"}}>
@@ -224,7 +230,6 @@ export default function Companies() {
                                 onChange={handleSearchCategory}
                             >
                                 <MenuItem value={"title"}>عنوان</MenuItem>
-                                <MenuItem value={"company_title"}>شرکت مربوطه</MenuItem>
                             </Select>
                         </FormControl>
                         <Button variant={"contained"} onClick={search} className={"align-self-center bg-my-purple"}>
@@ -244,9 +249,6 @@ export default function Companies() {
                                             {column.label}
                                         </TableCell>
                                     ))}
-                                    <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                        شرکت مربوطه
-                                    </TableCell>
                                     <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                         وضعیت نمایش
                                     </TableCell>
@@ -271,13 +273,6 @@ export default function Companies() {
                                                 );
                                             })}
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <Tooltip title="مشاهده اکانت شرکت">
-                                                    <Button variant={"outlined"} onClick={()=> goToCompany(row.companyId)}>
-                                                        مشاهده اکانت شرکت
-                                                    </Button>
-                                                </Tooltip>
-                                            </TableCell>
-                                            <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                                 {
                                                     row.status === "فعال" ?
                                                         <Badge bg={"success"} className={"px-3 py-2"}>
@@ -290,7 +285,7 @@ export default function Companies() {
                                                 }
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <Tooltip title="مشاهده و ویرایش کاتالوگ">
+                                                <Tooltip title="مشاهده و ویرایش دسته">
                                                     <IconButton color={"warning"}
                                                                 onClick={() => editHandler(row.id)}
                                                     >
@@ -314,7 +309,7 @@ export default function Companies() {
                                                             </IconButton>
                                                         </Tooltip>
                                                 }
-                                                <Tooltip title={"حذف کاتالوگ"}>
+                                                <Tooltip title={"حذف دسته"}>
                                                     <IconButton color={"error"}
                                                                 onClick={() => deleteHandler(row.id)}
                                                     >
@@ -350,11 +345,18 @@ export default function Companies() {
             <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                 <div className="panel-title-parent w-100">
                     <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                        کاتالوگ ها
+                        دسته بندی تبلیغات
                     </h5>
                 </div>
+                <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
+                    <div className={"d-flex flex-row justify-content-center"}>
+                        <Link href={"/admin/ads-categories/add"} className={"ps-2"}>
+                            <Button variant={"contained"} className={"bg-my-purple"}>افزودن دسته</Button>
+                        </Link>
+                    </div>
+                </div>
             </div>
-            <Paper className={"pb-3 rounded-4 shadow-sm"}
+            <Paper className={"pb-3 rounded-4 shadow-sm mt-3"}
                    sx={{width: '100%', overflow: 'hidden'}}>
                 <TableContainer sx={{maxHeight: 600}}>
                     <Table stickyHeader aria-label="sticky table">
