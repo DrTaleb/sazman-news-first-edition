@@ -26,7 +26,8 @@ const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'companyName', label: 'نام شرکت', minWidth: 170, align: "left"},
     {id: 'price', label: 'قیمت', minWidth: 170, align: "left"},
-    {id: 'status', label: 'وضعیت', minWidth: 170, align: "left"},
+    {id: 'plan', label: 'پلن', minWidth: 170, align: "left"},
+    {id: 'package_id', label: 'آیدی پکیج', minWidth: 170, align: "left"},
 ];
 
 
@@ -52,7 +53,7 @@ export default function Packages() {
     }
 
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/orders/1?page=${router.query.page}&${searchCategory}=${nameSearch}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/orders/3?page=${router.query.page}&${searchCategory}=${nameSearch}`)
         const data = await res.json()
         await setDATA(data)
         await setPage(data.data.current_page)
@@ -66,12 +67,12 @@ export default function Packages() {
         dataFetch()
     }, [getData])
 
-    function createData(id, companyName,price, status) {
-        return {id, companyName, price, status};
+    function createData(id, companyName,plan,package_id,price, status) {
+        return {id, companyName,plan,package_id, price, status};
     }
 
     if (DATA.status) {
-        DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.company.title}`, `${item.price} تومان`,`${item.status}`)))
+        DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.company ? item.company.title : ""}`,`${item.details.plan.title}` ,`${item.details.plan.package_id}`,`${item.price} تومان`,`${item.status}`)))
     }
 
     const clickHandler = async (event, value) => {

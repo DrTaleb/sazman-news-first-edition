@@ -57,12 +57,12 @@ export default function TopNav() {
         return(
             <Fragment>
                 <Tooltip title="منوی کاربری">
-                    <Fab color="text" className={"bg-white shadow-sm"} size={"small"}
+                    <Fab color="text" className={"bg-white content"} size={"small"}
                          onClick={handleClick}
                          aria-controls={open ? 'account-menu' : undefined}
                          aria-haspopup="true"
                          aria-expanded={open ? 'true' : undefined}>
-                        <PersonIcon className={"color-my-purple"}/>
+                        <PersonIcon className={"text-dark"}/>
                     </Fab>
                 </Tooltip>
                 <Menu
@@ -158,8 +158,8 @@ export default function TopNav() {
         return(
             <Link href={"/login"}>
                 <Tooltip title={"ورود یا عضویت"}>
-                    <Fab color="text" className={"bg-white shadow-sm"} size={"small"}>
-                        <LoginIcon className={"color-my-purple"}/>
+                    <Fab color="text" className={"bg-white content"} size={"small"}>
+                        <LoginIcon className={"text-dark"}/>
                     </Fab>
                 </Tooltip>
             </Link>
@@ -168,10 +168,10 @@ export default function TopNav() {
 
     return (
         <Fragment>
-            <Navbar sticky={"top"} className={`shadow-sm bg-my-purple ${styles.dirSmLtr}`}>
+            <Navbar sticky={"top"} className={`shadow bg-light ${styles.dirSmLtr}`}>
                 <Container fluid={true} className={"mx-md-5 mx-2"}>
                     <Navbar.Brand>
-                        <Link href={"/"} className={"text-white"}>
+                        <Link href={"/"} className={"text-dark"}>
                             {/*<Image className={styles.mainLogo} src={"/img/main-paya360-logo.webp"}/>*/}
                             سازمان نیوز
                         </Link>
@@ -179,11 +179,11 @@ export default function TopNav() {
                     <Navbar.Toggle/>
                     <div className={"d-none d-md-flex justify-content-end gap-3"}>
                         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', gap: "10px" }}>
-                            <Fab size={"small"}  className={"bg-white shadow-sm color-my-purple"}>
+                            <Fab size={"small"}  className={"bg-white content text-dark"}>
                                 <BedtimeRoundedIcon/>
                             </Fab>
                             <Link href={"/search"}>
-                                <Fab  className={"bg-white shadow-sm color-my-purple"} size={"small"}>
+                                <Fab  className={"bg-white content text-dark"} size={"small"}>
                                     <SearchIcon/>
                                 </Fab>
                             </Link>

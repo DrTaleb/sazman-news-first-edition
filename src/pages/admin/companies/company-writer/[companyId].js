@@ -12,6 +12,8 @@ import {Button, styled} from "@mui/material";
 import {useRouter} from "next/router";
 import Tooltip from "@mui/material/Tooltip";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import Image from "next/image";
+import Avatar from "@mui/material/Avatar";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
@@ -31,7 +33,7 @@ export default function Writers({data}) {
     }
 
     DATA.map(item => rows.push(createData(`${item.id}`, `${item.photo}`, `${item.firstname}`, `${item.lastname}`, `${item.user.mobile}`, )))
-
+    console.log(DATA)
     const viewHandler = (id)=>{
         router.push(`/admin/writers/view/${id}`)
     }
@@ -81,8 +83,12 @@ export default function Writers({data}) {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                         <TableCell sx={{width: "100px"}}>
-                                            <img alt={""} className={"w-100"}
-                                                 src={`https://newsapi.deltagroup.ir/${row.photo}`}/>
+                                            {
+                                                row.photo !== "null" ?
+                                                    <Image alt={""} className={"rounded-circle"} width={40} height={40} src={`${process.env.SERVER_URL}${row.photo}`}/>
+                                                    :
+                                                    <Avatar width={60} height={60}></Avatar>
+                                            }
                                         </TableCell>
                                         {columns.map((column) => {
                                             const value = row[column.id];

@@ -134,12 +134,13 @@ export default function EditPosts({data}) {
 
             await formData.append("subtitle", subtitle)
 
-
             if (file){
                 await formData.append("image", file)
             }
 
             await formData.append("category_id", data.data.category_id)
+
+            await formData.append("type", data.data.type)
 
             await formData.append("writer_id", data.data.writer_id)
 

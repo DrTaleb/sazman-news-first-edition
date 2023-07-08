@@ -5,7 +5,7 @@ import Tooltip from "@mui/material/Tooltip";
 function HotNewsItem(props) {
 
     return (
-        <Link href={`/post/${props.title}`} className="news-card">
+        <Link href={`/post/${props.id}`} className="news-card">
             <img src={`${process.env.SERVER_URL}${props.image}`} className="news-card-image"
                  alt=""/>
             <div className="news-card-overlay">

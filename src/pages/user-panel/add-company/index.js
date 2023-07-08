@@ -1,23 +1,29 @@
 import {Col} from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {FileUploader} from "react-drag-drop-files";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-import {Alert, Breadcrumbs, Button} from "@mui/material";
+import {Alert, Breadcrumbs, Button, Skeleton} from "@mui/material";
 import Container from "react-bootstrap/Container";
 import Swal from "sweetalert2";
 import {useRouter} from "next/router";
+import axios from "axios";
+import Nprogress from "nprogress";
+import AuthContext from "@/Contexts/AuthContext";
 
-export default function AddMenu() {
+
+export default function EditCompany() {
+
+
     const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href={"/admin/companies/1"}>
-            شرکت ها
-        </Link>,
         <Typography key="3" color="text.primary" className={"color-my-purple"}>
-            افزودن اکانت شرکت
+            افزودن اکانت مجموعه
         </Typography>,
     ];
+    const {userData} = useContext(AuthContext)
+
     const router = useRouter()
 
     const [statusOptions] = useState([
@@ -32,260 +38,292 @@ export default function AddMenu() {
     ])
     const [linkTypeList] = useState([
         {
-            label: "مراکز خرید، پاساژها و فروشگاه‌های زنجیره‌ای",
-            value: "مراکز خرید، پاساژها و فروشگاه‌های زنجیره‌ای"
+            label: "تالار عروسی",
+            value: "تالار عروسی"
         },
         {
-            label: "دانشگاه‌ها، مراکز آموزشی و کمک آموزشی و فرهنگسراها",
-            value: "دانشگاه‌ها، مراکز آموزشی و کمک آموزشی و فرهنگسراها"
+            label: "باغ تالار عروسی",
+            value: "باغ تالار عروسی"
         },
         {
-            label: "سفارتخانه‌ها و موسسات بین‌المللی",
-            value: "سفارتخانه‌ها و موسسات بین‌المللی"
+            label: "سالن عقد",
+            value: "باغ تالار عروسی"
         },
         {
-            label: "هتل‌ها، متل‌ها و مراکز اقامتی و گردشگری",
-            value: "هتل‌ها، متل‌ها و مراکز اقامتی و گردشگری"
-        }, {
-            label: "موزه‌ها، گالری‌ها، فرهنگسراها، کتابخانه‌ها و مراکز فرهنگی",
-            value: "موزه‌ها، گالری‌ها، فرهنگسراها، کتابخانه‌ها و مراکز فرهنگی"
+            label: "آتلیه فیلم و عکس",
+            value: "آتلیه فیلم و عکس"
         },
         {
-            label: "باشگاه‌ها و اماکن ورزشی",
-            value: "باشگاه‌ها و اماکن ورزشی"
+            label: "آرایشگاه و زیبایی",
+            value: "آرایشگاه و زیبایی"
         },
         {
-            label: "مراکز سرگرمی، تفریحی، شهربازی و اوقات فراغت",
-            value: "مراکز سرگرمی، تفریحی، شهربازی و اوقات فراغت"
+            label: "تشریفات مجالس",
+            value: "تشریفات مجالس"
         },
         {
-            label: "سایر مراکز و اماکن",
-            value: "سایر مراکز و اماکن"
+            label: "مزون",
+            value: "مزون"
         },
         {
-            label: "انتشارات، رسانه و کتاب",
-            value: "انتشارات، رسانه و کتاب"
+            label: "سایر",
+            value: "سایر"
         },
-        {
-            label: "خدمات تبلیغات، بازاریابی و روابط عمومی",
-            value: "خدمات تبلیغات، بازاریابی و روابط عمومی"
-        }, {
-            label: "خدمات توریسم، گردشگری، مسافرتی، خطوط هوایی",
-            value: "خدمات توریسم، گردشگری، مسافرتی، خطوط هوایی"
-        },
-        {
-            label: "خدمات حقوقی و قانونی و وکالت",
-            value: "خدمات حقوقی و قانونی و وکالت"
-        },
-        {
-            label: "خدمات حمل و نقل (خدمات دریایی، هوایی، ریلی)",
-            value: "خدمات حمل و نقل (خدمات دریایی، هوایی، ریلی)"
-        },
-        {
-            label: "خدمات طراحی، معماری و دکوراسیون داخلی",
-            value: "خدمات طراحی، معماری و دکوراسیون داخلی"
-        },
-        {
-            label: "تشریفات و خدمات برگزاری رویداد و مراسم",
-            value: "تشریفات و خدمات برگزاری رویداد و مراسم"
-        },
-        {
-            label: "خدمات بازرگانی، صادرات، واردات و گمرکی",
-            value: "خدمات بازرگانی، صادرات، واردات و گمرکی"
-        },
-
-
-        {
-            label: "سایر فعالیت‌های خدماتی",
-            value: "سایر فعالیت‌های خدماتی"
-        },
-        {
-            label: "صنعت دارو، درمان و بهداشت، پزشکی، دندانپزشکی و بیمارستانی",
-            value: "صنعت دارو، درمان و بهداشت، پزشکی، دندانپزشکی و بیمارستانی"
-        },
-        {
-            label: "مواد شوینده، پاک کننده، بهداشتی و سلولزی",
-            value: "مواد شوینده، پاک کننده، بهداشتی و سلولزی"
-        },
-        {
-            label: "صنایع بالابرها، آسانسور، پله برقی",
-            value: "صنایع بالابرها، آسانسور، پله برقی"
-        },
-        {
-            label: "نفت، گاز، پالایش و پتروشیمی",
-            value: "نفت، گاز، پالایش و پتروشیمی"
-        },
-        {
-            label: "صنایع غذایی و آشامیدنی",
-            value: "صنایع غذایی و آشامیدنی"
-        },
-        {
-            label: "صنعت چوب، مبلمان، دکوراسیون، آشپزخانه و تجهیزات اداری",
-            value: "صنعت چوب، مبلمان، دکوراسیون، آشپزخانه و تجهیزات اداری"
-        }, {
-            label: "صنعت پلیمر، لاستیک، پلاستیک، رنگ، رزین و کامپوزیت",
-            value: "صنعت پلیمر، لاستیک، پلاستیک، رنگ، رزین و کامپوزیت"
-        }, {
-            label: "صنعت مخابرات، برق، الکترونیک، صوتی و تصویری",
-            value: "صنعت مخابرات، برق، الکترونیک، صوتی و تصویری"
-        }, {
-            label: "صنعت کاشی، سرامیک و چینی",
-            value: "صنعت کاشی، سرامیک و چینی"
-        }, {
-            label: "مسکن، ساخت و ساز و مصالح ساختمانی",
-            value: "مسکن، ساخت و ساز و مصالح ساختمانی"
-        }, {
-            label: "کشاورزی، دامداری و طیور",
-            value: "کشاورزی، دامداری و طیور"
-        }, {
-            label: "خودرو، موتورسیکلت، قطعه‌سازی و لوازم یدکی",
-            value: "خودرو، موتورسیکلت، قطعه‌سازی و لوازم یدکی"
-        }, {
-            label: "پوشاک، کیف و کفش، چرم",
-            value: "پوشاک، کیف و کفش، چرم"
-        }, {
-            label: "صنعت نساجی، فرش، موکت و کفپوش",
-            value: "صنعت نساجی، فرش، موکت و کفپوش"
-        },
-        {
-            label: "صنعت ارتباطات، فناوری اطلاعات و خدمات اینترنت",
-            value: "صنعت ارتباطات، فناوری اطلاعات و خدمات اینترنت"
-        },
-        {
-            label: "صنعت آب و فاضلاب و تاسیسات",
-            value: "صنعت آب و فاضلاب و تاسیسات"
-        },
-        {
-            label: "صنایع معدنی، ماشین آلات و تجهیزات وابسته",
-            value: "صنایع معدنی، ماشین آلات و تجهیزات وابسته"
-        },
-        {
-            label: "متالورژی، فولاد",
-            value: "متالورژی، فولاد"
-        },
-        {
-            label: "هوانوردی و هوا فضا",
-            value: "هوانوردی و هوا فضا"
-        },
-        {
-            label: "صنعت آرایشی و بهداشتی",
-            value: "صنعت آرایشی و بهداشتی"
-        },
-        {
-            label: "صنایع دستی و اقلام فرهنگی",
-            value: "صنایع دستی و اقلام فرهنگی"
-        },
-        {
-            label: "صنعت چاپ و بسته‌بندی",
-            value: "صنعت چاپ و بسته‌بندی"
-        }, {
-            label: "حمل و نقل زمینی، هوایی، دریایی و ریلی",
-            value: "حمل و نقل زمینی، هوایی، دریایی و ریلی"
-        },
-        {
-            label: "صنعت لوازم خانگی و تجیهزات آشپزخانه",
-            value: "صنعت لوازم خانگی و تجیهزات آشپزخانه"
-        },
-        {
-            label: "طلا، جواهر، نقره، زیورآلات ، ساعت و عینک",
-            value: "طلا، جواهر، نقره، زیورآلات ، ساعت و عینک"
-        },
-        {
-            label: "صنعت پخش و توزیع کالا و خدمات مرتبط",
-            value: "صنعت پخش و توزیع کالا و خدمات مرتبط"
-        },
-        {
-            label: "صنعت خرده‌فروشی، فروشگاه‌های زنجیره‌ای، فرانچایز و تجهیزات فروشگاهی",
-            value: "صنعت خرده‌فروشی، فروشگاه‌های زنجیره‌ای، فرانچایز و تجهیزات فروشگاهی"
-        },
-        {
-            label: "صنعت تجهیزات ایمنی، امنیتی، حفاظتی و اطفاء حریق",
-            value: "صنعت تجهیزات ایمنی، امنیتی، حفاظتی و اطفاء حریق"
-        },
-        {
-            label: "صنایع تبدیلی، بازیافت و محیط زیستی",
-            value: "صنایع تبدیلی، بازیافت و محیط زیستی"
-        },
-        {
-            label: "صنایع دیجیتال، رایانه و کامپیوتر، سخت افزار و نرم افزار",
-            value: "صنایع دیجیتال، رایانه و کامپیوتر، سخت افزار و نرم افزار"
-        },
-        {
-            label: "صنعت بورس، بانک، بانکداری، خدمات مالی و بیمه، کارگزاری بورس",
-            value: "صنعت بورس، بانک، بانکداری، خدمات مالی و بیمه، کارگزاری بورس"
-        },
-        {
-            label: "صنعت تجهیزات و دستگاه‌های ورزشی",
-            value: "صنعت تجهیزات و دستگاه‌های ورزشی"
-        },
-        {
-            label: "سایر صنایع",
-            value: "سایر صنایع"
-        },
-        {
-            label: "ماشین آلات و ابزارهای صنعت",
-            value: "ماشین آلات و ابزارهای صنعت"
-        },
-        {
-            label: "صنایع و خدمات مرتبط با تلفن‌های همراه ( موبایل)",
-            value: "صنایع و خدمات مرتبط با تلفن‌های همراه ( موبایل)"
-        },
-        {
-            label: "تجارت الکترونیک و خدمات مبتنی بر وب",
-            value: "تجارت الکترونیک و خدمات مبتنی بر وب"
-        },
-        {
-            label: "صنایع دانش‌بنیان و دارای فناوری پیشرفته همچون نانوتکنولوژی",
-            value: "صنایع دانش‌بنیان و دارای فناوری پیشرفته همچون نانوتکنولوژی"
-        },
-        {
-            label: "صنایع دیجیتال، رایانه و کامپیوتر، سخت افزار و نرم افزار",
-            value: "صنایع دیجیتال، رایانه و کامپیوتر، سخت افزار و نرم افزار"
-        },
-        {
-            label: "سایر صنایع مربوط به فناوری‌های پیشرفته",
-            value: "سایر صنایع مربوط به فناوری‌های پیشرفته"
-        },
-        {
-            label: "لوازم خانگی",
-            value: "لوازم خانگی"
-        },
-        {
-            label: "ابزار و یراق",
-            value: "ابزار و یراق"
-        },
-        {
-            label: "وزارتخانه‌ها، ارگان‌ها، نهادها و سازمان‌های دولتی و حکومتی",
-            value: "وزارتخانه‌ها، ارگان‌ها، نهادها و سازمان‌های دولتی و حکومتی"
-        },
-        {
-            label: "انجمن‌های علمی و تخصصی",
-            value: "انجمن‌های علمی و تخصصی"
-        },
-        {
-            label: "اتحادیه‌ها و انجمن‌های صنفی",
-            value: "اتحادیه‌ها و انجمن‌های صنفی"
-        },
-        {
-            label: "نهادها و انجمن‌های خیریه و غیرانتفاعی",
-            value: "نهادها و انجمن‌های خیریه و غیرانتفاعی"
-        },
-        {
-            label: "فدراسیون‌ها و تشکل‌های ورزشی",
-            value: "فدراسیون‌ها و تشکل‌های ورزشی"
-        },
-        {
-            label: "سایر نهادها، سازمان‌ها و انجمن‌ها",
-            value: "سایر نهادها، سازمان‌ها و انجمن‌ها"
-        }
+        // {
+        //     label: "مراکز خرید، پاساژها و فروشگاه‌های زنجیره‌ای",
+        //     value: "مراکز خرید، پاساژها و فروشگاه‌های زنجیره‌ای"
+        // },
+        // {
+        //     label: "دانشگاه‌ها، مراکز آموزشی و کمک آموزشی و فرهنگسراها",
+        //     value: "دانشگاه‌ها، مراکز آموزشی و کمک آموزشی و فرهنگسراها"
+        // },
+        // {
+        //     label: "سفارتخانه‌ها و موسسات بین‌المللی",
+        //     value: "سفارتخانه‌ها و موسسات بین‌المللی"
+        // },
+        // {
+        //     label: "هتل‌ها، متل‌ها و مراکز اقامتی و گردشگری",
+        //     value: "هتل‌ها، متل‌ها و مراکز اقامتی و گردشگری"
+        // }, {
+        //     label: "موزه‌ها، گالری‌ها، فرهنگسراها، کتابخانه‌ها و مراکز فرهنگی",
+        //     value: "موزه‌ها، گالری‌ها، فرهنگسراها، کتابخانه‌ها و مراکز فرهنگی"
+        // },
+        // {
+        //     label: "باشگاه‌ها و اماکن ورزشی",
+        //     value: "باشگاه‌ها و اماکن ورزشی"
+        // },
+        // {
+        //     label: "مراکز سرگرمی، تفریحی، شهربازی و اوقات فراغت",
+        //     value: "مراکز سرگرمی، تفریحی، شهربازی و اوقات فراغت"
+        // },
+        // {
+        //     label: "سایر مراکز و اماکن",
+        //     value: "سایر مراکز و اماکن"
+        // },
+        // {
+        //     label: "انتشارات، رسانه و کتاب",
+        //     value: "انتشارات، رسانه و کتاب"
+        // },
+        // {
+        //     label: "خدمات تبلیغات، بازاریابی و روابط عمومی",
+        //     value: "خدمات تبلیغات، بازاریابی و روابط عمومی"
+        // }, {
+        //     label: "خدمات توریسم، گردشگری، مسافرتی، خطوط هوایی",
+        //     value: "خدمات توریسم، گردشگری، مسافرتی، خطوط هوایی"
+        // },
+        // {
+        //     label: "خدمات حقوقی و قانونی و وکالت",
+        //     value: "خدمات حقوقی و قانونی و وکالت"
+        // },
+        // {
+        //     label: "خدمات حمل و نقل (خدمات دریایی، هوایی، ریلی)",
+        //     value: "خدمات حمل و نقل (خدمات دریایی، هوایی، ریلی)"
+        // },
+        // {
+        //     label: "خدمات طراحی، معماری و دکوراسیون داخلی",
+        //     value: "خدمات طراحی، معماری و دکوراسیون داخلی"
+        // },
+        // {
+        //     label: "تشریفات و خدمات برگزاری رویداد و مراسم",
+        //     value: "تشریفات و خدمات برگزاری رویداد و مراسم"
+        // },
+        // {
+        //     label: "خدمات بازرگانی، صادرات، واردات و گمرکی",
+        //     value: "خدمات بازرگانی، صادرات، واردات و گمرکی"
+        // },
+        //
+        //
+        // {
+        //     label: "سایر فعالیت‌های خدماتی",
+        //     value: "سایر فعالیت‌های خدماتی"
+        // },
+        // {
+        //     label: "صنعت دارو، درمان و بهداشت، پزشکی، دندانپزشکی و بیمارستانی",
+        //     value: "صنعت دارو، درمان و بهداشت، پزشکی، دندانپزشکی و بیمارستانی"
+        // },
+        // {
+        //     label: "مواد شوینده، پاک کننده، بهداشتی و سلولزی",
+        //     value: "مواد شوینده، پاک کننده، بهداشتی و سلولزی"
+        // },
+        // {
+        //     label: "صنایع بالابرها، آسانسور، پله برقی",
+        //     value: "صنایع بالابرها، آسانسور، پله برقی"
+        // },
+        // {
+        //     label: "نفت، گاز، پالایش و پتروشیمی",
+        //     value: "نفت، گاز، پالایش و پتروشیمی"
+        // },
+        // {
+        //     label: "صنایع غذایی و آشامیدنی",
+        //     value: "صنایع غذایی و آشامیدنی"
+        // },
+        // {
+        //     label: "صنعت چوب، مبلمان، دکوراسیون، آشپزخانه و تجهیزات اداری",
+        //     value: "صنعت چوب، مبلمان، دکوراسیون، آشپزخانه و تجهیزات اداری"
+        // }, {
+        //     label: "صنعت پلیمر، لاستیک، پلاستیک، رنگ، رزین و کامپوزیت",
+        //     value: "صنعت پلیمر، لاستیک، پلاستیک، رنگ، رزین و کامپوزیت"
+        // }, {
+        //     label: "صنعت مخابرات، برق، الکترونیک، صوتی و تصویری",
+        //     value: "صنعت مخابرات، برق، الکترونیک، صوتی و تصویری"
+        // }, {
+        //     label: "صنعت کاشی، سرامیک و چینی",
+        //     value: "صنعت کاشی، سرامیک و چینی"
+        // }, {
+        //     label: "مسکن، ساخت و ساز و مصالح ساختمانی",
+        //     value: "مسکن، ساخت و ساز و مصالح ساختمانی"
+        // }, {
+        //     label: "کشاورزی، دامداری و طیور",
+        //     value: "کشاورزی، دامداری و طیور"
+        // }, {
+        //     label: "خودرو، موتورسیکلت، قطعه‌سازی و لوازم یدکی",
+        //     value: "خودرو، موتورسیکلت، قطعه‌سازی و لوازم یدکی"
+        // }, {
+        //     label: "پوشاک، کیف و کفش، چرم",
+        //     value: "پوشاک، کیف و کفش، چرم"
+        // }, {
+        //     label: "صنعت نساجی، فرش، موکت و کفپوش",
+        //     value: "صنعت نساجی، فرش، موکت و کفپوش"
+        // },
+        // {
+        //     label: "صنعت ارتباطات، فناوری اطلاعات و خدمات اینترنت",
+        //     value: "صنعت ارتباطات، فناوری اطلاعات و خدمات اینترنت"
+        // },
+        // {
+        //     label: "صنعت آب و فاضلاب و تاسیسات",
+        //     value: "صنعت آب و فاضلاب و تاسیسات"
+        // },
+        // {
+        //     label: "صنایع معدنی، ماشین آلات و تجهیزات وابسته",
+        //     value: "صنایع معدنی، ماشین آلات و تجهیزات وابسته"
+        // },
+        // {
+        //     label: "متالورژی، فولاد",
+        //     value: "متالورژی، فولاد"
+        // },
+        // {
+        //     label: "هوانوردی و هوا فضا",
+        //     value: "هوانوردی و هوا فضا"
+        // },
+        // {
+        //     label: "صنعت آرایشی و بهداشتی",
+        //     value: "صنعت آرایشی و بهداشتی"
+        // },
+        // {
+        //     label: "صنایع دستی و اقلام فرهنگی",
+        //     value: "صنایع دستی و اقلام فرهنگی"
+        // },
+        // {
+        //     label: "صنعت چاپ و بسته‌بندی",
+        //     value: "صنعت چاپ و بسته‌بندی"
+        // }, {
+        //     label: "حمل و نقل زمینی، هوایی، دریایی و ریلی",
+        //     value: "حمل و نقل زمینی، هوایی، دریایی و ریلی"
+        // },
+        // {
+        //     label: "صنعت لوازم خانگی و تجیهزات آشپزخانه",
+        //     value: "صنعت لوازم خانگی و تجیهزات آشپزخانه"
+        // },
+        // {
+        //     label: "طلا، جواهر، نقره، زیورآلات ، ساعت و عینک",
+        //     value: "طلا، جواهر، نقره، زیورآلات ، ساعت و عینک"
+        // },
+        // {
+        //     label: "صنعت پخش و توزیع کالا و خدمات مرتبط",
+        //     value: "صنعت پخش و توزیع کالا و خدمات مرتبط"
+        // },
+        // {
+        //     label: "صنعت خرده‌فروشی، فروشگاه‌های زنجیره‌ای، فرانچایز و تجهیزات فروشگاهی",
+        //     value: "صنعت خرده‌فروشی، فروشگاه‌های زنجیره‌ای، فرانچایز و تجهیزات فروشگاهی"
+        // },
+        // {
+        //     label: "صنعت تجهیزات ایمنی، امنیتی، حفاظتی و اطفاء حریق",
+        //     value: "صنعت تجهیزات ایمنی، امنیتی، حفاظتی و اطفاء حریق"
+        // },
+        // {
+        //     label: "صنایع تبدیلی، بازیافت و محیط زیستی",
+        //     value: "صنایع تبدیلی، بازیافت و محیط زیستی"
+        // },
+        // {
+        //     label: "صنایع دیجیتال، رایانه و کامپیوتر، سخت افزار و نرم افزار",
+        //     value: "صنایع دیجیتال، رایانه و کامپیوتر، سخت افزار و نرم افزار"
+        // },
+        // {
+        //     label: "صنعت بورس، بانک، بانکداری، خدمات مالی و بیمه، کارگزاری بورس",
+        //     value: "صنعت بورس، بانک، بانکداری، خدمات مالی و بیمه، کارگزاری بورس"
+        // },
+        // {
+        //     label: "صنعت تجهیزات و دستگاه‌های ورزشی",
+        //     value: "صنعت تجهیزات و دستگاه‌های ورزشی"
+        // },
+        // {
+        //     label: "سایر صنایع",
+        //     value: "سایر صنایع"
+        // },
+        // {
+        //     label: "ماشین آلات و ابزارهای صنعت",
+        //     value: "ماشین آلات و ابزارهای صنعت"
+        // },
+        // {
+        //     label: "صنایع و خدمات مرتبط با تلفن‌های همراه ( موبایل)",
+        //     value: "صنایع و خدمات مرتبط با تلفن‌های همراه ( موبایل)"
+        // },
+        // {
+        //     label: "تجارت الکترونیک و خدمات مبتنی بر وب",
+        //     value: "تجارت الکترونیک و خدمات مبتنی بر وب"
+        // },
+        // {
+        //     label: "صنایع دانش‌بنیان و دارای فناوری پیشرفته همچون نانوتکنولوژی",
+        //     value: "صنایع دانش‌بنیان و دارای فناوری پیشرفته همچون نانوتکنولوژی"
+        // },
+        // {
+        //     label: "صنایع دیجیتال، رایانه و کامپیوتر، سخت افزار و نرم افزار",
+        //     value: "صنایع دیجیتال، رایانه و کامپیوتر، سخت افزار و نرم افزار"
+        // },
+        // {
+        //     label: "سایر صنایع مربوط به فناوری‌های پیشرفته",
+        //     value: "سایر صنایع مربوط به فناوری‌های پیشرفته"
+        // },
+        // {
+        //     label: "لوازم خانگی",
+        //     value: "لوازم خانگی"
+        // },
+        // {
+        //     label: "ابزار و یراق",
+        //     value: "ابزار و یراق"
+        // },
+        // {
+        //     label: "وزارتخانه‌ها، ارگان‌ها، نهادها و سازمان‌های دولتی و حکومتی",
+        //     value: "وزارتخانه‌ها، ارگان‌ها، نهادها و سازمان‌های دولتی و حکومتی"
+        // },
+        // {
+        //     label: "انجمن‌های علمی و تخصصی",
+        //     value: "انجمن‌های علمی و تخصصی"
+        // },
+        // {
+        //     label: "اتحادیه‌ها و انجمن‌های صنفی",
+        //     value: "اتحادیه‌ها و انجمن‌های صنفی"
+        // },
+        // {
+        //     label: "نهادها و انجمن‌های خیریه و غیرانتفاعی",
+        //     value: "نهادها و انجمن‌های خیریه و غیرانتفاعی"
+        // },
+        // {
+        //     label: "فدراسیون‌ها و تشکل‌های ورزشی",
+        //     value: "فدراسیون‌ها و تشکل‌های ورزشی"
+        // },
+        // {
+        //     label: "سایر نهادها، سازمان‌ها و انجمن‌ها",
+        //     value: "سایر نهادها، سازمان‌ها و انجمن‌ها"
+        // }
     ])
     const stateList = [
         {
-            label: "آذربايجان شرقي",
+            label: "آذربايجان شرقی",
             value: 1
         },
         {
-            label: "آذربايجان غربي",
+            label: "آذربايجان غربی",
             value: 2
         },
         {
@@ -309,15 +347,15 @@ export default function AddMenu() {
             value: 7
         },
         {
-            label: "چهارمحال بختياري",
+            label: "چهارمحال بختياری",
             value: 8
         },
         {
-            label: "خراسان جنوبي",
+            label: "خراسان جنوبی",
             value: 9
         },
         {
-            label: "خراسان رضوي",
+            label: "خراسان رضوی",
             value: 10
         },
         {
@@ -389,7 +427,7 @@ export default function AddMenu() {
             value: 27
         },
         {
-            label: "مركزي",
+            label: "مركزی",
             value: 28
         },
         {
@@ -439,9 +477,7 @@ export default function AddMenu() {
         31: ["ابركوه", "اردكان", "اشكذر", "بافق", "تفت", "خضرآباد", "زارچ", "طبس", "مهريز", "ميبد", "هرات", "يزد"]
     };
 
-    const [status, setStatus] = useState(0)
-
-    // form input -----------------------------------
+    // form input ---------------------------------------
     const [brandName, setBrandName] = useState("")
     const [brandNameError, setBrandNameError] = useState(true)
     const [companyName, setCompanyName] = useState("")
@@ -451,16 +487,20 @@ export default function AddMenu() {
     const [accountName, setAccountName] = useState("")
     const [accountNameError, setAccountNameError] = useState(true)
     const [desc, setDesc] = useState("")
-    const [descError, setDescError] = useState(false)
+    const [descError, setDescError] = useState(true)
     const [tel, setTel] = useState("")
     const [telError, setTelError] = useState(true)
     const [state, setState] = useState("")
-    const [city, setCity] = useState("لطفا استان را انتخاب کنید")
+    const [city, setCity] = useState("")
     const [cityError, setCityError] = useState(city === "لطفا استان را انتخاب کنید")
-    const [selectedCityList, setSelectedCityList] = useState(["لطفا استان را انتخاب کنید"])
+    const [selectedCityList, setSelectedCityList] = useState([])
     const [address, setAddress] = useState("")
     const [addressError, setAddressError] = useState(true)
+    const [stateLabel, setStateLabel] = useState("")
 
+    useEffect(()=>{
+       state.length && setStateLabel(stateList.find(item => item.value === state).label)
+    },[state])
     const brandNameHandler = (event) => {
         setBrandName(event.target.value)
         event.target.value.length >= 6 && event.target.value.length <= 40 ? setBrandNameError(false) : setBrandNameError(true)
@@ -490,7 +530,7 @@ export default function AddMenu() {
         event.target.value.length ? setAddressError(false) : setAddressError(true)
     };
     const stateHandler = (event) => {
-        setState(event.target.value)
+        setState(stateList.find(item => item.value === event.target.value).value)
         setSelectedCityList(cityList[event.target.value])
     };
 
@@ -499,59 +539,89 @@ export default function AddMenu() {
         setCityError(false)
     };
 
-    const statusHandler = (event) => {
-        setStatus(event.target.value)
-    };
 
+    // file inputs ------------------------------
+    const formData = new FormData();
+    const fileTypes = ["JPG", "PNG", "WEBP"];
+    const [logo, setLogo] = useState(null);
+    const [background, setBackground] = useState(null);
+    const handleChangeLogo = (file) => {
+        setLogo(file);
+    };
+    const handleChangeBackground = (file) => {
+        setBackground(file);
+    };
+    // end file inputs ------------------------------
     const submitHandler = async (event) => {
         event.preventDefault()
-        if (brandNameError || companyNameError || activityTypeError || accountNameError || descError || telError || cityError || addressError) {
+        if (brandNameError || companyNameError || activityTypeError || accountNameError || descError || telError || cityError || addressError || !city.length) {
             Swal.fire({
                 icon: 'error',
                 text: "لطفا تمام فیلد ها را پر کنید",
             })
+        }else if (!background || !logo) {
+            Swal.fire({
+                icon: 'error',
+                text: "لطفا فایل ها را به درستی وارد کنید",
+            })
         } else {
+            await formData.append("brand_name", brandName)
+            await formData.append("company_name", companyName)
+            await formData.append("activity_type", activityType)
+            await formData.append("title", accountName)
+            await formData.append("subtitle", desc)
+            await formData.append("phone", tel)
+            await formData.append("city", city)
+            await formData.append("state", stateLabel)
+            await formData.append("address", address)
+            await formData.append("owner_id", userData.id)
+            await formData.append("banner", background)
+            await formData.append("logo", logo)
             try {
-                const res = await fetch(`${process.env.LOCAL_URL}/api/admin/menus/footer`, {
-                    method: "POST",
-                    body: JSON.stringify({})
-                })
-                const data = await res.json()
-                if (data.massage.status) {
-                    Swal.fire({
+                const res = await axios.post(`${process.env.LOCAL_URL}/api/user-panel/add-company`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    }
+                )
+                if (res.data.status) {
+                    Nprogress.done()
+                    await Swal.fire({
                         icon: 'success',
-                        text: "منو ایجاد شد",
+                        text: "مجموعه ثبت شد لطفا منتظر تایید توسط ما باشید",
                     })
-                    router.push("/admin/menus/footer/1")
+                    router.push("/user-panel")
                 } else {
-                    console.log(data.massage)
-                    Swal.fire({
+                    Nprogress.done()
+                    await Swal.fire({
                         icon: 'error',
-                        text: "مشکلی پیش آمده لطفا دوباره تلاش کنید",
+                        text: "مشکلی در سرور ایجاد شده",
                     })
                 }
-            } catch (err) {
-                Swal.fire({
+            } catch {
+                Nprogress.done()
+                await Swal.fire({
                     icon: 'error',
-                    text: "مشکلی در سرور پیش آمده",
+                    text: "مشکلی در سرور ایجاد شده",
                 })
             }
         }
     }
     return (
         <Container>
-            <Breadcrumbs className={"ms-4 py-3"} separator="›" aria-label="breadcrumb">
+            <Breadcrumbs className={"ms-md-4 py-3"} separator="›" aria-label="breadcrumb">
                 {breadcrumbs}
             </Breadcrumbs>
             <div className={"d-flex flex-row justify-content-center"}>
                 <Col xs={12} sm={11} md={8} lg={8} xl={7} className={"bg-white rounded-3 shadow"}>
                     <form>
                         <div className={"d-flex flex-column align-items-center gap-3 py-5"}>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12 d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField className={"w-100"}
                                            label="نام برند، نام تجاری و یا نام کسب و کار"
                                            variant="outlined"
-                                           placeholder={"مثال: شرکت مهندسی آرین سازه"}
+                                           placeholder={"مثال: تالار پذیرایی کوهسر"}
                                            value={brandName}
                                            error={brandNameError}
                                            InputLabelProps={{shrink: true}}
@@ -559,15 +629,16 @@ export default function AddMenu() {
                                 />
                                 <Alert variant={"standard"} color={"warning"} className={"w-100"}>
                                     فعالیت شما با چه نامی صورت می گیرد؟ این نام در کنار اخبار تولیدی شما و تحت عنوان
-                                    منتشر کننده مطلب نمایش داده می‌شود. صفحه رسمی شما هم در اخبار رسمی با این نام
+                                    منتشر کننده مطلب نمایش داده می‌شود. صفحه رسمی شما هم در سازمان نیوز با این نام
                                     ساخته
-                                    می‌شود. توجه: تنها می‌توانید برای شرکتی که در آن مشغول هستید پروفایل ساخته و از
+                                    می‌شود. توجه: تنها می‌توانید برای مجموعه که در آن مشغول هستید پروفایل ساخته و از
                                     سوی
                                     آن مطلب منتشر و توزیع کنید و یا اجازه نامه برای انتشار مطلب از سوی آن داشته
                                     باشید.
                                 </Alert>
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField className={"w-100"}
                                            label="نام حقوقی کسب و کار"
                                            variant="outlined"
@@ -577,11 +648,12 @@ export default function AddMenu() {
                                            onInput={(event) => companyNameHandler(event)}
                                 />
                                 <Alert variant={"standard"} color={"warning"} className={"w-100"}>
-                                    نام ثبت شده در آگهی تاسیس شرکت و روزنامه رسمی در اینجا نوشته شود. در صورتی که
-                                    شرکت ثبت شده ندارید، نام تجاری و یا نام کسب و کارتان را تکرار کنید.
+                                    نام ثبت شده در آگهی تاسیس مجموعه و روزنامه رسمی در اینجا نوشته شود. در صورتی که
+                                    مجموعه ثبت شده ندارید، نام تجاری و یا نام کسب و کارتان را تکرار کنید.
                                 </Alert>
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12 d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField
                                     select
                                     label="حوزه فعالیت"
@@ -597,10 +669,11 @@ export default function AddMenu() {
                                     ))}
                                 </TextField>
                                 <Alert variant={"standard"} color={"warning"} className={"w-100"}>
-                                    صنعت شرکتتان را جستجو و انتخاب کنید
+                                    صنعت مجموعه را جستجو و انتخاب کنید
                                 </Alert>
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField className={"w-100"}
                                            label="نام مورد نظر برای اکانت"
                                            variant="outlined"
@@ -613,9 +686,10 @@ export default function AddMenu() {
                                     کاربران دیگر با این نام ٬ پروفایل شما را مشاهده میکنند .
                                 </Alert>
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField className={"w-100"}
-                                           label="توضیحات در مورد حوزه فعالیت شرکت"
+                                           label="توضیحات در مورد حوزه فعالیت مجموعه"
                                            variant="outlined"
                                            value={desc}
                                            error={descError}
@@ -626,9 +700,10 @@ export default function AddMenu() {
                                     این توضیحات در پروفایل کاربری شما توسط کاربران دیگر مشاهده میشود
                                 </Alert>
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField className={"w-100"}
-                                           label="تلفن شرکت"
+                                           label="تلفن مجموعه"
                                            variant="outlined"
                                            value={tel}
                                            type={"number"}
@@ -638,7 +713,8 @@ export default function AddMenu() {
                                            onInput={(event) => telHandler(event)}
                                 />
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField
                                     select
                                     label="استان"
@@ -653,7 +729,8 @@ export default function AddMenu() {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField
                                     select
                                     label="شهر"
@@ -669,7 +746,8 @@ export default function AddMenu() {
                                     ))}
                                 </TextField>
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
+                            <div
+                                className={"col-md-9 col-12  d-flex flex-column gap-2 border border-1 border-light p-2"}>
                                 <TextField className={"w-100"}
                                            label="آدرس"
                                            variant="outlined"
@@ -679,25 +757,37 @@ export default function AddMenu() {
                                            onInput={(event) => addressHandler(event)}
                                 />
                             </div>
-                            <div className={"w-75 d-flex flex-column gap-2 border border-1 border-light p-2"}>
-                                <TextField
-                                    select
-                                    label="وضعیت"
-                                    className={"w-100"}
-                                    value={status}
-                                    onChange={statusHandler}
-                                >
-                                    {statusOptions.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                            <div
+                                className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
+                                    <span>
+                                        عکس پروفایل مجموعه (عکس بدون بک گراند از لوگوی مجموعه با نسبت ۱*۱)
+                                    </span>
+                                <FileUploader
+                                    handleChange={handleChangeLogo}
+                                    name="logo"
+                                    types={fileTypes}
+                                    label={"لوگوی مجموعه (نسبت ۱ * ۱)"}
+                                />
+                            </div>
+                            <div
+                                className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
+                                    <span>
+                                        عکس بک گراند پروفایل مجموعه (نسبت ترجیحی ۱*۳)
+                                    </span>
+                                <FileUploader
+                                    handleChange={handleChangeBackground}
+                                    name="background"
+                                    types={fileTypes}
+                                    label={"بک گراند (نسبت ۳ * ۱)"}
+                                />
                             </div>
                             <div className={"w-75 d-flex flex-column gap-2 p-2"}>
                                 <Button onClick={submitHandler}
-                                        className={"col-lg-3 col-md-5 col-12 align-self-end mt-5"} variant={"contained"}
-                                        color={"success"}>ثبت شرکت</Button>
+                                        className={"col-lg-3 col-md-5 col-12 align-self-end mt-5"}
+                                        variant={"contained"}
+                                        color={"success"}>
+                                    ذخیره تغییرات
+                                </Button>
                             </div>
                         </div>
                     </form>

@@ -76,7 +76,6 @@ export default function EditPosts({data}) {
         .replaceAll("۰","0")
     )
 
-console.log(data.data.published_at)
     const [text, setText] = useState(data.data.text)
 
     const [textError, setTextError] = useState(false)

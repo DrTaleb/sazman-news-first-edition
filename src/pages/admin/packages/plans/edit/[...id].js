@@ -10,11 +10,11 @@ import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import Nprogress from "nprogress";
 
-export default function Id({categories,data}) {
+export default function Add({data}) {
     const router = useRouter()
     const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href={`/admin/ads-positions/plans/${router.query.id[1]}`}>
-            پلن های تبلیغ
+        <Link underline="hover" key="1" color="inherit" href={`/admin/packages/plans/${router.query.id[1]}`}>
+            پلن های اکانت ها
         </Link>,
         <Typography key="3" color="text.primary" className={"color-my-purple"}>
             ویرایش پلن
@@ -32,8 +32,6 @@ export default function Id({categories,data}) {
             value: "1"
         }
     ])
-    const [categoryOptions] = useState(categories.data.data)
-
 
     // form input -----------------------------------
     const [name, setName] = useState(data.data.title)
@@ -44,8 +42,6 @@ export default function Id({categories,data}) {
 
     const [days, setDays] = useState(data.data.days)
     const [daysError, setDaysError] = useState(false)
-
-    const [category, setCategory] = useState(categories.status && categories.data.data.length ? categories.data.data[0].id : "")
 
     const [status, setStatus] = useState(data.data.status)
     const nameHandler = (event) => {
@@ -60,9 +56,6 @@ export default function Id({categories,data}) {
         setDays(event.target.value)
         event.target.value.length ? setDaysError(false) : setDaysError(true)
     }
-    const categoryHandler = (event) => {
-        setCategory(event.target.value)
-    }
     const statusHandler = (event) => {
         setStatus(event.target.value)
     };
@@ -71,7 +64,7 @@ export default function Id({categories,data}) {
     const submitHandler = async (event) => {
         event.preventDefault()
         Nprogress.start();
-        if (nameError) {
+        if (nameError || priceError || daysError) {
             Swal.fire({
                 icon: 'error',
                 text: "لطفا تمام فیلد ها را پر کنید",
@@ -79,14 +72,13 @@ export default function Id({categories,data}) {
             Nprogress.done();
         } else {
             try {
-                const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.id[1]}?id=${router.query.id[0]}`, {
+                const res = await fetch(`${process.env.LOCAL_URL}/api/admin/plans/${router.query.id[1]}/${router.query.id[0]}`, {
                     method: "PUT",
                     body: JSON.stringify({
                         _method : "PUT",
                         title: name,
                         price: price,
                         days: days,
-                        category_id: category,
                         status: status
                     })
                 })
@@ -97,7 +89,7 @@ export default function Id({categories,data}) {
                         icon: 'success',
                         text: "پلن ویرایش یافت",
                     })
-                    router.push(`/admin/ads-positions/plans/${router.query.id[1]}`)
+                    router.push(`/admin/packages/plans/${router.query.id[1]}`)
                 } else {
                     Nprogress.done();
                     Swal.fire({
@@ -152,19 +144,6 @@ export default function Id({categories,data}) {
                             />
                             <TextField
                                 select
-                                label="دسته بندی نوع تبلیغ"
-                                className={"col-md-9 col-11"}
-                                value={category}
-                                onChange={categoryHandler}
-                            >
-                                {categoryOptions.map((option) => (
-                                    <MenuItem key={option.id} value={option.id}>
-                                        {option.title}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <TextField
-                                select
                                 label="وضعیت"
                                 className={"col-md-9 col-11"}
                                 value={status}
@@ -187,34 +166,25 @@ export default function Id({categories,data}) {
 }
 
 export async function getServerSideProps(context) {
-    const {params, req} = context
     try {
+        const {params, req} = context
 
-        const categoryResponse = await fetch(`${process.env.SERVER_URL}/panel/ads_categories?page=1&limit=1000`, {
+        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/packages/${params.id[1]}/plans/${params.id[0]}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'Authorization': `Bearer ${req.cookies.authToken}`
             }
         })
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/ads_positions/${params.id[1]}/plans/${params.id[0]}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization': `Bearer ${req.cookies.authToken}`
-            }
-        })
-        const categories = await categoryResponse.json()
         const data = await dataResponse.json()
 
         return {
-            props: {categories,data}
+            props: {data}
         }
-    } catch(err) {
-        console.log(err)
-        const categories = {status: false, data: {data: []}}
+    } catch {
+        const data = {status: false, data: {data: []}}
         return {
-            props: {categories}
+            props: {data}
         }
     }
 }

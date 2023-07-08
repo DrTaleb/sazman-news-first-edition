@@ -24,9 +24,12 @@ import MenuItem from "@mui/material/MenuItem";
 
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
-    {id: 'companyName', label: 'نام شرکت', minWidth: 170, align: "left"},
+    {id: 'userName', label: 'نام اکانت', minWidth: 170, align: "left"},
+    {id: 'category', label: 'دسته بندی', minWidth: 170, align: "left"},
+    {id: 'position', label: 'جایگاه', minWidth: 170, align: "left"},
+    {id: 'plan', label: 'پلن', minWidth: 170, align: "left"},
+    {id: 'mobile', label: 'شماره تماس', minWidth: 170, align: "left"},
     {id: 'price', label: 'قیمت', minWidth: 170, align: "left"},
-    {id: 'status', label: 'وضعیت', minWidth: 170, align: "left"},
 ];
 
 
@@ -52,7 +55,7 @@ export default function Packages() {
     }
 
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/orders/1?page=${router.query.page}&${searchCategory}=${nameSearch}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/orders/2?page=${router.query.page}&${searchCategory}=${nameSearch}`)
         const data = await res.json()
         await setDATA(data)
         await setPage(data.data.current_page)
@@ -66,12 +69,12 @@ export default function Packages() {
         dataFetch()
     }, [getData])
 
-    function createData(id, companyName,price, status) {
-        return {id, companyName, price, status};
+    function createData(id, userName,category,position,plan,mobile,price, status) {
+        return {id, userName,category,position,plan, mobile,price, status};
     }
 
     if (DATA.status) {
-        DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.company.title}`, `${item.price} تومان`,`${item.status}`)))
+        DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.details.writer.firstname} ${item.details.writer.lastname}`,`${item.details.category.title}`,`${item.details.position.title}`,`${item.details.plan.title}`, `${item.details.writer.user.mobile}`,`${item.price} تومان`,`${item.status}`)))
     }
 
     const clickHandler = async (event, value) => {

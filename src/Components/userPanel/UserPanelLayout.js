@@ -23,7 +23,7 @@ import AdsClickIcon from '@mui/icons-material/AdsClick';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import AuthContext from "@/Contexts/AuthContext";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Check, Person} from "@mui/icons-material";
+import {Check, Circle, CircleOutlined, Person} from "@mui/icons-material";
 import {Col} from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import AddTaskIcon from "@mui/icons-material/AddTask";
@@ -90,6 +90,7 @@ export default function UserPanelLayout({children}) {
     const {userData, logOut, userStatus} = useContext(AuthContext)
 
     const [selectedCompany, setSelectedCompany] = useState("")
+    const [isOwner,setIsOwner] = useState(false)
     useEffect(() => {
         if (userStatus) {
             if (localStorage.getItem("selectedCompany") !== "null" && localStorage.getItem("selectedCompany")) {
@@ -99,6 +100,9 @@ export default function UserPanelLayout({children}) {
             }
         }
     }, [userData])
+    useEffect(()=>{
+        setIsOwner(userData.companies.length && selectedCompany ? userData.companies.find(item => item.title === selectedCompany).owner_id === `${userData.id}` : false)
+    },[selectedCompany])
 
     const selectCompany = async (id) => {
         await Nprogress.start()
@@ -130,6 +134,8 @@ export default function UserPanelLayout({children}) {
         await selectCompany(id)
         await handleClose()
     }
+
+
 
     return (
         <main>
@@ -230,14 +236,18 @@ export default function UserPanelLayout({children}) {
                                         <span className="text-secondary">مانیتورینگ</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/user-panel/writers/1"}>
-                                    <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/writers") && "active"}`}>
-                                        <Person
-                                            className={`${routerPath.includes("/writers") && "color-my-purple"}`}></Person>
-                                        <span className="text-secondary">کارمندان</span>
-                                    </MenuItem>
-                                </Link>
+                                {
+                                    isOwner ?
+                                        <Link href={"/user-panel/writers/1"}>
+                                            <MenuItem
+                                                className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/writers") && "active"}`}>
+                                                <Person
+                                                    className={`${routerPath.includes("/writers") && "color-my-purple"}`}></Person>
+                                                <span className="text-secondary">کارمندان</span>
+                                            </MenuItem>
+                                        </Link>
+                                        : ""
+                                }
                                 <Link href={"/user-panel/post-management/1"}>
                                     <MenuItem
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/post-management") && "active"}`}>
@@ -278,14 +288,18 @@ export default function UserPanelLayout({children}) {
                                         <span className="text-secondary">تبلیغات شما</span>
                                     </MenuItem>
                                 </Link>
-                                <Link href={"/user-panel/setting"}>
-                                    <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/setting") && "active"}`}>
-                                        <SettingsIcon
-                                            className={`${routerPath.includes("/setting") && "color-my-purple"}`}></SettingsIcon>
-                                        <span className="text-secondary">تنظیمات مجموعه</span>
-                                    </MenuItem>
-                                </Link>
+                                {
+                                    isOwner ?
+                                        <Link href={"/user-panel/setting"}>
+                                            <MenuItem
+                                                className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/setting") && "active"}`}>
+                                                <SettingsIcon
+                                                    className={`${routerPath.includes("/setting") && "color-my-purple"}`}></SettingsIcon>
+                                                <span className="text-secondary">تنظیمات مجموعه</span>
+                                            </MenuItem>
+                                        </Link>
+                                        : ""
+                                }
                                 <Link href={"/user-panel/support/1"}>
                                     <MenuItem
                                         className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("/support") && "active"}`}>
@@ -307,7 +321,7 @@ export default function UserPanelLayout({children}) {
                                     userStatus ?
                                         <>
                                             <div>
-                                                <Tooltip title="تنظیمات اکانت شرکت">
+                                                <Tooltip title="تنظیمات اکانت مجموعه">
                                                     <Button
                                                         aria-label="delete"
                                                         onClick={handleClick2}
@@ -316,59 +330,61 @@ export default function UserPanelLayout({children}) {
                                                         size={"large"}
                                                         aria-expanded={open2 ? 'true' : undefined}
                                                         className={"text-dark"}
-                                                        endIcon={<ExpandMoreIcon/>}>
-                                                        {selectedCompany ?
-                                                            selectedCompany
-                                                            : <Skeleton height={20} width={60}></Skeleton>
-                                                        }
+                                                        endIcon={userData.companies.length ? <ExpandMoreIcon/> : ""}>
+                                                        {selectedCompany && userData.companies.length ? selectedCompany : ""}
+                                                        {!selectedCompany && userData.companies.length ?  "مجموعه مورد نظر را انتخاب کنید" : ""}
+                                                        {!selectedCompany && !userData.companies.length ? "شما در حال حاضر در مجموعه ای عضو نیستید" : ""}
                                                     </Button>
                                                 </Tooltip>
                                             </div>
-                                            <Menu
-                                                anchorEl={anchorEl2}
-                                                id="company-menu"
-                                                open={open2}
-                                                onClose={handleClose2}
-                                                onClick={handleClose2}
-                                                PaperProps={{
-                                                    elevation: 0,
-                                                    sx: {
-                                                        minWidth: "200px",
-                                                        overflow: 'visible',
-                                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                                        mt: 2,
-                                                        '& .MuiAvatar-root': {
-                                                            width: 52,
-                                                            height: 32,
-                                                            ml: -0.5,
-                                                            mr: 2,
-                                                        },
+                                            {
+                                                userData.companies.length &&
+                                                <Menu
+                                                    anchorEl={anchorEl2}
+                                                    id="company-menu"
+                                                    open={open2}
+                                                    onClose={handleClose2}
+                                                    onClick={handleClose2}
+                                                    PaperProps={{
+                                                        elevation: 0,
+                                                        sx: {
+                                                            minWidth: "200px",
+                                                            overflow: 'visible',
+                                                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                            mt: 2,
+                                                            '& .MuiAvatar-root': {
+                                                                width: 52,
+                                                                height: 32,
+                                                                ml: -0.5,
+                                                                mr: 2,
+                                                            },
 
-                                                    },
-                                                }}
-                                                transformOrigin={{horizontal: 'right', vertical: 'top'}}
-                                                anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                                            >
-                                                {
-                                                    userData.companies &&
-                                                    userData.companies.map(item =>
-                                                        <MenuItem key={item.id}
-                                                                  onClick={() => handleCompanyAndClose(item.id)}>
-                                                            {
-                                                                item.title === selectedCompany ?
-                                                                    <ListItemIcon>
-                                                                        <Check fontSize={"small"}/>
-                                                                    </ListItemIcon>
-                                                                    :
-                                                                    <ListItemIcon>
-                                                                        <CheckBoxOutlineBlankIcon fontSize={"small"}/>
-                                                                    </ListItemIcon>
-                                                            }
-                                                            {item.title}
-                                                        </MenuItem>
-                                                    )
-                                                }
-                                            </Menu>
+                                                        },
+                                                    }}
+                                                    transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                                                    anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+                                                >
+                                                    {
+                                                        userData.companies.map(item =>
+                                                            item !== selectedCompany &&
+                                                            <MenuItem key={item.id}
+                                                                      onClick={() => handleCompanyAndClose(item.id)}>
+                                                                {
+                                                                    item.title === selectedCompany ?
+                                                                        <ListItemIcon>
+                                                                            <Check fontSize={"small"}/>
+                                                                        </ListItemIcon>
+                                                                        :
+                                                                        <ListItemIcon>
+                                                                            <CircleOutlined fontSize={"small"}/>
+                                                                        </ListItemIcon>
+                                                                }
+                                                                {item.title}
+                                                            </MenuItem>
+                                                        )
+                                                    }
+                                                </Menu>
+                                            }
                                         </>
                                         :
                                         userStatus === null &&
@@ -460,95 +476,99 @@ export default function UserPanelLayout({children}) {
                         </div>
                     </nav>
                     {
-                        userStatus && userData.companies.length && !router.pathname.includes("/add-company") && selectedCompany && userData.companies.length &&
-                            children
-                            // :
-                            // <div className={"d-flex flex-row justify-content-center"}>
-                            //     <div className={"bg-white rounded-4 shadow-sm col-11 col-md-4 px-sm-4 py-4"}>
-                            //         <div className="d-flex flex-row align-items-center mt-4 mt-md-0 mb-4">
-                            //             <div className="panel-title-parent w-100">
-                            //                     <span
-                            //                         className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                            //                         شرکت مورد نظر خود را انتخاب کنید
-                            //                     </span>
-                            //             </div>
-                            //         </div>
-                            //         {
-                            //             userData.companies.map(item =>
-                            //
-                            //                 <MenuItem key={item.id} onClick={() => selectCompany(item.id)}>
-                            //                     <ListItemIcon>
-                            //                         <CheckBoxOutlineBlankIcon fontSize={"small"}/>
-                            //                     </ListItemIcon>
-                            //
-                            //                     {item.title}
-                            //                 </MenuItem>
-                            //             )
-                            //         }
-                            //     </div>
-                            // </div>
-                        // :
-                        // <div className="container">
-                        //     <div className="d-flex flex-column flex-xl-row justify-content-center align-items-center">
-                        //         <div className="col-xl-6">
-                        //             <div className="d-flex flex-column">
-                        //                 <h1 className="mt-3">به مراسم چین خوش آمدید !</h1>
-                        //                 <p className="text-secondary mt-3 text-justify">
-                        //                     لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده
-                        //                     از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و
-                        //                     سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای
-                        //                     متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه
-                        //                     درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با
-                        //                     نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان
-                        //                     خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید
-                        //                     داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان
-                        //                     رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات
-                        //                     پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                        //                 </p>
-                        //                 <div className="d-flex flex-row justify-content-between ">
-                        //                     <div className="d-flex flex-column align-items-start">
-                        //                         <div className="d-flex flex-row gap-3 align-items-center">
-                        //                             <img src="/img/check-green.svg"/>
-                        //                             <span className="small mt-1 fw-bold">لورم ایپسوم</span>
-                        //                         </div>
-                        //                         <div className="py-3 border-start border-1 ms-2"></div>
-                        //                         <div className="d-flex flex-row gap-3 align-items-center">
-                        //                             <img src="/img/check-green.svg"/>
-                        //                             <span className="small mt-1">لورم ایپسوم </span>
-                        //                         </div>
-                        //                         <div className="py-3 border-start border-1 ms-2"></div>
-                        //                         <div className="d-flex flex-row gap-3 align-items-center">
-                        //                             <img src="/img/check-green.svg"/>
-                        //                             <span className="small mt-1">لورم ایپسوم</span>
-                        //                         </div>
-                        //                         <div className="py-3 border-start border-1 ms-2"></div>
-                        //                         <div className="d-flex flex-row gap-3 align-items-center">
-                        //                             <img src="/img/check-green.svg"/>
-                        //                             <span className="small mt-1">لورم ایپسوم</span>
-                        //                         </div>
-                        //                         <div className="py-3 border-start border-1 ms-2"></div>
-                        //                         <div className="d-flex flex-row gap-3 align-items-center">
-                        //                             <img src="/img/check-green.svg"/>
-                        //                             <span className="small mt-1">لورم ایپسوم</span>
-                        //                         </div>
-                        //                     </div>
-                        //                 </div>
-                        //                 <Button variant={"contained"} className={"bg-my-purple align-self-end"}>
-                        //                     ثبت مجموعه در مراسم چین
-                        //                 </Button>
-                        //             </div>
-                        //         </div>
-                        //         <div
-                        //             class="col-12 col-xl-5 d-flex flex-column align-items-center mt-5 mt-md-0">
-                        //             <img className="col-12 col-xl-11 rounded-4" src="/img/3344442.png"/>
-                        //         </div>
-                        //     </div>
-                        // </div>
+                        userStatus && selectedCompany && userData.companies.length ? children : ""
                     }
                     {
-                        userStatus && !userData.companies.length && router.pathname.includes("/add-company") &&
-                        children
+                        userStatus && !selectedCompany && userData.companies.length ?
+                        <div className={"d-flex flex-row justify-content-center"}>
+                            <div className={"bg-white rounded-4 shadow-sm col-11 col-md-4 px-sm-4 py-4"}>
+                                <div className="d-flex flex-row align-items-center mt-4 mt-md-0 mb-4">
+                                    <div className="panel-title-parent w-100">
+                                            <span
+                                                className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
+                                                مجموعه مورد نظر خود را انتخاب کنید
+                                            </span>
+                                    </div>
+                                </div>
+                                {
+                                    userData.companies.map(item =>
+
+                                        <MenuItem key={item.id} onClick={() => selectCompany(item.id)}>
+                                            <ListItemIcon>
+                                                <CheckBoxOutlineBlankIcon fontSize={"small"}/>
+                                            </ListItemIcon>
+
+                                            {item.title}
+                                        </MenuItem>
+                                    )
+                                }
+                            </div>
+                        </div>
+                            :
+                            ""
                     }
+                    {
+                        !userData.companies.length && !router.pathname.includes("add-company") &&
+                        <div className="container">
+                            <div className="d-flex flex-column flex-xl-row justify-content-center align-items-center">
+                                <div className="col-xl-6">
+                                    <div className="d-flex flex-column">
+                                        <h1 className="mt-3">به مراسم چین خوش آمدید !</h1>
+                                        <p className="text-secondary mt-3 text-justify">
+                                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده
+                                            از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و
+                                            سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای
+                                            متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه
+                                            درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با
+                                            نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان
+                                            خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید
+                                            داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان
+                                            رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات
+                                            پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                                        </p>
+                                        <div className="d-flex flex-row justify-content-between ">
+                                            <div className="d-flex flex-column align-items-start">
+                                                <div className="d-flex flex-row gap-3 align-items-center">
+                                                    <img src="/img/check-green.svg"/>
+                                                    <span className="small mt-1 fw-bold">لورم ایپسوم</span>
+                                                </div>
+                                                <div className="py-3 border-start border-1 ms-2"></div>
+                                                <div className="d-flex flex-row gap-3 align-items-center">
+                                                    <img src="/img/check-green.svg"/>
+                                                    <span className="small mt-1">لورم ایپسوم </span>
+                                                </div>
+                                                <div className="py-3 border-start border-1 ms-2"></div>
+                                                <div className="d-flex flex-row gap-3 align-items-center">
+                                                    <img src="/img/check-green.svg"/>
+                                                    <span className="small mt-1">لورم ایپسوم</span>
+                                                </div>
+                                                <div className="py-3 border-start border-1 ms-2"></div>
+                                                <div className="d-flex flex-row gap-3 align-items-center">
+                                                    <img src="/img/check-green.svg"/>
+                                                    <span className="small mt-1">لورم ایپسوم</span>
+                                                </div>
+                                                <div className="py-3 border-start border-1 ms-2"></div>
+                                                <div className="d-flex flex-row gap-3 align-items-center">
+                                                    <img src="/img/check-green.svg"/>
+                                                    <span className="small mt-1">لورم ایپسوم</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <Link href={"/user-panel/add-company"} className={" align-self-end"}>
+                                            <Button variant={"contained"} className={"bg-my-purple"}>
+                                                ثبت مجموعه در مراسم چین
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                                <div
+                                    className="col-12 col-xl-5 d-flex flex-column align-items-center mt-5 mt-md-0">
+                                    <img className="col-12 col-xl-11 rounded-4" src="/img/3344442.png"/>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    {router.pathname.includes("add-company") && children}
                 </div>
             </div>
         </main>

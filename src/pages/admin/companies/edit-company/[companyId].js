@@ -11,9 +11,17 @@ import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import axios from "axios";
 import Nprogress from "nprogress";
+import persian from "react-date-object/calendars/persian";
+import transition from "react-element-popper/animations/transition";
+import opacity from "react-element-popper/animations/opacity";
+import persian_fa from "react-date-object/locales/persian_fa";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import DatePickerHeader from "react-multi-date-picker/plugins/date_picker_header";
+import DatePicker from "react-multi-date-picker";
 
 
-export default function EditCompany({data}) {
+export default function EditCompany({data,packages}) {
     const breadcrumbs = [
         <Link underline="hover" key="1" color="inherit" href={"/admin/companies/1"}>
             شرکت ها
@@ -465,7 +473,21 @@ export default function EditCompany({data}) {
     const [status, setStatus] = useState(data.data.status)
     const [verifyStatus, setVerifyStatus] = useState(data.data.verify_status)
     const [selectedStatus, setSelectedStatus] = useState(data.data.selected_status)
+    const [goldStatus, setGoldStatus] = useState(data.data.gold_status)
+    const [packageId, setPackageId] = useState(packages.data.data.find(item => item.id === Number(data.data.package_id)))
     const [stateLabel, setStateLabel] = useState("")
+    const [date, setDate] = useState(data.data.expire
+        .replaceAll("۱","1")
+        .replaceAll("۲","2")
+        .replaceAll("۳","3")
+        .replaceAll("۴","4")
+        .replaceAll("۵","5")
+        .replaceAll("۶","6")
+        .replaceAll("۷","7")
+        .replaceAll("۸","8")
+        .replaceAll("۹","9")
+        .replaceAll("۰","0")
+    )
     useEffect(() => {
         setStateLabel(stateList.find(item => item.value == state).label)
     }, [state])
@@ -516,6 +538,15 @@ export default function EditCompany({data}) {
     const selectedStatusHandler = (event) => {
         setSelectedStatus(event.target.value)
     };
+    const goldStatusHandler = (event) => {
+        setGoldStatus(event.target.value)
+    };
+    const packageHandler = (event) => {
+        setPackageId(event.target.value)
+    };
+    const dateHandler = (val) => {
+        setDate(val.format("YYYY/MM/DD"))
+    }
 
     // file inputs ------------------------------
     const formData = new FormData();
@@ -549,7 +580,22 @@ export default function EditCompany({data}) {
             await formData.append("status", status)
             await formData.append("verify_status", verifyStatus)
             await formData.append("selected_status", selectedStatus)
+            await formData.append("gold_status", goldStatus)
             await formData.append("owner_id", data.data.owner_id)
+            await formData.append("expire",   date.replaceAll("-", "/")
+                .replaceAll("۰","0")
+                .replaceAll("۱","1")
+                .replaceAll("۲","2")
+                .replaceAll("۳","3")
+                .replaceAll("۴","4")
+                .replaceAll("۵","5")
+                .replaceAll("۶","6")
+                .replaceAll("۷","7")
+                .replaceAll("۸","8")
+                .replaceAll("۹","9")
+            )
+            await formData.append("package", packageId)
+            await formData.append("expire", data.data.expire)
             if (background) {
                 await formData.append("banner", background)
             }
@@ -587,7 +633,6 @@ export default function EditCompany({data}) {
             }
         }
     }
-    console.log(data.data)
     if (data.status) {
         return (
             <Container>
@@ -741,7 +786,7 @@ export default function EditCompany({data}) {
                                 </div>
                                 <div className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 shadow-sm bg-light py-4 rounded-2 px-2"}>
                                     <span className={"border-bottom border-2 border-secondary mb-3"}>
-                                        کادر تغییر وضعیت
+                                        کادر دسترسی ادمین
                                     </span>
                                     <TextField
                                         select
@@ -782,6 +827,65 @@ export default function EditCompany({data}) {
                                             </MenuItem>
                                         ))}
                                     </TextField>
+                                    <TextField
+                                        select
+                                        label="وضعیت نشان طلایی"
+                                        className={"w-100"}
+                                        value={goldStatus}
+                                        onChange={goldStatusHandler}
+                                    >
+                                        {statusOptions.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+
+                                    <TextField
+                                        select
+                                        label="پکیج فعال"
+                                        className={"w-100"}
+                                        value={packageId}
+                                        onChange={packageHandler}
+                                    >
+                                        {packages.data.data.map((option) => (
+                                            <MenuItem key={option.id} value={option.id}>
+                                                {option.title}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                    <span>
+                                        تاریخ پایان پکیج
+                                    </span>
+                                    <DatePicker
+                                        className={"col-12"}
+                                        render={
+                                            <Button
+                                                variant={"contained"}
+                                                className={"py-2 col-12 bg-my-purple"}>
+                                                {date}
+                                            </Button>}
+                                        calendar={persian}
+                                        animations={[
+                                            transition({duration: 400, from: 35}),
+                                            opacity({duration: 400, from: 0})
+                                        ]}
+                                        zIndex={2000}
+                                        locale={persian_fa}
+                                        value={date}
+                                        onChange={dateHandler}
+                                        format={"YYYY-MM-DD HH:mm"}
+                                        plugins={[
+                                            <DatePanel key={2} markFocused></DatePanel>,
+                                            <DatePickerHeader
+                                                key={3}
+                                                position="top"
+                                                size="medium"
+                                                className={"bg-my-purple"}
+                                            />
+                                        ]}
+                                    >
+                                    </DatePicker>
                                 </div>
                                 <div className={"col-md-9 col-11  d-flex flex-column align-items-center gap-3 border border-1 border-light p-2"}>
                                     <span>
@@ -849,11 +953,19 @@ export async function getServerSideProps(context) {
             'Authorization': `Bearer ${req.cookies.authToken}`
         }
     })
+    const packageResponse = await fetch(`${process.env.SERVER_URL}/panel/packages?page=1&limit=1000`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': `Bearer ${req.cookies.authToken}`
+        }
+    })
 
     const data = await dataResponse.json()
+    const packages = await packageResponse.json()
 
 
     return {
-        props: {data}
+        props: {data,packages}
     }
 }

@@ -54,7 +54,6 @@ export async function getServerSideProps() {
     try {
         const dataRes = await fetch(`${process.env.SERVER_URL}/front/home`)
         const data = await dataRes.json()
-        console.log(data)
         return {props: {data}};
     } catch {
         const data = {status: false, data: {data: []}}

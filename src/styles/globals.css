@@ -562,7 +562,7 @@ input::-webkit-inner-spin-button {
 
 .news-chart-parent {
     position: relative;
-    height: inherit;
+    height: 600px;
 }
 
 .news-chart {
@@ -570,6 +570,7 @@ input::-webkit-inner-spin-button {
     padding-top: 2cm;
     top: 0;
     bottom: 50%;
+    height: 100%;
     width: 95%;
     overflow: scroll;
     border-radius: 9px;
@@ -703,6 +704,127 @@ input::-webkit-inner-spin-button {
 
 }
 
+.profile-section {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-image {
+    margin-top: -90px;
+    width: 140px;
+    height: 140px;
+}
+@media (min-width: 768px) {
+    .profile-image {
+        margin-top: -90px;
+        width: 190px;
+        height: 190px;
+    }
+}
+.profile-info-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-bg-section {
+    min-height: 300px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+@media (min-width: 768px) {
+    .profile-bg-section {
+        min-height: 400px;
+    }
+}
+.tab {
+    overflow: hidden;
+    z-index: 0;
+    margin-bottom: -5px;
+    border-top: 3px solid var(--white);
+    box-shadow: 0 -0.2rem .3rem rgba(0, 0, 0, .1) !important;
+    border-radius: 5px 5px 0 0;
+}
+
+.tab.active {
+    z-index: 2;
+    border-top: 3px solid var(--main-purple);
+}
+
+.my-tab-content {
+    z-index: 2;
+}
+.add-news{
+    width: 50px;
+    height: 50px;
+    background: var(--main-purple);
+    color: var(--white);
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+.profile-section {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-image {
+    margin-top: -90px;
+    width: 140px;
+    z-index: 10;
+    height: 140px;
+}
+@media (min-width: 768px) {
+    .profile-image {
+        margin-top: -90px;
+        width: 190px;
+        height: 190px;
+    }
+}
+.profile-info-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-bg-section {
+    height: 300px;
+    position : relative;
+    background-position: top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+@media (min-width: 768px) {
+    .profile-bg-section {
+        height: 400px;
+    }
+}
+.tab {
+    overflow: hidden;
+    z-index: 0;
+    margin-bottom: -5px;
+    border-top: 3px solid var(--white);
+    box-shadow: 0 -0.2rem .3rem rgba(0, 0, 0, .1) !important;
+    border-radius: 5px 5px 0 0;
+}
+
+.tab.active {
+    z-index: 2;
+    border-top: 3px solid var(--main-purple);
+}
+
+.my-tab-content {
+    z-index: 2;
+}
+.add-news{
+    width: 50px;
+    height: 50px;
+    background: var(--main-purple);
+    color: var(--white);
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
 
 .footer {
     display: flex;
@@ -1097,8 +1219,12 @@ input::-webkit-inner-spin-button {
 
 .suggestion-card {
     width: 100%;
+    transition : .4s
 }
 
+.suggestion-card:hover {
+    box-shadow : 1px 4px 3px #dddddd;
+}
 @media (min-width: 768px) {
     .suggestion-card {
         width: 45%;
@@ -1325,6 +1451,9 @@ input::-webkit-inner-spin-button {
         width: 70px;
     }
 
+    .max-h-400{
+       height : 400px
+    }
     .projcard-textbox {
         position: absolute;
         background-color: var(--content-background);

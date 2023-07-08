@@ -120,7 +120,7 @@ export default function AddAds() {
 
     const [textError, setTextError] = useState("")
 
-    const [type, setType] = useState("text")
+    const [type, setType] = useState(video ? "video" : "text")
 
     useEffect(() => {
         text.length ? setTextError(false) : setTextError(true)

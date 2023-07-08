@@ -5,6 +5,8 @@ import ShareIcon from '@mui/icons-material/Share';
 import {toast} from "react-toastify";
 import ReplyIcon from '@mui/icons-material/Reply';
 import Link from "next/link";
+import Image from "next/image";
+import {post} from "axios";
 
 export default function SingleNewsPage({data}) {
     const [commentInput, setCommentInput] = useState("")
@@ -45,17 +47,61 @@ export default function SingleNewsPage({data}) {
     return (
         <Fragment>
             <div className="parent d-flex flex-row justify-content-end">
-                <div className="content-div w-100  px-md-4">
+                <div className="content-div w-100 px-md-4">
                     <div className="content mx-xl-4">
-                        <div
-                            className="mt-4 px-lg-3 pt-4 d-flex flex-row flex-wrap justify-content-between px-xl-4 px-2">
-                            <div
-                                className="col-lg-6 col-md-6 col-12 pe-md-2 pe-lg-0 d-flex flex-column justify-content-between">
-                                <div className="writer-profile-section d-flex flex-column p-xl-2 gap-xl-3">
+                        {
+                            data.data.post.type === "text" ?
+                                <div className="mt-4 px-lg-3 pt-4 d-flex flex-row flex-wrap justify-content-between px-xl-4 px-2">
                                     <div
-                                        className="writer-profile-inner-section d-flex flex-row align-items-center gap-3">
-                                        <img className="writer-profile-img"
-                                             src={`${process.env.SERVER_URL}${data.data.post.company.logo}`}/>
+                                        className="col-lg-6 col-md-6 col-12 pe-md-2 pe-lg-0 d-flex flex-column justify-content-between">
+                                        <div className="writer-profile-section d-flex flex-column p-xl-2 gap-xl-3">
+                                            <Link href={`/profile/${data.data.post.company.id}/${data.data.post.company.title.replaceAll("پ", "-")}}`} className="writer-profile-inner-section d-flex flex-row align-items-center gap-3">
+                                                <img className="writer-profile-img"
+                                                     src={`${process.env.SERVER_URL}${data.data.post.company.logo}`}/>
+                                                <div className="writer-user-name">
+                                                <span className="fw-bolder text-secondary px-2">
+                                                    {data.data.post.company.title}
+                                                </span>
+                                                    <span className="border-start border-1 border-secondary px-2">
+                                                    {data.data.post.published_at}
+                                            </span>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                        <h1 className="news-main-title mt-md-3 px-xl-3">
+                                            {data.data.post.title}
+                                        </h1>
+                                        <h5 className="mt-lg-2 mt-xl-0 px-xl-3">
+                                            {data.data.post.subtitle}
+                                        </h5>
+                                        <div className="d-flex flex-row gap-4 justify-content-end pe-3">
+                                            <div className="d-flex flex-column align-items-center">
+                                                <Fab size={"small"} color={"secondary"} aria-label="like">
+                                                    <FavoriteIcon fontSize={"small"}/>
+                                                </Fab>
+                                            </div>
+                                            <div className="d-flex flex-column align-items-center">
+                                                <Fab size={"medium"} color={"primary"} aria-label="like">
+                                                    <ShareIcon fontSize={"small"}/>
+                                                </Fab>
+                                            </div>
+                                            <div className="d-flex flex-column align-items-center">
+                                                <Fab size={"medium"} color={"secondary"} aria-label="like">
+                                                    <FavoriteIcon fontSize={"small"}/>
+                                                </Fab>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6 col-12">
+                                        <div className="news-main-img-section">
+                                            <img alt={data.data.post.title} className="w-100 rounded-3" src={`${process.env.SERVER_URL}${data.data.post.image}`}/>
+                                        </div>
+                                    </div>
+                                </div>
+                                :
+                                <div className="writer-profile-section d-flex flex-column p-xl-3 gap-xl-3 mt-3 ">
+                                    <Link href={`/profile/${data.data.post.company.id}/${data.data.post.company.title.replaceAll("پ", "-")}}`} className="writer-profile-inner-section d-flex flex-row align-items-center gap-3">
+                                        <Image width={60} height={60} alt={data.data.post.title} src={`${process.env.SERVER_URL}${data.data.post.company.logo}`}/>
                                         <div className="writer-user-name">
                                                 <span className="fw-bolder text-secondary px-2">
                                                     {data.data.post.company.title}
@@ -64,40 +110,19 @@ export default function SingleNewsPage({data}) {
                                                     {data.data.post.published_at}
                                             </span>
                                         </div>
-                                    </div>
+                                    </Link>
                                 </div>
-                                <h1 className="news-main-title mt-md-3 px-xl-3">
-                                    {data.data.post.title}
-                                </h1>
-                                <h5 className="mt-lg-2 mt-xl-0 px-xl-3">
-                                    {data.data.post.subtitle}
-                                </h5>
-                                <div className="d-flex flex-row gap-4 justify-content-end pe-3">
-                                    <div className="d-flex flex-column align-items-center">
-                                        <Fab size={"small"} color={"secondary"} aria-label="like">
-                                            <FavoriteIcon fontSize={"small"}/>
-                                        </Fab>
-                                    </div>
-                                    <div className="d-flex flex-column align-items-center">
-                                        <Fab size={"medium"} color={"primary"} aria-label="like">
-                                            <ShareIcon fontSize={"small"}/>
-                                        </Fab>
-                                    </div>
-                                    <div className="d-flex flex-column align-items-center">
-                                        <Fab size={"medium"} color={"secondary"} aria-label="like">
-                                            <FavoriteIcon fontSize={"small"}/>
-                                        </Fab>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                                <div className="news-main-img-section">
-                                    <img alt={data.data.post.title} className="w-100 rounded-3" src={`${process.env.SERVER_URL}${data.data.post.image}`}/>
-                                </div>
-                            </div>
-                        </div>
+                        }
                         <div className="px-4 d-flex flex-row justify-content-between">
                             <div className="col-lg-7 col-12 mt-5">
+                                {
+                                    data.data.post.type === "video" &&
+                                        <video className={"w-100 rounded-3"} poster={`${process.env.SERVER_URL}${data.data.post.image}`}>
+                                            <source src={`${data.data.post.video}`}/>
+                                            Your browser does not support the video tag.
+                                        </video>
+                                }
+
                                 <div ref={contentSection} className={"content-section px-4 w-100"}>
 
                                 </div>
@@ -232,7 +257,7 @@ export default function SingleNewsPage({data}) {
                             <a href="#" className="btn btn-outline-secondary border-3">مشاهده همه</a>
                         </div>
                     </div>
-                    <div className="suggestion-section w-100 px-4 py-3 gap-3 justify-content-between flex-wrap">
+                    <div className="suggestion-section w-100 px-4 py-3 gap-3 justify-content-start flex-wrap">
                         {data.data.other_posts.length ?
                             data.data.other_posts.map(item =>
                                 <Link href={`/post/${item.id}/${item.title}`} key={item.id}

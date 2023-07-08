@@ -42,7 +42,6 @@ export default function AdsPositions() {
         const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.position}`)
         const data = await res.json()
         await setDATA(data)
-        console.log(data)
     }
 
     useEffect(() => {
@@ -57,14 +56,13 @@ export default function AdsPositions() {
         DATA.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`,`${item.category.title}`,`${item.days}`,` ${item.price}  تومان `,`${item.status == 1 ? "فعال" : "غیر فعال"}`)))
     }
     const editHandler = (id) => {
-        router.push(`/admin/ads-positions/plans/${router.query.position}/edit/${id}`)
+        router.push(`/admin/ads-positions/plans/edit/${id}/${router.query.position}`)
     }
 
     const blockHandler = async (id) => {
-        const selectedCatalog = DATA.data.data.find(item => item.id == id)
-        console.log(selectedCatalog)
+        const selectedCatalog = DATA.data.find(item => item.id == id)
         Swal.fire({
-            text: `آیا از ${selectedCatalog.status === "1" ? "" : "رفع"} غیر فعال سازی جایگاه مورد نظر اطمینان دارید؟`,
+            text: `آیا از ${selectedCatalog.status === "1" ? "" : "رفع"} غیر فعال سازی پلن مورد نظر اطمینان دارید؟`,
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: "خیر",
@@ -74,20 +72,23 @@ export default function AdsPositions() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-positions/edit/${id}`,{
+                    const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.position}?id=${id}`,{
                         method : "PUT",
                         body : JSON.stringify({
+                            _method : "PUT",
                             title : selectedCatalog.title,
+                            days : selectedCatalog.days,
+                            price : selectedCatalog.price,
+                            category_id : selectedCatalog.category_id,
                             status : selectedCatalog.status === "1" ? 0 : 1
                         })
                     })
                     const data = await res.json()
-                    console.log(data)
                     if (data.status) {
                         Nprogress.done()
                         await Swal.fire({
                             icon: 'success',
-                            text: ` جایگاه ${selectedCatalog.title}${selectedCatalog.status === "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
+                            text: ` پلن ${selectedCatalog.title}${selectedCatalog.status === "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
                         })
                         await setGeData(!getData)
                     } else {
@@ -120,10 +121,9 @@ export default function AdsPositions() {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`${process.env.LOCAL_URL}/api/admin/ads-positions/delete/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.position}?id=${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
-                        console.log(data)
                         if (data.status) {
                             Nprogress.done()
                             Swal.fire(
@@ -132,11 +132,11 @@ export default function AdsPositions() {
                                 'success'
                             )
                             setGeData(!getData)
-                        } else if (!data.status && data.errors[0] === "this position exists data") {
+                        } else {
                             Nprogress.done()
                             Swal.fire(
                                 '',
-                                "در حال حاضر در این محل تبلیغ وجود دارد",
+                                "مشکلی پیش آمده",
                                 'error'
                             )
                         }
@@ -172,13 +172,13 @@ export default function AdsPositions() {
                 <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                     <div className="panel-title-parent w-100">
                         <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                            جایگاه های نصب تبلیغ
+                            پلن های جایگاه
                         </h5>
                     </div>
                     <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
                         <div className={"d-flex flex-row justify-content-center"}>
-                            <Link href={"/admin/ads-positions/add"} className={"ps-2"}>
-                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن جایگاه</Button>
+                            <Link href={`/admin/ads-positions/plans/add?position=${router.query.position}`} className={"ps-2"}>
+                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن پلن</Button>
                             </Link>
                         </div>
                     </div>
@@ -233,7 +233,7 @@ export default function AdsPositions() {
                                                 }
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <Tooltip title="مشاهده و ویرایش محل">
+                                                <Tooltip title="مشاهده و ویرایش پلن">
                                                     <IconButton color={"warning"}
                                                                 onClick={() => editHandler(row.id)}
                                                     >
@@ -257,7 +257,7 @@ export default function AdsPositions() {
                                                             </IconButton>
                                                         </Tooltip>
                                                 }
-                                                <Tooltip title={"حذف محل"}>
+                                                <Tooltip title={"حذف پلن"}>
                                                     <IconButton color={"error"}
                                                                 onClick={() => deleteHandler(row.id)}
                                                     >
@@ -280,7 +280,7 @@ export default function AdsPositions() {
             <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                 <div className="panel-title-parent w-100">
                     <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                        کاتالوگ ها
+                        پلن های جایگاه
                     </h5>
                 </div>
             </div>

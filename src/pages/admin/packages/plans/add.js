@@ -10,11 +10,11 @@ import Swal from "sweetalert2";
 import {useRouter} from "next/router";
 import Nprogress from "nprogress";
 
-export default function Add({categories}) {
+export default function Add() {
     const router = useRouter()
     const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href={`/admin/ads-positions/plans/${router.query.position}`}>
-            پلن های تبلیغ
+        <Link underline="hover" key="1" color="inherit" href={`/admin/packages/plans/${router.query.position}`}>
+            پلن های اکانت ها
         </Link>,
         <Typography key="3" color="text.primary" className={"color-my-purple"}>
             افزودن پلن
@@ -32,9 +32,6 @@ export default function Add({categories}) {
             value: 1
         }
     ])
-    const [categoryOptions] = useState(categories.data.data)
-    console.log(categories.data.data)
-
 
     // form input -----------------------------------
     const [name, setName] = useState("")
@@ -46,23 +43,39 @@ export default function Add({categories}) {
     const [days, setDays] = useState("")
     const [daysError, setDaysError] = useState(true)
 
-    const [category, setCategory] = useState(categories.status && categories.data.data.length ? categories.data.data[0].id : "")
-
     const [status, setStatus] = useState(0)
     const nameHandler = (event) => {
         setName(event.target.value)
         event.target.value.length ? setNameError(false) : setNameError(true)
     }
     const priceHandler = (event) => {
-        setPrice(event.target.value)
-        event.target.value.length ? setPriceError(false) : setPriceError(true)
+
+        const value = event.target.value.replaceAll("۰","0")
+            .replaceAll("۱","1")
+            .replaceAll("۲","2")
+            .replaceAll("۳","3")
+            .replaceAll("۴","4")
+            .replaceAll("۵","5")
+            .replaceAll("۶","6")
+            .replaceAll("۷","7")
+            .replaceAll("۸","8")
+            .replaceAll("۹","9")
+        setPrice(value)
+        value.length ? setPriceError(false) : setPriceError(true)
     }
     const daysHandler = (event) => {
-        setDays(event.target.value)
-        event.target.value.length ? setDaysError(false) : setDaysError(true)
-    }
-    const categoryHandler = (event) => {
-        setCategory(event.target.value)
+        const value = event.target.value.replaceAll("۰","0")
+            .replaceAll("۱","1")
+            .replaceAll("۲","2")
+            .replaceAll("۳","3")
+            .replaceAll("۴","4")
+            .replaceAll("۵","5")
+            .replaceAll("۶","6")
+            .replaceAll("۷","7")
+            .replaceAll("۸","8")
+            .replaceAll("۹","9")
+        setDays(value)
+        value.length ? setDaysError(false) : setDaysError(true)
     }
     const statusHandler = (event) => {
         setStatus(event.target.value)
@@ -72,7 +85,7 @@ export default function Add({categories}) {
     const submitHandler = async (event) => {
         event.preventDefault()
         Nprogress.start();
-        if (nameError) {
+        if (nameError || priceError || daysError) {
             Swal.fire({
                 icon: 'error',
                 text: "لطفا تمام فیلد ها را پر کنید",
@@ -80,13 +93,12 @@ export default function Add({categories}) {
             Nprogress.done();
         } else {
             try {
-                const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.position}`, {
+                const res = await fetch(`${process.env.LOCAL_URL}/api/admin/plans/${router.query.position}`, {
                     method: "POST",
                     body: JSON.stringify({
                         title: name,
                         price: price,
                         days: days,
-                        category_id: category,
                         status: status
                     })
                 })
@@ -97,7 +109,7 @@ export default function Add({categories}) {
                         icon: 'success',
                         text: "پلن ایجاد شد",
                     })
-                    router.push(`/admin/ads-positions/plans/${router.query.position}`)
+                    router.push(`/admin/packages/plans/${router.query.position}`)
                 } else {
                     Nprogress.done();
                     Swal.fire({
@@ -137,6 +149,7 @@ export default function Add({categories}) {
                                 label="قیمت پلن به تومان"
                                 variant="outlined"
                                 value={price}
+                                type={"tel"}
                                 error={priceError}
                                 InputLabelProps={{shrink: true}}
                                 onInput={(event) => priceHandler(event)}
@@ -145,24 +158,12 @@ export default function Add({categories}) {
                                 className={"col-md-9 col-11"}
                                 label="تعداد روز"
                                 variant="outlined"
+                                type={"tel"}
                                 value={days}
                                 error={daysError}
                                 InputLabelProps={{shrink: true}}
                                 onInput={(event) => daysHandler(event)}
                             />
-                            <TextField
-                                select
-                                label="دسته بندی نوع تبلیغ"
-                                className={"col-md-9 col-11"}
-                                value={category}
-                                onChange={categoryHandler}
-                            >
-                                {categoryOptions.map((option) => (
-                                    <MenuItem key={option.id} value={option.id}>
-                                        {option.title}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
                             <TextField
                                 select
                                 label="وضعیت"
@@ -186,27 +187,4 @@ export default function Add({categories}) {
     )
 }
 
-export async function getServerSideProps(context) {
-    try {
-        const {params, req} = context
-
-        const dataResponse = await fetch(`${process.env.SERVER_URL}/panel/ads_categories?page=1&limit=1000`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'Authorization': `Bearer ${req.cookies.authToken}`
-            }
-        })
-        const categories = await dataResponse.json()
-
-        return {
-            props: {categories}
-        }
-    } catch {
-        const categories = {status: false, data: {data: []}}
-        return {
-            props: {categories}
-        }
-    }
-}
 

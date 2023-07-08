@@ -71,7 +71,7 @@ export default function PanelLayout({children}) {
                              ref={toggleElement}>
                             <MenuIcon sx={{color: "var(--white)"}}></MenuIcon>
                         </div>
-                        <a className="navbar-brand text-white" href="#">اخبار رسمی</a>
+                        <a className="navbar-brand text-white" href="#">مراسم چین</a>
                     </div>
                     <div className="d-flex flex-row align-items-center gap-4">
                         <div className="d-inline-block">
@@ -160,7 +160,7 @@ export default function PanelLayout({children}) {
                                         <ListAltIcon
                                             className={`${routerPath.includes("companies") && "color-my-purple"}`}
                                         ></ListAltIcon>
-                                        <span className="text-secondary">لیست شرکت ها</span>
+                                        <span className="text-secondary">لیست مجموعه ها</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/admin/certificates/1"}>
@@ -187,7 +187,7 @@ export default function PanelLayout({children}) {
                                         <ListAltIcon
                                             className={`${routerPath.includes("gallery") && "color-my-purple"}`}
                                         ></ListAltIcon>
-                                        <span className="text-secondary">گالری شرکت ها</span>
+                                        <span className="text-secondary">گالری مجموعه ها</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/admin/writers/1"}>
@@ -240,6 +240,26 @@ export default function PanelLayout({children}) {
                                     <div className="panel-title-parent w-100">
                                         <span
                                             className="panel-main-title- text-capitalize panel-header-title text-secondary">
+                                            پکیج های اکانت ها
+                                        </span>
+                                    </div>
+                                    <span className="mt-1 ms-2">
+                                   <i className="fa fa-angle-down text-secondary"></i>
+                                </span>
+                                </div>
+                                <Link href={"/admin/packages/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("packages") && "active"}`}>
+                                        <ListAltIcon
+                                            className={`${routerPath.includes("packages") && "color-my-purple"}`}
+                                        ></ListAltIcon>
+                                        <span className="text-secondary">پکیج ها</span>
+                                    </MenuItem>
+                                </Link>
+                                <div className="service-section-opener d-flex flex-row">
+                                    <div className="panel-title-parent w-100">
+                                        <span
+                                            className="panel-main-title- text-capitalize panel-header-title text-secondary">
                                             تبلیغات
                                         </span>
                                     </div>
@@ -249,9 +269,9 @@ export default function PanelLayout({children}) {
                                 </div>
                                 <Link href={"/admin/ads/1"}>
                                     <MenuItem
-                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("ads") && !routerPath.includes("ads-requests")  && !routerPath.includes("ads-positions") && !routerPath.includes("ads-categories") && "active"}`}>
+                                        className={`panel-side-bar-item rounded gap-4 ps-3 ${routerPath.includes("ads") && !routerPath.includes("ads-requests") && !routerPath.includes("ads-positions") && !routerPath.includes("ads-categories") && !routerPath.includes("ads-orders") && "active"}`}>
                                         <ListAltIcon
-                                            className={`${routerPath.includes("ads") && !routerPath.includes("ads-positions") && !routerPath.includes("ads-categories") && "color-my-purple"}`}
+                                            className={`${routerPath.includes("ads") && !routerPath.includes("ads-positions") && !routerPath.includes("ads-categories") && !routerPath.includes("ads-orders") && "color-my-purple"}`}
                                         ></ListAltIcon>
                                         <span className="text-secondary"> لیست تبلیغات فعال</span>
                                     </MenuItem>
@@ -287,12 +307,50 @@ export default function PanelLayout({children}) {
                                     <div className="panel-title-parent w-100">
                                         <span
                                             className="panel-main-title- text-capitalize panel-header-title text-secondary">
+                                            سفارشات
+                                        </span>
+                                    </div>
+                                    <span className="mt-1 ms-2">
+                                        <i className="fa fa-angle-down text-secondary"></i>
+                                    </span>
+                                </div>
+                                <Link href={"/admin/gold-orders/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("gold-orders") && "active"}`}>
+                                        <WysiwygIcon
+                                            className={`${routerPath.includes("gold-orders") && "color-my-purple"}`}
+                                        ></WysiwygIcon>
+                                        <span className="text-secondary"> نشان طلایی</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/ads-orders/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("ads-orders") && "active"}`}>
+                                        <WysiwygIcon
+                                            className={`${routerPath.includes("ads-orders") && "color-my-purple"}`}
+                                        ></WysiwygIcon>
+                                        <span className="text-secondary">تبلیغات</span>
+                                    </MenuItem>
+                                </Link>
+                                <Link href={"/admin/package-orders/1"}>
+                                    <MenuItem
+                                        className={`panel-side-bar-item rounded gap-3 ps-3 ${routerPath.includes("package-orders") && "active"}`}>
+                                        <WysiwygIcon
+                                            className={`${routerPath.includes("package-orders") && "color-my-purple"}`}
+                                        ></WysiwygIcon>
+                                        <span className="text-secondary">پکیج ها</span>
+                                    </MenuItem>
+                                </Link>
+                                <div className="service-section-opener d-flex flex-row">
+                                    <div className="panel-title-parent w-100">
+                                        <span
+                                            className="panel-main-title- text-capitalize panel-header-title text-secondary">
                                            درخواست ها
                                         </span>
                                     </div>
                                     <span className="mt-1 ms-2">
                                    <i className="fa fa-angle-down text-secondary"></i>
-                                </span>
+                                   </span>
                                 </div>
                                 <Link href={"/admin/post-requests/1"}>
                                     <MenuItem
@@ -318,7 +376,7 @@ export default function PanelLayout({children}) {
                                         <AddTaskIcon
                                             className={`${routerPath.includes("company-requests") && "color-my-purple"}`}
                                         ></AddTaskIcon>
-                                        <span className="text-secondary">درخواست های ثبت شرکت</span>
+                                        <span className="text-secondary">درخواست های ثبت مجموعه</span>
                                     </MenuItem>
                                 </Link>
                                 <Link href={"/admin/newsLetters/1"}>

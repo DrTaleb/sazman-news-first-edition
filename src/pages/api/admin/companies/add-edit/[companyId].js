@@ -28,6 +28,9 @@ export default async function Handler(req, res) {
                 await formData.append("status", fields.status)
                 await formData.append("verify_status", fields.verify_status)
                 await formData.append("selected_status", fields.selected_status)
+                await formData.append("gold_status", fields.gold_status)
+                await formData.append("expire", fields.expire)
+                await formData.append("package_id", fields.package_id)
                 await formData.append("owner_id", fields.owner_id)
                 await formData.append("_method", "PUT")
                 if (files.banner) {

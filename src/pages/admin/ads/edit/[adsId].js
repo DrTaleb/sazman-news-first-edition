@@ -192,7 +192,6 @@ export default function AddAds({data}) {
     const formData = new FormData();
     const handleChange = (file) => {
         setFile(file);
-        console.log(file)
     };
 
     const submitHandler = async (event) => {

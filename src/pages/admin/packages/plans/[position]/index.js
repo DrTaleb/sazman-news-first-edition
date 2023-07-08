@@ -26,7 +26,6 @@ import Link from "next/link";
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'title', label: 'عنوان', minWidth: 170, align: "left"},
-    {id: 'category', label: 'دسته بندی', minWidth: 170, align: "left"},
     {id: 'days', label: 'تعداد روز', minWidth: 170, align: "left"},
     {id: 'price', label: 'قیمت', minWidth: 170, align: "left"},
 ];
@@ -39,7 +38,7 @@ export default function AdsPositions() {
     const [getData, setGeData] = useState(false)
 
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.position}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/plans/${router.query.position}`)
         const data = await res.json()
         await setDATA(data)
     }
@@ -48,15 +47,15 @@ export default function AdsPositions() {
         dataFetch()
     }, [getData])
 
-    function createData(id, title,category,days,price,status) {
-        return {id, title,category,days,price,status};
+    function createData(id, title,days,price,status) {
+        return {id, title,days,price,status};
     }
 
     if (DATA.status) {
-        DATA.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`,`${item.category.title}`,`${item.days}`,` ${item.price}  تومان `,`${item.status == 1 ? "فعال" : "غیر فعال"}`)))
+        DATA.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`,`${item.days}`,` ${item.price}  تومان `,`${item.status == 1 ? "فعال" : "غیر فعال"}`)))
     }
     const editHandler = (id) => {
-        router.push(`/admin/ads-positions/plans/edit/${id}/${router.query.position}`)
+        router.push(`/admin/packages/plans/edit/${id}/${router.query.position}`)
     }
 
     const blockHandler = async (id) => {
@@ -72,14 +71,13 @@ export default function AdsPositions() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.position}?id=${id}`,{
+                    const res = await fetch(`${process.env.LOCAL_URL}/api/admin/plans/${router.query.position}/${id}`,{
                         method : "PUT",
                         body : JSON.stringify({
                             _method : "PUT",
                             title : selectedCatalog.title,
                             days : selectedCatalog.days,
                             price : selectedCatalog.price,
-                            category_id : selectedCatalog.category_id,
                             status : selectedCatalog.status === "1" ? 0 : 1
                         })
                     })
@@ -121,7 +119,7 @@ export default function AdsPositions() {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`${process.env.LOCAL_URL}/api/admin/ads-plans/${router.query.position}?id=${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/plans/${router.query.position}/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
                         if (data.status) {
@@ -172,12 +170,12 @@ export default function AdsPositions() {
                 <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                     <div className="panel-title-parent w-100">
                         <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                            پلن های جایگاه
+                            پلن های پکیج
                         </h5>
                     </div>
                     <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
                         <div className={"d-flex flex-row justify-content-center"}>
-                            <Link href={`/admin/ads-positions/plans/add?position=${router.query.position}`} className={"ps-2"}>
+                            <Link href={`/admin/packages/plans/add?position=${router.query.position}`} className={"ps-2"}>
                                 <Button variant={"contained"} className={"bg-my-purple"}>افزودن پلن</Button>
                             </Link>
                         </div>

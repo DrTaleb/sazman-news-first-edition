@@ -35,10 +35,12 @@ import MenuItem from "@mui/material/MenuItem";
 const columns = [
     {id: 'id', label: 'آیدی', minWidth: 170},
     {id: 'title', label: 'عنوان', minWidth: 170, align: "left"},
+    {id: 'posts_count', label: 'تعداد پست', minWidth: 170, align: "left"},
+    {id: 'vip_posts_count', label: 'تعداد پست برتر', minWidth: 170, align: "left"},
 ];
 
 
-export default function AdsPositions() {
+export default function Packages() {
     const rows = []
     const router = useRouter()
     const [DATA, setDATA] = useState({})
@@ -60,7 +62,7 @@ export default function AdsPositions() {
     }
 
     const dataFetch = async () => {
-        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-positions/${router.query.page}?${searchCategory}=${nameSearch}`)
+        const res = await fetch(`${process.env.LOCAL_URL}/api/admin/packages/${router.query.page}?${searchCategory}=${nameSearch}`)
         const data = await res.json()
         await setDATA(data)
         await setPage(data.data.current_page)
@@ -74,67 +76,19 @@ export default function AdsPositions() {
         dataFetch()
     }, [getData])
 
-    function createData(id, title, status,companyId) {
-        return {id, title, status,companyId};
+    function createData(id, title,posts_count,vip_posts_count, status,companyId) {
+        return {id, title,posts_count,vip_posts_count, status,companyId};
     }
 
     if (DATA.status) {
-        DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`,`${item.company_id}`,)))
+        DATA.data.data.map(item => rows.push(createData(`${item.id}`, `${item.title}`, `${item.posts_count}`,`${item.vip_posts_count}`,`${item.status == 1 ? "فعال" : "غیر فعال"}`,`${item.company_id}`,)))
     }
     const editHandler = (id) => {
-        router.push(`/admin/ads-positions/edit/${id}`)
+        router.push(`/admin/packages/edit/${id}`)
     }
     const goToPlan = (id) => {
-        router.push(`/admin/ads-positions/plans/${id}`)
+        router.push(`/admin/packages/plans/${id}`)
     }
-    const blockHandler = async (id) => {
-        const selectedCatalog = DATA.data.data.find(item => item.id == id)
-        console.log(selectedCatalog)
-        Swal.fire({
-            text: `آیا از ${selectedCatalog.status === "1" ? "" : "رفع"} غیر فعال سازی جایگاه مورد نظر اطمینان دارید؟`,
-            icon: 'warning',
-            showCancelButton: true,
-            cancelButtonText: "خیر",
-            confirmButtonColor: 'var(--main-purple)',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'بله'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const res = await fetch(`${process.env.LOCAL_URL}/api/admin/ads-positions/edit/${id}`,{
-                        method : "PUT",
-                        body : JSON.stringify({
-                            title : selectedCatalog.title,
-                            status : selectedCatalog.status === "1" ? 0 : 1
-                        })
-                    })
-                    const data = await res.json()
-                    console.log(data)
-                    if (data.status) {
-                        Nprogress.done()
-                        await Swal.fire({
-                            icon: 'success',
-                            text: ` جایگاه ${selectedCatalog.title}${selectedCatalog.status === "1" ? " به طور موقت مسدود شد" : " رفع مسدودیت شد"}`,
-                        })
-                        await setGeData(!getData)
-                    } else {
-                        Nprogress.done()
-                        await Swal.fire({
-                            icon: 'error',
-                            text: "مشکلی در سرور ایجاد شده",
-                        })
-                    }
-                } catch {
-                    Nprogress.done()
-                    await Swal.fire({
-                        icon: 'error',
-                        text: "مشکلی در سرور ایجاد شده",
-                    })
-                }
-            }
-        })
-    }
-
     const deleteHandler = async (id) => {
         Swal.fire({
             text: "آیا از حذف آیتم مورد نظر اطمینان دارید؟",
@@ -147,7 +101,7 @@ export default function AdsPositions() {
             if (result.isConfirmed) {
                 Nprogress.start()
                 try {
-                    fetch(`${process.env.LOCAL_URL}/api/admin/ads-positions/delete/${id}`, {
+                    fetch(`${process.env.LOCAL_URL}/api/admin/packages/${id}`, {
                         method: "DELETE"
                     }).then(res => res.json()).then(data => {
                         console.log(data)
@@ -203,13 +157,13 @@ export default function AdsPositions() {
                 <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                     <div className="panel-title-parent w-100">
                         <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                             جایگاه های نصب تبلیغ
+                             پکیج های اکانت ها
                         </h5>
                     </div>
                     <div className={"col-5 col-sm-4 col-md-3 col-lg-2"}>
                         <div className={"d-flex flex-row justify-content-center"}>
-                            <Link href={"/admin/ads-positions/add"} className={"ps-2"}>
-                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن جایگاه</Button>
+                            <Link href={"/admin/packages/add"} className={"ps-2"}>
+                                <Button variant={"contained"} className={"bg-my-purple"}>افزودن پکیج</Button>
                             </Link>
                         </div>
                     </div>
@@ -257,7 +211,7 @@ export default function AdsPositions() {
                                         وضعیت نمایش
                                     </TableCell>
                                     <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                        پلن های جایگاه
+                                        پلن های پکیج
                                     </TableCell>
                                     <TableCell align={"left"} sx={{minWidth: "200px"}}>
                                         گزینه ها
@@ -293,35 +247,18 @@ export default function AdsPositions() {
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "250px"}}>
                                                <Button onClick={()=> goToPlan(row.id)}>
-                                                   مشاهده و تغییر پلن های این جایگاه
+                                                   مشاهده و تغییر پلن های این پکیج
                                                </Button>
                                             </TableCell>
                                             <TableCell align={"left"} sx={{minWidth: "200px"}}>
-                                                <Tooltip title="مشاهده و ویرایش محل">
+                                                <Tooltip title="مشاهده و ویرایش پکیج">
                                                     <IconButton color={"warning"}
                                                                 onClick={() => editHandler(row.id)}
                                                     >
                                                         <EditOutlined/>
                                                     </IconButton>
                                                 </Tooltip>
-                                                {
-                                                    row.status === "فعال" ?
-                                                        <Tooltip title={"مسدود سازی موقت"}>
-                                                            <IconButton color={"error"}
-                                                                        onClick={() => blockHandler(row.id)}
-                                                            >
-                                                                <DoNotDisturbAltIcon></DoNotDisturbAltIcon>
-                                                            </IconButton>
-                                                        </Tooltip> :
-                                                        <Tooltip title={"رفع مسدود سازی"}>
-                                                            <IconButton color={"success"}
-                                                                        onClick={() => blockHandler(row.id)}
-                                                            >
-                                                                <AddTaskIcon></AddTaskIcon>
-                                                            </IconButton>
-                                                        </Tooltip>
-                                                }
-                                                <Tooltip title={"حذف محل"}>
+                                                <Tooltip title={"حذف پکیج"}>
                                                     <IconButton color={"error"}
                                                                 onClick={() => deleteHandler(row.id)}
                                                     >
@@ -357,7 +294,7 @@ export default function AdsPositions() {
             <div className="d-flex flex-row align-items-center mt-2 mt-md-0">
                 <div className="panel-title-parent w-100">
                     <h5 className="panel-main-title fw-bold panel-main-title- text-capitalize panel-header-title text-secondary">
-                        کاتالوگ ها
+                        پکیج ها
                     </h5>
                 </div>
             </div>

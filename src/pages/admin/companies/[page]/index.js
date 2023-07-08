@@ -27,6 +27,7 @@ const columns = [
     {id: 'company_name', label: 'نام شرکت', minWidth: 170, align: 'left',},
     {id: 'activity_type', label: 'نوع فعالیت', minWidth: 250, align: 'left',},
     {id: 'verify_status', label: 'وضعیت احراز هویت', minWidth: 170, align: 'left',},
+    {id: 'gold_status', label: 'وضعیت نشان طلایی', minWidth: 170, align: 'left',},
 ];
 
 
@@ -71,11 +72,11 @@ export default function Companies({data}) {
         dataFetch()
     }, [router.query.page])
 
-    function createData(id, brand_name, company_name, activity_type, verify_status, status, options) {
-        return {id, brand_name, company_name, activity_type, verify_status, status, options};
+    function createData(id, brand_name, company_name, activity_type, verify_status,gold_status, status, options) {
+        return {id, brand_name, company_name, activity_type, verify_status, gold_status,status, options};
     }
 
-    DATA.map(item => rows.push(createData(`${item.id}`, `${item.brand_name}`, `${item.company_name}`, `${item.activity_type}`, `${item.verify_status == 1 ? "فعال" : "غیر فعال"}`, `${item.status == 1 ? "فعال" : "غیر فعال"}`)))
+    DATA.map(item => rows.push(createData(`${item.id}`, `${item.brand_name}`, `${item.company_name}`, `${item.activity_type}`, `${item.verify_status === "1" ? "فعال" : "غیر فعال"}`, `${item.gold_status === "1" ? "فعال" : "غیر فعال"}`,`${item.status == 1 ? "فعال" : "غیر فعال"}`)))
 
     const editHandler = (id) => {
         router.push(`/admin/companies/edit-company/${id}`)
@@ -105,6 +106,9 @@ export default function Companies({data}) {
                 await formData.append("status", selectedCompany.status == "1" ? 0 : 1)
                 await formData.append("verify_status", selectedCompany.verify_status)
                 await formData.append("selected_status", selectedCompany.selected_status)
+                await formData.append("gold_status", selectedCompany.gold_status)
+                await formData.append("expire", selectedCompany.expire)
+                await formData.append("package", selectedCompany.package_id)
                 await formData.append("owner_id", selectedCompany.owner.id)
                 try {
                     const res = await axios.put(`${process.env.LOCAL_URL}/api/admin/companies/add-edit/${id}`, formData, {
