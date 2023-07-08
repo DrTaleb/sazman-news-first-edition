@@ -1,18 +1,17 @@
-import {Fragment, useEffect, useState} from "react";
+import {Fragment, useEffect, useRef, useState} from "react";
 import {Button, Fab} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from '@mui/icons-material/Share';
 import {toast} from "react-toastify";
 import ReplyIcon from '@mui/icons-material/Reply';
+import Link from "next/link";
 
-export default function SingleNewsPage({
-                                           data,
-                                           companyInfo,
-                                           otherDataTopFive,
-                                           commentList,
-                                           otherPostOfCategoryListTopFour
-                                       }) {
+export default function SingleNewsPage({data}) {
     const [commentInput, setCommentInput] = useState("")
+    const contentSection = useRef()
+    useEffect(()=>{
+        contentSection.current.innerHTML = data.data.post.text
+    },[data])
     const commentInputHandler = (event) => {
         setCommentInput(event.target.value)
     }
@@ -41,9 +40,7 @@ export default function SingleNewsPage({
         })
 
     }
-    useEffect(() => {
-        console.log("hi")
-    }, [data, companyInfo, otherDataTopFive, commentList, otherPostOfCategoryListTopFour])
+
 
     return (
         <Fragment>
@@ -57,26 +54,23 @@ export default function SingleNewsPage({
                                 <div className="writer-profile-section d-flex flex-column p-xl-2 gap-xl-3">
                                     <div
                                         className="writer-profile-inner-section d-flex flex-row align-items-center gap-3">
-                                        <img className="writer-profile-img rounded-circle"
-                                             src={`${companyInfo.logo}`}/>
+                                        <img className="writer-profile-img"
+                                             src={`${process.env.SERVER_URL}${data.data.post.company.logo}`}/>
                                         <div className="writer-user-name">
                                                 <span className="fw-bolder text-secondary px-2">
-                                                    {companyInfo.companyTitle}
+                                                    {data.data.post.company.title}
                                                 </span>
                                             <span className="border-start border-1 border-secondary px-2">
-                                                    {data.publishAt}
-                                                </span>
-                                            <span className="border-start border-1 border-secondary px-2">
-                                                    {/*18:42*/}
-                                                </span>
+                                                    {data.data.post.published_at}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                                 <h1 className="news-main-title mt-md-3 px-xl-3">
-                                    {data.title}
+                                    {data.data.post.title}
                                 </h1>
                                 <h5 className="mt-lg-2 mt-xl-0 px-xl-3">
-                                    {data.subtitle}
+                                    {data.data.post.subtitle}
                                 </h5>
                                 <div className="d-flex flex-row gap-4 justify-content-end pe-3">
                                     <div className="d-flex flex-column align-items-center">
@@ -98,14 +92,14 @@ export default function SingleNewsPage({
                             </div>
                             <div className="col-md-6 col-12">
                                 <div className="news-main-img-section">
-                                    <img className="w-100 rounded-3" src={data.image}/>
+                                    <img alt={data.data.post.title} className="w-100 rounded-3" src={`${process.env.SERVER_URL}${data.data.post.image}`}/>
                                 </div>
                             </div>
                         </div>
                         <div className="px-4 d-flex flex-row justify-content-between">
                             <div className="col-lg-7 col-12 mt-5">
-                                <div className={"content-section px-4 w-100"}>
-                                    {data.text}
+                                <div ref={contentSection} className={"content-section px-4 w-100"}>
+
                                 </div>
                                 <div className={"blog-tags-place w-100"}></div>
                                 <div className="block">
@@ -113,7 +107,7 @@ export default function SingleNewsPage({
                                         <div className="title">
                                             <h4>نظرات کاربران</h4>
                                             <div
-                                                className="tag">{commentList.filter(item => item.parentID === 0).length}</div>
+                                                className="tag">{data.data.post.comments.filter(item => item.parentID === 0).length}</div>
                                         </div>
                                     </div>
                                     <div className="writing col-lg-10 col-12">
@@ -129,8 +123,8 @@ export default function SingleNewsPage({
                                         </form>
                                     </div>
                                 </div>
-                                {commentList.reverse().filter(item => item.parentID === 0).map(item =>
-                                    <div key={item.ID} className="comment">
+                                {data.data.post.comments.filter(item => item.parentID === 0).map(item =>
+                                    <div key={item.id} className="comment">
                                         <div className="user-banner">
                                             <div className="user">
                                                 <div className="avatar">
@@ -165,7 +159,7 @@ export default function SingleNewsPage({
                                                 {item.text}
                                             </p>
                                         </div>
-                                        {commentList.filter(x => x.parentID === item.ID).map(i =>
+                                        {data.data.post.comments.filter(x => x.parentID === item.ID).map(i =>
                                             <div key={i.ID} className="reply-section offset-1 ps-3">
                                                 <div className="reply">
                                                     <div className="user-banner">
@@ -203,12 +197,12 @@ export default function SingleNewsPage({
                                         className="news-chart-icon d-flex flex-column justify-content-center align-items-center">
                                         <i className="fa fa-angle-down"></i>
                                     </div>
-                                    {otherDataTopFive.map(item =>
-                                        <div key={item.ID} className="news-chart-item col-12 px-1">
+                                    {data.data.related_posts.map(item =>
+                                        <Link href={`/post/${item.id}/${item.title}`} key={item.id} className="news-chart-item col-12 px-1">
                                             <div className="news-chart-item-inner d-flex flex-column">
                                                 <div className="d-flex flex-column gap-2">
                                             <span className="news-chart-item-title">
-                                                {item.publishAt}
+                                                {item.published_at}
                                             </span>
                                                     <span className="news-chart-item-text fw-bolder">
                                                 {item.title}
@@ -216,9 +210,10 @@ export default function SingleNewsPage({
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row">
-                                                <img className="news-chart-img" src={item.image}/>
+                                                <img className="news-chart-img" src={`${process.env.SERVER_URL}${item.image}`}/>
                                             </div>
-                                        </div>)}
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -238,17 +233,17 @@ export default function SingleNewsPage({
                         </div>
                     </div>
                     <div className="suggestion-section w-100 px-4 py-3 gap-3 justify-content-between flex-wrap">
-                        {otherPostOfCategoryListTopFour.length ?
-                            otherPostOfCategoryListTopFour.map(item =>
-                                <div key={item.ID}
+                        {data.data.other_posts.length ?
+                            data.data.other_posts.map(item =>
+                                <Link href={`/post/${item.id}/${item.title}`} key={item.id}
                                      className="suggestion-card card d-flex flex-column align-items-center mt-5">
-                                    <img src={item.image} className="card-img" alt={""}/>
+                                    <img src={`${process.env.SERVER_URL}${item.image}`} className="card-img shadow-sm" alt={""}/>
                                     <div className="card-body">
                                         <h5 className="card-title text-center my-3">
                                             {item.title}
                                         </h5>
                                     </div>
-                                </div>
+                                </Link>
                             ) : <p>هیچ موردی برای نمایش وجود ندارد</p>
                         }
                     </div>
@@ -261,37 +256,16 @@ export default function SingleNewsPage({
 export async function getServerSideProps(context) {
     const {params} = context
     // the details of post
-    const dataResponse = await fetch(`http://localhost:4000/posts?title=${params.postTitle}`)
-    const dataList = await dataResponse.json()
-    const data = await dataList[0]
+    const dataResponse = await fetch(`${process.env.SERVER_URL}/front/post_details?id=${params.id[0]}`)
+    const data = await dataResponse.json()
     // ------------------
-    // the info of publisher company
-    const companyResponse = await fetch(`http://localhost:4000/companies?ID=${data.companyID}`)
-    const companyList = await companyResponse.json()
-    const companyInfo = {companyTitle: companyList[0].title, logo: companyList[0].logo}
-    // ------------------
-    // the top 5 other posts of the publisher company
-    const otherDataByPublisherResponse = await fetch(`http://localhost:4000/posts?companyID=${data.companyID}`)
-    const otherDataByPublisherList = await otherDataByPublisherResponse.json()
-    const otherDataTopFive = await otherDataByPublisherList.sort(item => item.viewCount).slice(5)
-    //-------------------
-    // the comments
-    const postCommentsResponse = await fetch(`http://localhost:4000/postComments?postID=${data.ID}`)
-    const commentList = await postCommentsResponse.json()
-    //-------------------
-    // the comments
-    const otherPostOfCategoryResponse = await fetch(`http://localhost:4000/posts?categoryID=${data.categoryID}`)
-    const otherPostOfCategoryList = await otherPostOfCategoryResponse.json()
-    const otherPostOfCategoryListTopFour = otherPostOfCategoryList.sort(item => item.viewCount).slice(4)
-    //-------------------
-    //the same category posts
     if (!data) {
         return {
             notFound: true
         }
     } else {
         return {
-            props: {data, companyInfo, otherDataTopFive, commentList, otherPostOfCategoryListTopFour}
+            props: {data}
         }
     }
 }
